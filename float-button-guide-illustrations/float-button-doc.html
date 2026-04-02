@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>悬浮按钮 FloatButton — 组件文档</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5/dist/reset.css" />
+  <style>
+    :root { --primary: #2673dd; --text: #333; --text-2: #666; --text-3: #999; --border: #e8e8e8; --bg: #fafbfc; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #f5f7fa; font-family: Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text); line-height: 1.7; }
+    .doc-header {
+      background: linear-gradient(135deg, #1a5cbf 0%, #2673dd 50%, #4d94eb 100%);
+      color: #fff; padding: 64px 24px 48px; text-align: center;
+    }
+    .doc-header h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+    .doc-header p { font-size: 15px; opacity: .85; max-width: 540px; margin: 0 auto; line-height: 1.7; }
+    .doc-body { max-width: 1140px; margin: 0 auto; padding: 40px 18px 80px; }
+    h2 { font-size: 22px; font-weight: 700; margin: 48px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--primary); display: inline-block; }
+    h3 { font-size: 17px; font-weight: 600; margin: 32px 0 10px; }
+    p, li { font-size: 14px; line-height: 1.8; color: var(--text-2); }
+    p { margin-bottom: 10px; }
+    ul { padding-left: 20px; margin-bottom: 12px; }
+    li { margin-bottom: 4px; }
+    strong { color: var(--text); }
+    .illus {
+      width: 1104px; background: #F5F5F5; border-radius: 0; padding: 16px;
+      margin: 16px 0 24px; display: flex; flex-direction: column;
+      align-items: flex-start; gap: 20px;
+    }
+    .illus-inner { width: 100%; background: #fff; padding: 24px 28px; }
+    .elem-item { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 10px; font-size: 14px; line-height: 1.7; }
+    .elem-num {
+      flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+      background: var(--primary); color: #fff; font-size: 11px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center; margin-top: 2px;
+    }
+
+    /* Override FloatButton position inside demo containers */
+    .demo-box { position: relative; }
+    .demo-box .ant-float-btn-group { position: absolute !important; inset-inline-end: 14px !important; bottom: 14px !important; }
+    .demo-box .ant-float-btn:not(.ant-float-btn-group .ant-float-btn) { position: absolute !important; inset-inline-end: 14px !important; bottom: 14px !important; }
+
+    /* Mock page */
+    .mock { background: var(--bg); border-radius: 8px; border: 1px solid var(--border); position: relative; padding: 14px; }
+    .mock .ant-skeleton { pointer-events: none; }
+    .mock .ant-skeleton-title { height: 8px !important; margin-bottom: 12px !important; border-radius: 3px !important; }
+    .mock .ant-skeleton-paragraph > li { height: 5px !important; border-radius: 2px !important; }
+    .mock .ant-skeleton-paragraph > li + li { margin-top: 6px !important; }
+
+    /* Compare */
+    .compare-wrap { width: 1104px; background: #F5F5F5; border-radius: 0; padding: 16px; margin: 16px 0 8px; }
+    .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .compare-item { display: flex; flex-direction: column; }
+    .compare-card { background: #fff; border-radius: 8px; flex: 1; padding: 20px; min-height: 120px; display: flex; align-items: center; justify-content: center; }
+    .compare-bar { height: 4px; margin-top: 0; border-radius: 0; }
+    .compare-bar.do { background: linear-gradient(90deg, #52c41a 0%, rgba(82,196,26,0.15) 100%); }
+    .compare-bar.dont { background: linear-gradient(90deg, #ff4d4f 0%, rgba(255,77,79,0.15) 100%); }
+    .compare-label { text-align: left; padding: 6px 0 0; font-size: 14px; font-weight: 700; }
+    .compare-label.do { color: #52c41a; }
+    .compare-label.dont { color: #ff4d4f; }
+    .compare-desc { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; line-height: 1.8; color: var(--text-2); margin-top: 12px; }
+    .compare-desc .anticon { flex-shrink: 0; margin-top: 4px; }
+
+    .states-row { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; }
+    .state-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+    .fc { display: flex; align-items: center; justify-content: center; }
+    .fcc { display: flex; flex-direction: column; align-items: center; }
+    .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; }
+    .faq-item { margin-bottom: 20px; }
+    .faq-q { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .faq-a { font-size: 13px; color: var(--text-2); line-height: 1.8; }
+
+    @media (max-width: 640px) { .compare, .g2 { grid-template-columns: 1fr; } .doc-body { padding: 24px 16px 60px; } }
+  </style>
+</head>
+<body>
+
+<div class="doc-header">
+  <h1>悬浮按钮 FloatButton</h1>
+  <p>悬浮按钮用于在页面上提供固定的全局操作入口，无论用户浏览到何处都可以看见并快速触达。</p>
+</div>
+
+<div class="doc-body" id="root"></div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/antd@5/dist/antd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ant-design/icons@5/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
+const { FloatButton, Badge, Skeleton, Divider, Tag, Tooltip, ConfigProvider, Menu } = antd;
+const {
+  MessageOutlined, CustomerServiceOutlined, QuestionCircleOutlined,
+  VerticalAlignTopOutlined, BellOutlined, PlusOutlined, CloseOutlined,
+  EllipsisOutlined, ExportOutlined, ShareAltOutlined, StarOutlined,
+  PrinterOutlined, DeleteOutlined, CopyOutlined, FileTextOutlined,
+  LoadingOutlined, MailOutlined, AimOutlined, CommentOutlined,
+  QuestionOutlined, CheckCircleFilled, CloseCircleFilled
+} = icons;
+
+/*
+ * In a SPACE project:
+ *   import { FloatButton, Badge, Skeleton, ... } from 'infrad';
+ *   import { MessageOutlined, ... } from 'infra-design-icons';
+ *
+ * FloatButton API (infrad@5.0.0, ref: infrad.shopee.io/components/float-button):
+ *   icon(ReactNode), description(ReactNode), tooltip(ReactNode | ()=>ReactNode),
+ *   type('default'|'primary'), shape('circle'|'square'),
+ *   badge(BadgeProps — status not supported), href, target, onClick
+ *
+ * FloatButton.Group:
+ *   shape('circle'|'square'), trigger('click'|'hover'), open(boolean),
+ *   placement('top'|'right'|'bottom'|'left'), closeIcon(ReactNode),
+ *   onOpenChange(open=>void), onClick(event=>void — only in menu mode)
+ *
+ * FloatButton.BackTop:
+ *   duration(number, ms), target(()=>HTMLElement), visibilityHeight(number, default 400),
+ *   onClick(()=>void)
+ */
+
+const infraTheme = {
+  token: { colorPrimary: '#2673dd', fontFamily: 'Roboto, -apple-system, BlinkMacSystemFont, sans-serif', colorText: '#333', colorLink: '#2673dd' }
+};
+
+const skW = (n) => Array.from({ length: n }, (_, i) => ['100%','72%','85%','100%','72%','85%','100%','72%','85%','100%','72%'][i % 11]);
+
+const Illus = ({ children }) => (
+  <div className="illus">
+    <div className="illus-inner">{children}</div>
+  </div>
+);
+
+const MockPage = ({ children, height = 160, style, label, lines = 5 }) => (
+  <div className="mock demo-box" style={{ height, ...style }}>
+    {label && <div style={{ position:'absolute', top:10, left:14, fontSize:10, color:'#aaa', fontWeight:500, zIndex:1 }}>{label}</div>}
+    <Skeleton active title={{ width:'55%' }} paragraph={{ rows: lines, width: skW(lines) }} />
+    {children}
+  </div>
+);
+
+const Compare = ({ doContent, dontContent, doCaption, dontCaption }) => (
+  <div>
+    <div className="compare-wrap">
+      <div className="compare">
+        <div className="compare-item">
+          <div className="compare-card">{doContent}</div>
+          <div className="compare-bar do" />
+          <div className="compare-label do">Do</div>
+        </div>
+        <div className="compare-item">
+          <div className="compare-card">{dontContent}</div>
+          <div className="compare-bar dont" />
+          <div className="compare-label dont">Don&rsquo;t</div>
+        </div>
+      </div>
+    </div>
+    <div className="compare-desc"><CheckCircleFilled style={{ color:'#52c41a', fontSize:16 }} /><div><strong style={{ color:'#333' }}>推荐：</strong>{doCaption}</div></div>
+    <div className="compare-desc"><CloseCircleFilled style={{ color:'#ff4d4f', fontSize:16 }} /><div><strong style={{ color:'#333' }}>不推荐：</strong>{dontCaption}</div></div>
+  </div>
+);
+
+const FC_P = '#2673dd';
+const FC_BG = '#f0f5ff';
+const FC_WHITE = '#fff';
+const FC_BORDER = '#2673dd';
+
+const FcRect = ({ x, y, w, h, text, fill = FC_BG }) => (
+  <g>
+    <rect x={x} y={y} width={w} height={h} rx={6} fill={fill} stroke={FC_BORDER} strokeWidth={1.5} />
+    <text x={x + w/2} y={y + h/2 + 1} textAnchor="middle" dominantBaseline="central" fontSize={12} fill="#333" fontWeight={500}>{text}</text>
+  </g>
+);
+
+const FcDiamond = ({ cx, cy, w, h, text }) => {
+  const pts = `${cx},${cy - h/2} ${cx + w/2},${cy} ${cx},${cy + h/2} ${cx - w/2},${cy}`;
+  return (
+    <g>
+      <polygon points={pts} fill={FC_BG} stroke={FC_BORDER} strokeWidth={1.5} />
+      <text x={cx} y={cy + 1} textAnchor="middle" dominantBaseline="central" fontSize={11} fill="#333" fontWeight={500}>{text}</text>
+    </g>
+  );
+};
+
+const FcResult = ({ x, y, w, h, text }) => (
+  <g>
+    <rect x={x} y={y} width={w} height={h} rx={14} fill={FC_P} stroke={FC_P} strokeWidth={1.5} />
+    <text x={x + w/2} y={y + h/2 + 1} textAnchor="middle" dominantBaseline="central" fontSize={11} fill="#fff" fontWeight={500}>{text}</text>
+  </g>
+);
+
+const FcArrow = ({ x1, y1, x2, y2, label, labelSide }) => {
+  const mx = (x1 + x2) / 2;
+  const my = (y1 + y2) / 2;
+  const isVert = x1 === x2;
+  return (
+    <g>
+      <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={FC_BORDER} strokeWidth={1.5} markerEnd="url(#fc-arrow)" />
+      {label && <text x={isVert ? mx + (labelSide === 'right' ? 10 : -10) : mx} y={isVert ? my : my - 6} textAnchor={isVert ? (labelSide === 'right' ? 'start' : 'end') : 'middle'} dominantBaseline="central" fontSize={10} fill={FC_P} fontWeight={600}>{label}</text>}
+    </g>
+  );
+};
+
+const FcElbow = ({ x1, y1, xm, ym, x2, y2, label }) => (
+  <g>
+    <polyline points={`${x1},${y1} ${xm},${y1} ${xm},${y2} ${x2},${y2}`} fill="none" stroke={FC_BORDER} strokeWidth={1.5} markerEnd="url(#fc-arrow)" />
+    {label && <text x={x1 + 10} y={y1 - 6} textAnchor="start" fontSize={10} fill={FC_P} fontWeight={600}>{label}</text>}
+  </g>
+);
+
+const FlowChart = () => (
+  <svg viewBox="0 0 820 500" style={{ width:'100%', maxWidth:820, display:'block', margin:'0 auto' }} fill="none">
+    <defs>
+      <marker id="fc-arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth={7} markerHeight={7} orient="auto-start-reverse">
+        <path d="M0,0 L10,5 L0,10 Z" fill={FC_BORDER} />
+      </marker>
+    </defs>
+
+    {/* Start node */}
+    <FcRect x={310} y={10} w={200} h={36} text="需要全局悬浮操作入口" fill={FC_WHITE} />
+
+    {/* D1: 回到顶部? */}
+    <FcArrow x1={410} y1={46} x2={410} y2={70} />
+    <FcDiamond cx={410} cy={100} w={130} h={56} text="回到顶部?" />
+
+    {/* 是 → BackTop */}
+    <FcArrow x1={475} y1={100} x2={620} y2={100} label="是" labelSide="right" />
+    <FcResult x={620} y={84} w={150} h={32} text="FloatButton.BackTop" />
+
+    {/* 否 → D2 */}
+    <FcArrow x1={410} y1={128} x2={410} y2={155} label="否" labelSide="right" />
+    <FcDiamond cx={410} cy={185} w={140} h={56} text="单一全局操作?" />
+
+    {/* D2 是 → D3 */}
+    <FcArrow x1={340} y1={185} x2={220} y2={185} label="是" />
+    <FcDiamond cx={160} cy={185} w={140} h={56} text="首要核心入口?" />
+
+    {/* D3 是 → 主色调 */}
+    <FcArrow x1={160} y1={213} x2={160} y2={245} label="是" labelSide="right" />
+    <FcResult x={85} y={245} w={150} h={30} text="主色调悬浮按钮" />
+
+    {/* D3 否 → D4 */}
+    <FcArrow x1={160} y1={275} x2={160} y2={305} label="否" labelSide="right" />
+    <FcDiamond cx={160} cy={335} w={140} h={56} text="需要文字辅助?" />
+
+    {/* D4 是 → 方形 */}
+    <FcArrow x1={90} y1={335} x2={20} y2={335} label="是" />
+    <FcResult x={20} y={316} w={70} h={38} text="方形按钮" />
+
+    {/* D4 否 → 单按钮 */}
+    <FcArrow x1={160} y1={363} x2={160} y2={395} label="否" labelSide="right" />
+    <FcResult x={90} y={395} w={140} h={30} text="单悬浮按钮" />
+
+    {/* D2 否 → D5 */}
+    <FcArrow x1={480} y1={185} x2={590} y2={185} label="否" />
+    <FcDiamond cx={650} cy={185} w={160} h={56} text="有数量/状态提示?" />
+
+    {/* D5 是 → 带徽标 */}
+    <FcArrow x1={650} y1={213} x2={650} y2={245} label="是" labelSide="right" />
+    <FcResult x={575} y={245} w={150} h={30} text="带徽标悬浮按钮" />
+
+    {/* D5 否 → D6 */}
+    <FcArrow x1={650} y1={275} x2={650} y2={310} label="否" labelSide="right" />
+    <FcDiamond cx={650} cy={340} w={130} h={56} text="子操作较多?" />
+
+    {/* D6 是 → 菜单模式 */}
+    <FcArrow x1={650} y1={368} x2={650} y2={400} label="是" labelSide="right" />
+    <FcResult x={570} y={400} w={160} h={30} text="菜单模式悬浮按钮" />
+
+    {/* D6 否 → 按钮组 */}
+    <FcArrow x1={715} y1={340} x2={750} y2={340} label="否" />
+    <FcElbow x1={750} y1={340} xm={750} ym={340} x2={750} y2={455} />
+    <FcResult x={680} y={445} w={140} h={30} text="悬浮按钮组" />
+  </svg>
+);
+
+function App() {
+  const [menuOpen, setMenuOpen] = React.useState(true);
+
+  return (
+  <ConfigProvider theme={infraTheme}>
+  <>
+    <h2 style={{ display:'block', fontSize:26, borderBottom:'none', marginBottom:0 }}>1. 简洁易读部份</h2>
+
+    {/* ====== 1.0 组件描述 ====== */}
+    <h2>1.0 组件描述</h2>
+    <p>悬浮按钮组件用于在页面上提供固定的全局操作入口，无论用户浏览到何处都可以看见并快速触达。通过视觉层级引导用户发现和使用全局功能。</p>
+
+    {/* ====== 1.1 组件构成 ====== */}
+    <h2>1.1 组件构成</h2>
+    <p>悬浮按钮由以下基础要素构成，可按需组合使用：</p>
+
+    <Illus>
+      <div className="g2">
+        <div style={{ textAlign:'center' }}>
+          <svg width="220" height="160" viewBox="0 0 220 160" fill="none">
+            <circle cx="90" cy="80" r="30" fill="white" stroke="#d9d9d9" strokeWidth="1.5"/>
+            <circle cx="90" cy="80" r="30" fill="none" stroke="#2673dd" strokeWidth="1.5" strokeDasharray="4 2" opacity=".35"/>
+            <foreignObject x="72" y="62" width="36" height="36">
+              <div xmlns="http://www.w3.org/1999/xhtml" style={{ display:'flex', alignItems:'center', justifyContent:'center', width:'100%', height:'100%', color:'#2673dd', fontSize:22 }}><MessageOutlined /></div>
+            </foreignObject>
+            <ellipse cx="90" cy="114" rx="20" ry="3" fill="#000" opacity=".05"/>
+            <circle cx="64" cy="58" r="3" fill="#2673dd"/><line x1="64" y1="58" x2="16" y2="30" stroke="#2673dd" strokeWidth="1"/>
+            <rect x="0" y="18" width="50" height="18" rx="4" fill="#2673dd" opacity=".1"/><text x="25" y="31" textAnchor="middle" fontSize="10" fill="#2673dd" fontWeight="500">① 容器</text>
+            <circle cx="112" cy="74" r="3" fill="#2673dd"/><line x1="112" y1="74" x2="170" y2="46" stroke="#2673dd" strokeWidth="1"/>
+            <rect x="158" y="34" width="50" height="18" rx="4" fill="#2673dd" opacity=".1"/><text x="183" y="47" textAnchor="middle" fontSize="10" fill="#2673dd" fontWeight="500">② 图标</text>
+            <text x="90" y="142" textAnchor="middle" fontSize="11" fill="#999" fontWeight="500">shape="circle"</text>
+          </svg>
+        </div>
+        <div style={{ textAlign:'center' }}>
+          <svg width="220" height="160" viewBox="0 0 220 160" fill="none">
+            <rect x="64" y="44" width="52" height="72" rx="8" fill="white" stroke="#d9d9d9" strokeWidth="1.5"/>
+            <rect x="64" y="44" width="52" height="72" rx="8" fill="none" stroke="#2673dd" strokeWidth="1.5" strokeDasharray="4 2" opacity=".35"/>
+            <foreignObject x="72" y="54" width="36" height="36">
+              <div xmlns="http://www.w3.org/1999/xhtml" style={{ display:'flex', alignItems:'center', justifyContent:'center', width:'100%', height:'100%', color:'#2673dd', fontSize:22 }}><MessageOutlined /></div>
+            </foreignObject>
+            <text x="90" y="103" textAnchor="middle" fontSize="11" fill="#333" fontWeight="500">反馈</text>
+            <ellipse cx="90" cy="122" rx="18" ry="3" fill="#000" opacity=".05"/>
+            <circle cx="68" cy="50" r="3" fill="#2673dd"/><line x1="68" y1="50" x2="16" y2="22" stroke="#2673dd" strokeWidth="1"/>
+            <rect x="0" y="10" width="50" height="18" rx="4" fill="#2673dd" opacity=".1"/><text x="25" y="23" textAnchor="middle" fontSize="10" fill="#2673dd" fontWeight="500">① 容器</text>
+            <circle cx="112" cy="70" r="3" fill="#2673dd"/><line x1="112" y1="70" x2="170" y2="34" stroke="#2673dd" strokeWidth="1"/>
+            <rect x="158" y="22" width="50" height="18" rx="4" fill="#2673dd" opacity=".1"/><text x="183" y="35" textAnchor="middle" fontSize="10" fill="#2673dd" fontWeight="500">② 图标</text>
+            <circle cx="112" cy="99" r="3" fill="#2673dd"/><line x1="112" y1="99" x2="170" y2="99" stroke="#2673dd" strokeWidth="1"/>
+            <rect x="158" y="88" width="72" height="18" rx="4" fill="#2673dd" opacity=".1"/><text x="194" y="101" textAnchor="middle" fontSize="10" fill="#2673dd" fontWeight="500">③ description</text>
+            <text x="90" y="148" textAnchor="middle" fontSize="11" fill="#999" fontWeight="500">shape="square"</text>
+          </svg>
+        </div>
+      </div>
+    </Illus>
+
+    <div className="elem-item"><span className="elem-num">1</span><div><strong>容器</strong>&ensp;定义按钮的点击区域与整体形态，固定悬浮于视口某一位置，用于承载图标与可选文字。</div></div>
+    <div className="elem-item"><span className="elem-num">2</span><div><strong>图标</strong>&ensp;通过 <code>icon</code> prop 设置，表达操作语义，为悬浮按钮的核心要素。</div></div>
+    <div className="elem-item"><span className="elem-num">3</span><div><strong>文字描述（可选）</strong>&ensp;通过 <code>description</code> prop 设置，仅 <code>shape="square"</code> 时支持，需精简。</div></div>
+
+    <Divider />
+
+    {/* ====== 1.2 组件类型 ====== */}
+    <h2>1.2 组件包含哪些不同类型</h2>
+
+    {/* 1.2.1 */}
+    <h3>1.2.1 单悬浮按钮（默认）</h3>
+    <p><strong>是什么</strong>：单个悬浮于页面上方的圆形按钮，承载单一全局操作</p>
+    <Illus>
+      <div className="g2">
+        <div className="demo-box" style={{ width:80, height:80 }}><FloatButton icon={<MessageOutlined />} /></div>
+        <MockPage><FloatButton icon={<MessageOutlined />} /></MockPage>
+      </div>
+    </Illus>
+    <p><strong>简单用法</strong>：必须用于网站上的全局功能；无论用户滚动到何处都需可见；同一视口内同一区域不宜出现多个独立悬浮按钮</p>
+    <p><strong>典型场景</strong>：反馈入口、在线客服、快捷帮助、提交建议</p>
+    <Illus>
+      <MockPage height={180} lines={7}><FloatButton icon={<QuestionCircleOutlined />} tooltip="帮助" /></MockPage>
+    </Illus>
+    <p><strong>替代方案</strong>：若需收纳多个操作，改用悬浮按钮组或菜单模式</p>
+
+    {/* 1.2.2 */}
+    <h3>1.2.2 主色调悬浮按钮</h3>
+    <p><strong>是什么</strong>：采用主色填充（<code>type="primary"</code>）的悬浮按钮，用于强调当前页面的首要全局操作</p>
+    <Illus>
+      <div className="fc" style={{ gap:24, padding:'16px 0' }}>
+        <div className="demo-box" style={{ width:80, height:80 }}><FloatButton icon={<MessageOutlined />} /></div>
+        <div style={{ fontSize:20, color:'#ccc' }}>→</div>
+        <div className="demo-box" style={{ width:80, height:80 }}><FloatButton icon={<MessageOutlined />} type="primary" /></div>
+      </div>
+    </Illus>
+    <p><strong>简单用法</strong>：必须用于页面唯一的、最重要的全局入口；不可与多个同等强调的悬浮按钮并存</p>
+    <p><strong>典型场景</strong>：主 CTA（如「立即咨询」）、核心业务入口、付费转化按钮</p>
+    <Illus>
+      <MockPage height={180} lines={6}><FloatButton icon={<AimOutlined />} type="primary" tooltip="立即咨询" /></MockPage>
+    </Illus>
+    <p><strong>替代方案</strong>：若操作非首要目标，改用默认悬浮按钮</p>
+
+    {/* 1.2.3 */}
+    <h3>1.2.3 方形悬浮按钮（带文字）</h3>
+    <p><strong>是什么</strong>：采用 <code>shape="square"</code> 的悬浮按钮，可通过 <code>description</code> 携带精简文字描述以增强识别</p>
+    <Illus>
+      <div className="fc" style={{ gap:20, padding:'16px 0' }}>
+        {[['反馈', <MessageOutlined />], ['客服', <CustomerServiceOutlined />], ['帮助', <QuestionCircleOutlined />]].map(([t, ic], i) => (
+          <div key={i} className="demo-box" style={{ width:80, height:80 }}><FloatButton icon={ic} shape="square" description={t} /></div>
+        ))}
+      </div>
+    </Illus>
+    <p><strong>简单用法</strong>：必须用于需要文字辅助说明语义的场景；文字必须精简，推荐双字；仅 <code>shape="square"</code> 支持 <code>description</code></p>
+    <p><strong>典型场景</strong>：反馈、客服、帮助、回到顶部</p>
+    <Illus>
+      <MockPage height={180}><FloatButton icon={<MessageOutlined />} shape="square" description="反馈" /></MockPage>
+    </Illus>
+    <p><strong>替代方案</strong>：若语义通过图标已可识别，改用圆形悬浮按钮</p>
+
+    {/* 1.2.4 */}
+    <h3>1.2.4 悬浮按钮组</h3>
+    <p><strong>是什么</strong>：使用 <code>FloatButton.Group</code> 将多个悬浮按钮组合，自上而下展开，无需二次点击即可看到全部选项</p>
+    <Illus>
+      <div className="g2">
+        <div className="demo-box" style={{ width:80, height:220 }}>
+          <FloatButton.Group shape="circle" style={{ insetInlineEnd: 14 }}>
+            <FloatButton icon={<MessageOutlined />} />
+            <FloatButton icon={<CustomerServiceOutlined />} />
+            <FloatButton icon={<QuestionCircleOutlined />} />
+          </FloatButton.Group>
+        </div>
+        <MockPage height={220}>
+          <FloatButton.Group shape="circle">
+            <FloatButton icon={<MessageOutlined />} tooltip="反馈" />
+            <FloatButton icon={<CustomerServiceOutlined />} tooltip="客服" />
+            <FloatButton icon={<QuestionCircleOutlined />} tooltip="帮助" />
+          </FloatButton.Group>
+        </MockPage>
+      </div>
+    </Illus>
+    <p><strong>简单用法</strong>：必须用于多个同等重要或平级的全局操作；子按钮数量不宜超过 5 个；展开方向通过 <code>placement</code> 控制</p>
+    <p><strong>典型场景</strong>：反馈 + 帮助 + 客服、多种快捷入口并列</p>
+    <p><strong>替代方案</strong>：若子项过多或需收纳，改用菜单模式悬浮按钮</p>
+
+    {/* 1.2.5 */}
+    <h3>1.2.5 菜单模式悬浮按钮</h3>
+    <p><strong>是什么</strong>：通过 <code>FloatButton.Group</code> 设置 <code>trigger="click"</code> 或 <code>trigger="hover"</code>，点击/悬停后展开菜单</p>
+    <Illus>
+      <div className="g2">
+        <div className="demo-box" style={{ width:80, height:260 }}>
+          <FloatButton.Group trigger="click" open={menuOpen} onOpenChange={setMenuOpen} icon={<EllipsisOutlined />} type="primary" style={{ insetInlineEnd: 14 }}>
+            <FloatButton icon={<MessageOutlined />} tooltip="提交反馈" />
+            <FloatButton icon={<CustomerServiceOutlined />} tooltip="在线客服" />
+            <FloatButton icon={<QuestionCircleOutlined />} tooltip="帮助中心" />
+            <FloatButton icon={<FileTextOutlined />} tooltip="使用文档" />
+          </FloatButton.Group>
+        </div>
+        <MockPage height={260}>
+          <FloatButton.Group trigger="hover" open={true} icon={<EllipsisOutlined />} type="primary">
+            <FloatButton icon={<ExportOutlined />} tooltip="导出" />
+            <FloatButton icon={<ShareAltOutlined />} tooltip="分享" />
+            <FloatButton icon={<StarOutlined />} tooltip="收藏" />
+            <FloatButton icon={<PrinterOutlined />} tooltip="打印" />
+          </FloatButton.Group>
+        </MockPage>
+      </div>
+    </Illus>
+    <p><strong>简单用法</strong>：必须用于操作较多、需收纳以节省空间的场景；支持 <code>trigger="click"</code> 或 <code>trigger="hover"</code>；主触发按钮通过 <code>icon</code> 表达「更多」或核心动作</p>
+    <p><strong>典型场景</strong>：多种反馈入口、多项快捷操作、导出/分享/收藏等动作集合</p>
+    <p><strong>替代方案</strong>：若操作数量少且重要性相近，改用悬浮按钮组（不设 trigger）</p>
+
+    {/* 1.2.6 */}
+    <h3>1.2.6 回到顶部</h3>
+    <p><strong>是什么</strong>：<code>FloatButton.BackTop</code> 专用于长页面滚动后，一键返回页面顶部</p>
+    <Illus>
+      <div className="g2">
+        <div className="demo-box" style={{ width:80, height:80 }}><FloatButton icon={<VerticalAlignTopOutlined />} /></div>
+        <MockPage height={200} lines={11}>
+          <div style={{ position:'absolute', top:6, left:'50%', transform:'translateX(-50%)', fontSize:9, color:'#bbb', background:'var(--bg)', padding:'0 6px', zIndex:1 }}>▲ 页面顶部</div>
+          <div style={{ position:'absolute', bottom:50, left:14, right:14, borderTop:'1px dashed #d9d9d9' }} />
+          <div style={{ position:'absolute', bottom:38, left:'50%', transform:'translateX(-50%)', fontSize:9, color:'#bbb' }}>当前可视区域 ↕</div>
+          <FloatButton icon={<VerticalAlignTopOutlined />} />
+        </MockPage>
+      </div>
+    </Illus>
+    <p><strong>简单用法</strong>：必须用于长内容页面；通过 <code>visibilityHeight</code>（默认 400）控制出现时机；<code>duration</code> 控制滚动耗时</p>
+    <p><strong>典型场景</strong>：文章页、列表页、详情页、文档页</p>
+    <p><strong>替代方案</strong>：若页面内容较短无需滚动，不必使用回到顶部</p>
+
+    {/* 1.2.7 */}
+    <h3>1.2.7 带徽标悬浮按钮</h3>
+    <p><strong>是什么</strong>：通过 <code>badge</code> prop 在悬浮按钮右上角附带数字徽标，提示待处理数量或新消息</p>
+    <Illus>
+      <div className="fc" style={{ gap:24, padding:'16px 0' }}>
+        <div className="demo-box" style={{ width:80, height:80 }}><FloatButton icon={<MessageOutlined />} badge={{ count: 3 }} /></div>
+        <div className="demo-box" style={{ width:80, height:80 }}><FloatButton icon={<BellOutlined />} type="primary" badge={{ count: 12 }} /></div>
+        <div className="demo-box" style={{ width:80, height:80 }}><FloatButton icon={<MailOutlined />} badge={{ dot: true }} /></div>
+      </div>
+    </Illus>
+    <p><strong>简单用法</strong>：必须用于有数量或状态提示需求的入口；徽标数字需与业务含义一致；不可滥用，以免干扰用户</p>
+    <p><strong>典型场景</strong>：消息通知、待处理数量、客服未读数</p>
+    <Illus>
+      <MockPage height={180} label={<span><MailOutlined style={{ marginRight:4 }} />消息中心</span>}><FloatButton icon={<MessageOutlined />} badge={{ count: 5 }} /></MockPage>
+    </Illus>
+    <p><strong>替代方案</strong>：若无需数量提示，改用普通悬浮按钮</p>
+
+    <Divider />
+
+    {/* ====== 1.3 典型场景案例 ====== */}
+    <h2>1.3 各类型典型场景案例</h2>
+
+    <h3>1.3.1 单悬浮按钮</h3>
+    <Compare
+      doContent={<MockPage height={140} style={{ width:'100%' }}><FloatButton icon={<MessageOutlined />} /></MockPage>}
+      doCaption="单一全局入口使用单悬浮按钮，保持界面简洁"
+      dontContent={
+        <MockPage height={140} style={{ width:'100%' }}>
+          <FloatButton icon={<MessageOutlined />} />
+          <FloatButton icon={<QuestionCircleOutlined />} style={{ insetInlineEnd: 70 }} />
+          <FloatButton icon={<CustomerServiceOutlined />} style={{ insetInlineEnd: 'auto', insetInlineStart: 14 }} />
+        </MockPage>}
+      dontCaption="同一视口内出现多个独立悬浮按钮，造成视觉干扰"
+    />
+
+    <h3>1.3.2 主色调与默认</h3>
+    <Compare
+      doContent={
+        <MockPage height={140} style={{ width:'100%' }}>
+          <FloatButton.Group shape="circle">
+            <FloatButton icon={<QuestionCircleOutlined />} />
+            <FloatButton icon={<AimOutlined />} type="primary" />
+          </FloatButton.Group>
+        </MockPage>}
+      doCaption="首要全局操作使用 type='primary'，次要操作使用默认"
+      dontContent={
+        <MockPage height={140} style={{ width:'100%' }}>
+          <FloatButton.Group shape="circle">
+            <FloatButton icon={<QuestionCircleOutlined />} type="primary" />
+            <FloatButton icon={<AimOutlined />} type="primary" />
+          </FloatButton.Group>
+          <FloatButton icon={<MessageOutlined />} type="primary" style={{ insetInlineEnd: 'auto', insetInlineStart: 14 }} />
+        </MockPage>}
+      dontCaption="多个 type='primary' 悬浮按钮并存，层级混乱"
+    />
+
+    <h3>1.3.3 悬浮按钮组与菜单模式</h3>
+    <Compare
+      doContent={
+        <div style={{ display:'flex', gap:16, alignItems:'flex-end' }}>
+          <div style={{ textAlign:'center' }}>
+            <MockPage height={160} style={{ width:140 }} lines={2}>
+              <FloatButton.Group shape="circle">
+                <FloatButton icon={<MessageOutlined />} />
+                <FloatButton icon={<QuestionCircleOutlined />} />
+                <FloatButton icon={<CustomerServiceOutlined />} />
+              </FloatButton.Group>
+            </MockPage>
+          </div>
+          <div style={{ textAlign:'center' }}>
+            <MockPage height={160} style={{ width:140 }} lines={2}>
+              <FloatButton.Group trigger="hover" open={true} icon={<EllipsisOutlined />} type="primary">
+                <FloatButton icon={<MessageOutlined />} /><FloatButton icon={<CustomerServiceOutlined />} />
+                <FloatButton icon={<QuestionCircleOutlined />} /><FloatButton icon={<FileTextOutlined />} />
+              </FloatButton.Group>
+            </MockPage>
+          </div>
+        </div>}
+      doCaption="操作少用按钮组直接展示，操作多用 trigger 菜单收纳"
+      dontContent={
+        <MockPage height={160} style={{ width:'100%' }} lines={2}>
+          <FloatButton.Group shape="circle">
+            <FloatButton icon={<MessageOutlined />} /><FloatButton icon={<CustomerServiceOutlined />} />
+            <FloatButton icon={<QuestionCircleOutlined />} /><FloatButton icon={<FileTextOutlined />} />
+            <FloatButton icon={<ExportOutlined />} /><FloatButton icon={<StarOutlined />} />
+            <FloatButton icon={<PrinterOutlined />} />
+          </FloatButton.Group>
+        </MockPage>}
+      dontCaption="大量操作平铺在按钮组中，选择困难、遮挡内容"
+    />
+
+    <h3>1.3.4 回到顶部</h3>
+    <Compare
+      doContent={<MockPage height={140} style={{ width:'100%' }} lines={9} label={<span><FileTextOutlined style={{ marginRight:4 }} />长页面（需滚动）</span>}><FloatButton icon={<VerticalAlignTopOutlined />} /></MockPage>}
+      doCaption="长内容页面、需滚动浏览时使用 FloatButton.BackTop"
+      dontContent={<MockPage height={140} style={{ width:'100%' }} lines={3} label={<span><FileTextOutlined style={{ marginRight:4 }} />短页面（无需滚动）</span>}><FloatButton icon={<VerticalAlignTopOutlined />} /></MockPage>}
+      dontCaption="内容不足以产生滚动的页面放置回到顶部，多余"
+    />
+
+    <Divider />
+
+    {/* ====== 2. 选型指南 ====== */}
+    <h2 style={{ display:'block', fontSize:26, borderBottom:'none', marginBottom:0 }}>2. 选型指南</h2>
+    <h2>2.1 选择流程</h2>
+    <Illus>
+      <FlowChart />
+    </Illus>
+
+    <Divider />
+
+    {/* ====== 3. 交互与排版规则 ====== */}
+    <h2 style={{ display:'block', fontSize:26, borderBottom:'none', marginBottom:0 }}>3. 细致专业部份（交互与排版规则）</h2>
+    <p>为了保持界面清爽并降低用户的误触率，当同一区域出现多个悬浮操作时，请参考以下排版和交互规则：</p>
+    <h2>3.1 多操作的展示与折叠策略</h2>
+    <p>当悬浮区域需要承载多个全局操作时，需按以下逻辑决定展示与收纳：</p>
+    <ul>
+      <li><strong>直接展示</strong>：3–5 个同等重要的操作，使用 <code>FloatButton.Group</code>（不设 trigger）直接展示。</li>
+      <li><strong>收纳展示</strong>：超过 5 个操作，使用 <code>FloatButton.Group</code> + <code>trigger="click"</code> 或 <code>"hover"</code> 收纳。</li>
+      <li><strong>单一优先</strong>：若只有一个核心全局入口，使用单个 <code>FloatButton</code>。</li>
+    </ul>
+    <Illus>
+      <div style={{ display:'flex', gap:24, justifyContent:'center', alignItems:'flex-end', flexWrap:'wrap', padding:'8px 0' }}>
+        <div style={{ textAlign:'center' }}>
+          <div className="demo-box" style={{ width:80, height:80 }}><FloatButton icon={<MessageOutlined />} /></div>
+        </div>
+        <Divider type="vertical" style={{ height:60, alignSelf:'center' }} />
+        <div style={{ textAlign:'center' }}>
+          <div className="demo-box" style={{ width:80, height:200 }}>
+            <FloatButton.Group shape="circle" style={{ insetInlineEnd: 14 }}>
+              <FloatButton icon={<MessageOutlined />} />
+              <FloatButton icon={<QuestionCircleOutlined />} />
+              <FloatButton icon={<CustomerServiceOutlined />} />
+            </FloatButton.Group>
+          </div>
+        </div>
+        <Divider type="vertical" style={{ height:60, alignSelf:'center' }} />
+        <div style={{ textAlign:'center' }}>
+          <div className="demo-box" style={{ width:80, height:260 }}>
+            <FloatButton.Group trigger="hover" open={true} icon={<EllipsisOutlined />} type="primary" style={{ insetInlineEnd: 14 }}>
+              <FloatButton icon={<MessageOutlined />} /><FloatButton icon={<CustomerServiceOutlined />} />
+              <FloatButton icon={<QuestionCircleOutlined />} /><FloatButton icon={<FileTextOutlined />} />
+            </FloatButton.Group>
+          </div>
+        </div>
+      </div>
+    </Illus>
+
+    <h2>3.2 危险操作（删除/清空/停用）</h2>
+    <p>悬浮按钮通常不承载危险操作；若业务强需求在悬浮入口中提供删除、停用等操作：</p>
+    <ul>
+      <li><strong>收纳</strong>：危险操作必须收纳在菜单模式中，不可作为主触发按钮。</li>
+      <li><strong>二次确认</strong>：点击后必须通过弹窗进行二次确认，再执行。</li>
+      <li><strong>视觉隔离</strong>：在展开列表中，危险项需通过红色或弱化样式与常规项区分。</li>
+    </ul>
+    <Illus>
+      <div className="fc" style={{ padding:'12px 0' }}>
+        <Menu selectable={false} style={{ borderRadius:8, boxShadow:'0 4px 16px rgba(0,0,0,.12)', minWidth:150, border:'1px solid #e8e8e8', borderRight:'none' }}>
+          <Menu.Item key="1" icon={<ExportOutlined />}>导出数据</Menu.Item>
+          <Menu.Item key="2" icon={<CopyOutlined />}>复制链接</Menu.Item>
+          <Menu.Item key="3" icon={<StarOutlined />}>加入收藏</Menu.Item>
+          <Menu.Divider />
+          <Menu.Item key="4" icon={<DeleteOutlined />} danger>清空数据</Menu.Item>
+        </Menu>
+      </div>
+    </Illus>
+
+    <h2>3.3 摆放位置（按页面场景划分）</h2>
+    <p>悬浮按钮的固定位置需与用户视线及操作习惯匹配：</p>
+    <ul>
+      <li><strong>默认右下角</strong>：适用于多数桌面端页面，不遮挡主体内容。</li>
+      <li><strong>自定义方向</strong>：若右下角已被占用，可调整至左下、左上或右上。</li>
+      <li><strong>移动端</strong>：需考虑拇指可触达区域，通常仍为右下角或底部居中偏右。</li>
+      <li><strong>与内容边距</strong>：悬浮按钮与视口边缘需保持固定间距，避免贴边。</li>
+    </ul>
+    <Illus>
+      <div style={{ display:'flex', gap:20, justifyContent:'center', flexWrap:'wrap', padding:'8px 0' }}>
+        <div style={{ textAlign:'center' }}>
+          <MockPage height={150} style={{ width:220 }}><FloatButton icon={<MessageOutlined />} type="primary" /></MockPage>
+        </div>
+        <div style={{ textAlign:'center' }}>
+          <MockPage height={150} style={{ width:220 }}>
+            <FloatButton icon={<MessageOutlined />} style={{ insetInlineEnd:'auto', insetInlineStart:14 }} />
+          </MockPage>
+        </div>
+        <div style={{ textAlign:'center' }}>
+          <MockPage height={180} style={{ width:100, borderRadius:12 }} lines={6}>
+            <FloatButton icon={<MessageOutlined />} type="primary" style={{ width:32, height:32 }} />
+          </MockPage>
+        </div>
+      </div>
+    </Illus>
+
+    <h2>3.4 顺序与对齐逻辑</h2>
+    <p>悬浮按钮组或菜单模式中，子项顺序需符合业务优先级与用户预期：</p>
+    <ul>
+      <li><strong>自上而下</strong>：主操作或高频操作排在顶部；危险操作排在底部。通过 <code>placement</code> 控制展开方向。</li>
+      <li><strong>逻辑分组</strong>：同类操作可相邻排列；不同类型间可适当留白。</li>
+      <li><strong>回到顶部</strong>：若与其它悬浮入口并存，<code>FloatButton.BackTop</code> 宜放在最底部。</li>
+    </ul>
+    <Illus>
+      <div className="fc" style={{ padding:'12px 0' }}>
+        <div className="demo-box" style={{ width:80, height:260 }}>
+          <FloatButton.Group shape="circle" style={{ insetInlineEnd: 14 }}>
+            <FloatButton icon={<MessageOutlined />} tooltip="反馈（高频）" />
+            <FloatButton icon={<QuestionCircleOutlined />} tooltip="帮助（中频）" />
+            <FloatButton icon={<CustomerServiceOutlined />} tooltip="客服（低频）" />
+            <FloatButton icon={<VerticalAlignTopOutlined />} tooltip="回到顶部" />
+          </FloatButton.Group>
+        </div>
+      </div>
+    </Illus>
+
+    <h2>3.5 状态与交互反馈</h2>
+    <p>悬浮按钮需提供清晰的状态与反馈：</p>
+    <ul>
+      <li><strong>默认</strong>：可点击性明确，与背景有足够对比。</li>
+      <li><strong>悬停</strong>：提供可点击暗示（如轻微放大、阴影或底色变化）。</li>
+      <li><strong>按下</strong>：提供明确的按压反馈。</li>
+      <li><strong>展开中</strong>：菜单模式展开时，主按钮 icon 旋转为 <code>CloseOutlined</code>。</li>
+      <li><strong>加载中</strong>：若操作触发异步请求，需进入加载状态并锁定，防止重复点击。</li>
+    </ul>
+    <Illus>
+      <div className="states-row" style={{ padding:'16px 0' }}>
+        <div className="state-item">
+          <div className="demo-box" style={{ width:60, height:60 }}><FloatButton icon={<MessageOutlined />} /></div>
+        </div>
+        <div className="state-item">
+          <div className="demo-box" style={{ width:60, height:60 }}><FloatButton icon={<MessageOutlined />} type="primary" /></div>
+        </div>
+        <div className="state-item">
+          <div className="demo-box" style={{ width:60, height:60 }}><FloatButton icon={<CloseOutlined />} type="primary" /></div>
+        </div>
+        <div className="state-item">
+          <div className="demo-box" style={{ width:60, height:60 }}><FloatButton icon={<LoadingOutlined spin />} /></div>
+        </div>
+      </div>
+    </Illus>
+
+    <h2>3.6 视觉规范与形态选择</h2>
+    <ul>
+      <li><strong>圆形与方形</strong>：<code>shape="circle"</code>（默认）适合纯图标；<code>shape="square"</code> 适用于需携带 <code>description</code> 的场景。</li>
+      <li><strong>尺寸</strong>：悬浮按钮需足够大以方便点击，同时不可过大以免遮挡内容。</li>
+      <li><strong>层级</strong>：悬浮按钮的层级应高于普通内容，低于模态框、抽屉等全屏覆盖层。</li>
+      <li><strong>图标选择</strong>：图标语义必须与操作一致，优先使用行业共识强的图标。</li>
+    </ul>
+    <Illus>
+      <div style={{ display:'flex', gap:32, justifyContent:'center', alignItems:'flex-end', flexWrap:'wrap', padding:'12px 0' }}>
+        <div style={{ textAlign:'center' }}>
+          <div style={{ display:'flex', gap:12, alignItems:'flex-end' }}>
+            <div className="fcc" style={{ gap:4 }}>
+              <div className="demo-box" style={{ width:60, height:60 }}><FloatButton icon={<MessageOutlined />} /></div>
+            </div>
+            <div className="fcc" style={{ gap:4 }}>
+              <div className="demo-box" style={{ width:60, height:70 }}><FloatButton icon={<MessageOutlined />} shape="square" description="反馈" /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Illus>
+
+    <Divider />
+
+    {/* ====== 4. FAQ ====== */}
+    <h2>4.0 常见问题</h2>
+    <div className="faq-item">
+      <div className="faq-q">1. 悬浮按钮组和菜单模式悬浮按钮有什么区别？</div>
+      <div className="faq-a">
+        <strong>悬浮按钮组</strong>（<code>FloatButton.Group</code> 不设 trigger）：子按钮直接展开，所有选项一目了然，适合 3–5 个平级操作。<br/>
+        <strong>菜单模式</strong>（<code>FloatButton.Group</code> + <code>trigger="click|hover"</code>）：点击/悬停后展开，适合更多操作或需收纳的场景，收起时只显示触发按钮。
+      </div>
+    </div>
+    <div className="faq-item">
+      <div className="faq-q">2. 回到顶部什么时候出现比较合适？</div>
+      <div className="faq-a">
+        <code>FloatButton.BackTop</code> 的 <code>visibilityHeight</code> 默认值为 400（px），即用户滚动超过 400px 后才显示。建议保持默认值或根据页面首屏高度微调。
+      </div>
+    </div>
+
+    <FloatButton.BackTop />
+  </>
+  </ConfigProvider>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+</script>
+</body>
+</html>

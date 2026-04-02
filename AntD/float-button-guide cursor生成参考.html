@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FloatButton 悬浮按钮 - 组件设计指南</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/dayjs@1/dayjs.min.js"></script>
+  <script src="https://unpkg.com/antd@5/dist/antd.min.js"></script>
+  <script src="https://unpkg.com/@ant-design/icons@5/dist/index.umd.min.js"></script>
+  <script src="https://unpkg.com/mermaid@10/dist/mermaid.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #f0f2f5;
+      color: rgba(0,0,0,0.88);
+    }
+    .page-wrapper {
+      display: flex;
+      max-width: 1400px;
+      margin: 0 auto;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+      padding: 32px 0 32px 24px;
+      scrollbar-width: thin;
+    }
+    .main-content {
+      flex: 1;
+      min-width: 0;
+      padding: 32px 48px 80px 48px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #1677ff 0%, #4096ff 50%, #69b1ff 100%);
+      border-radius: 16px;
+      padding: 48px;
+      margin-bottom: 48px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .hero-title { font-size: 40px; font-weight: 700; margin-bottom: 16px; position: relative; }
+    .hero-desc { font-size: 18px; opacity: 0.9; max-width: 600px; line-height: 1.8; position: relative; }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 4px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      margin-top: 20px;
+      backdrop-filter: blur(4px);
+      position: relative;
+    }
+
+    .section { margin-bottom: 56px; }
+    .section-title {
+      font-size: 26px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .section-subtitle {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 32px 0 12px;
+      color: rgba(0,0,0,0.85);
+    }
+    .section-desc {
+      font-size: 15px;
+      color: rgba(0,0,0,0.65);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .demo-frame {
+      border-radius: 12px;
+      border: 1px solid #e0e0e0;
+      overflow: hidden;
+      background: #fff;
+      margin: 16px 0 24px;
+    }
+    .demo-chrome {
+      height: 36px;
+      background: #f5f5f5;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      gap: 8px;
+    }
+    .demo-dots { display: flex; gap: 6px; }
+    .demo-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+    }
+    .demo-dot-red { background: #ff5f57; }
+    .demo-dot-yellow { background: #febc2e; }
+    .demo-dot-green { background: #28c840; }
+    .demo-url {
+      flex: 1;
+      height: 24px;
+      background: #fff;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 12px;
+      color: #999;
+    }
+    .demo-body {
+      position: relative;
+      transform: scale(1);
+      overflow: hidden;
+      background: #fff;
+    }
+    .demo-body-gray { background: #fafafa; }
+
+    .page-placeholder {
+      padding: 20px 24px;
+    }
+    .ph-line {
+      height: 8px;
+      border-radius: 4px;
+      background: #f0f0f0;
+      margin-bottom: 10px;
+    }
+    .ph-block {
+      height: 50px;
+      border-radius: 8px;
+      background: #f5f5f5;
+      margin-bottom: 12px;
+    }
+
+    .compare-row {
+      display: flex;
+      gap: 24px;
+      margin: 16px 0 24px;
+    }
+    .compare-col { flex: 1; min-width: 0; }
+    .compare-card {
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .compare-card-do { border: 2px solid #b7eb8f; }
+    .compare-card-dont { border: 2px solid #ffccc7; }
+    .compare-footer {
+      padding: 12px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 14px;
+    }
+    .compare-footer-do { background: #f6ffed; }
+    .compare-footer-dont { background: #fff2f0; }
+
+    .annotation-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      background: #fafafa;
+      border-radius: 12px;
+      border: 1px solid #f0f0f0;
+      margin: 16px 0 24px;
+    }
+    .anno-line {
+      position: absolute;
+      border: 1.5px dashed #1677ff;
+    }
+    .anno-label {
+      position: absolute;
+      background: #e6f4ff;
+      color: #1677ff;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .anno-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #1677ff;
+      color: #fff;
+      font-size: 11px;
+      margin-right: 6px;
+      flex-shrink: 0;
+    }
+
+    .type-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #f0f0f0;
+      padding: 24px;
+      margin: 16px 0;
+      transition: box-shadow 0.3s;
+    }
+    .type-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .type-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .type-badge {
+      display: inline-flex;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .usage-list {
+      margin: 8px 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    .usage-list li {
+      position: relative;
+      padding-left: 16px;
+      line-height: 2;
+      font-size: 14px;
+      color: rgba(0,0,0,0.65);
+    }
+    .usage-list li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: #1677ff;
+      font-weight: bold;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 12px 0 20px;
+    }
+    .info-item {
+      background: #fafafa;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .info-item-label {
+      font-size: 13px;
+      color: rgba(0,0,0,0.45);
+      margin-bottom: 6px;
+    }
+    .info-item-value {
+      font-size: 14px;
+      color: rgba(0,0,0,0.85);
+      line-height: 1.6;
+    }
+
+    .mermaid-wrapper {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #f0f0f0;
+      padding: 32px;
+      margin: 16px 0 24px;
+      overflow-x: auto;
+      text-align: center;
+    }
+
+    .faq-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #f0f0f0;
+      padding: 24px;
+      margin: 12px 0;
+    }
+    .faq-q {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .faq-a {
+      font-size: 14px;
+      color: rgba(0,0,0,0.65);
+      line-height: 1.8;
+      padding-left: 28px;
+    }
+
+    .rule-card {
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #f0f0f0;
+      padding: 24px;
+      margin: 16px 0;
+    }
+    .rule-list {
+      margin: 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    .rule-list li {
+      position: relative;
+      padding: 8px 0 8px 24px;
+      line-height: 1.8;
+      font-size: 14px;
+      color: rgba(0,0,0,0.75);
+      border-bottom: 1px solid #fafafa;
+    }
+    .rule-list li:last-child { border-bottom: none; }
+    .rule-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 4px;
+      color: #1677ff;
+    }
+
+    .state-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin: 16px 0 24px;
+    }
+    .state-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 12px;
+      background: #fafafa;
+      border-radius: 12px;
+      border: 1px solid #f0f0f0;
+    }
+    .state-label {
+      font-size: 13px;
+      color: rgba(0,0,0,0.65);
+      font-weight: 500;
+    }
+
+    .position-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 16px 0 24px;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d9d9d9; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #bfbfbf; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const {
+      FloatButton, Typography, Anchor, Badge, Divider, Tag, Space, ConfigProvider,
+      Tooltip, Card, theme, Collapse, Flex
+    } = antd;
+    const { Title, Paragraph, Text } = Typography;
+    const {
+      QuestionCircleOutlined, CustomerServiceOutlined, CommentOutlined,
+      EditOutlined, PlusOutlined, CloseOutlined, VerticalAlignTopOutlined,
+      MessageOutlined, ShareAltOutlined, HeartOutlined, DeleteOutlined,
+      FileTextOutlined, SettingOutlined, BellOutlined, UpOutlined,
+      CheckCircleFilled, CloseCircleFilled, MenuOutlined,
+      PhoneOutlined, MailOutlined, StarOutlined, CopyOutlined,
+      DownloadOutlined, ExportOutlined, SearchOutlined,
+      LoadingOutlined, InfoCircleOutlined, FireOutlined,
+      RocketOutlined, SmileOutlined, ToolOutlined
+    } = icons;
+
+    /* ========== Reusable Components ========== */
+
+    const BrowserFrame = ({ children, height = 200, url = 'https://example.com', gray = false }) => (
+      <div className="demo-frame">
+        <div className="demo-chrome">
+          <div className="demo-dots">
+            <div className="demo-dot demo-dot-red" />
+            <div className="demo-dot demo-dot-yellow" />
+            <div className="demo-dot demo-dot-green" />
+          </div>
+          <div className="demo-url">{url}</div>
+        </div>
+        <div className={`demo-body ${gray ? 'demo-body-gray' : ''}`} style={{ height }}>
+          {children}
+        </div>
+      </div>
+    );
+
+    const PagePlaceholder = ({ lines = 5, block = true }) => (
+      <div className="page-placeholder">
+        <div className="ph-line" style={{ width: '55%', height: 12, marginBottom: 16 }} />
+        {block && <div className="ph-block" />}
+        {Array.from({ length: lines }).map((_, i) => (
+          <div key={i} className="ph-line" style={{ width: `${60 + Math.random() * 35}%` }} />
+        ))}
+      </div>
+    );
+
+    const MockBtn = ({ icon, type = 'default', shape = 'circle', description, badgeCount, size = 40, style = {}, shadow = true, hovered = false, pressed = false, loading = false }) => {
+      const isPrimary = type === 'primary';
+      const isSquare = shape === 'square';
+      const baseStyle = {
+        width: size,
+        minHeight: size,
+        height: isSquare && description ? 'auto' : size,
+        borderRadius: isSquare ? 8 : '50%',
+        background: isPrimary ? '#1677ff' : '#ffffff',
+        color: isPrimary ? '#ffffff' : 'rgba(0,0,0,0.65)',
+        display: 'inline-flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxShadow: shadow
+          ? hovered
+            ? '0 6px 20px rgba(0,0,0,0.15)'
+            : '0 6px 16px rgba(0,0,0,0.08), 0 3px 6px -4px rgba(0,0,0,0.12), 0 9px 28px 8px rgba(0,0,0,0.05)'
+          : 'none',
+        cursor: 'pointer',
+        padding: isSquare && description ? '12px 4px 8px' : 0,
+        gap: isSquare && description ? 2 : 0,
+        border: 'none',
+        transition: 'all 0.2s',
+        opacity: pressed ? 0.85 : 1,
+        transform: hovered && !pressed ? 'scale(1.05)' : pressed ? 'scale(0.95)' : 'scale(1)',
+        flexShrink: 0,
+        ...style,
+      };
+      if (isPrimary && hovered) baseStyle.background = '#4096ff';
+      if (isPrimary && pressed) baseStyle.background = '#0958d9';
+
+      const iconEl = loading
+        ? <LoadingOutlined style={{ fontSize: isSquare && description ? 18 : 20 }} spin />
+        : <span style={{ fontSize: isSquare && description ? 18 : 20, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{icon}</span>;
+
+      const btn = (
+        <div style={baseStyle}>
+          {iconEl}
+          {description && (
+            <span style={{ fontSize: 12, lineHeight: 1.2, whiteSpace: 'nowrap', marginTop: 2, color: isPrimary ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.65)' }}>
+              {description}
+            </span>
+          )}
+        </div>
+      );
+
+      if (badgeCount !== undefined) {
+        return <Badge count={badgeCount} size="small" offset={[-4, 4]}>{btn}</Badge>;
+      }
+      return btn;
+    };
+
+    const SectionTitle = ({ id, children, level = 2 }) => {
+      const Tag = level === 2 ? 'h2' : 'h3';
+      return <Tag id={id} className={level === 2 ? 'section-title' : 'section-subtitle'}>{children}</Tag>;
+    };
+
+    /* ========== 1.1 Composition Annotation ========== */
+
+    const CompositionDiagram = () => (
+      <div className="annotation-wrapper" style={{ minHeight: 260, justifyContent: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 80 }}>
+          {/* Left annotations */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 32, alignItems: 'flex-end' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div className="anno-label"><span className="anno-num">1</span>容器 Container</div>
+              <div style={{ width: 40, borderTop: '1.5px dashed #1677ff' }} />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div className="anno-label"><span className="anno-num">2</span>图标 Icon</div>
+              <div style={{ width: 40, borderTop: '1.5px dashed #1677ff' }} />
+            </div>
+          </div>
+
+          {/* Center: Square button mock (shows all 3 elements) */}
+          <div style={{
+            width: 64, minHeight: 84, borderRadius: 12,
+            background: '#fff', display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center', gap: 6,
+            boxShadow: '0 6px 16px rgba(0,0,0,0.08), 0 3px 6px -4px rgba(0,0,0,0.12), 0 9px 28px 8px rgba(0,0,0,0.05)',
+            padding: '16px 8px 12px', position: 'relative', zIndex: 2,
+            border: '2px solid #e6f4ff',
+          }}>
+            <QuestionCircleOutlined style={{ fontSize: 26, color: '#1677ff' }} />
+            <span style={{ fontSize: 13, color: 'rgba(0,0,0,0.65)', fontWeight: 500 }}>帮助</span>
+          </div>
+
+          {/* Right annotation */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ width: 40, borderTop: '1.5px dashed #1677ff' }} />
+            <div className="anno-label"><span className="anno-num">3</span>文字描述 Description（可选）</div>
+          </div>
+        </div>
+      </div>
+    );
+
+    /* ========== 1.2 Type Demos ========== */
+
+    const SingleDemo = () => (
+      <BrowserFrame height={200} url="https://app.example.com/dashboard">
+        <PagePlaceholder lines={4} />
+        <div style={{ position: 'absolute', right: 24, bottom: 24 }}>
+          <MockBtn icon={<QuestionCircleOutlined />} />
+        </div>
+      </BrowserFrame>
+    );
+
+    const PrimaryDemo = () => (
+      <div style={{ display: 'flex', gap: 24 }}>
+        <div style={{ flex: 1 }}>
+          <BrowserFrame height={180} url="默认类型">
+            <PagePlaceholder lines={3} block={false} />
+            <div style={{ position: 'absolute', right: 24, bottom: 24 }}>
+              <MockBtn icon={<CustomerServiceOutlined />} />
+            </div>
+          </BrowserFrame>
+        </div>
+        <div style={{ flex: 1 }}>
+          <BrowserFrame height={180} url="主色调类型 Primary">
+            <PagePlaceholder lines={3} block={false} />
+            <div style={{ position: 'absolute', right: 24, bottom: 24 }}>
+              <MockBtn icon={<CustomerServiceOutlined />} type="primary" />
+            </div>
+          </BrowserFrame>
+        </div>
+      </div>
+    );
+
+    const SquareDemo = () => (
+      <BrowserFrame height={200} url="https://app.example.com/support">
+        <PagePlaceholder lines={4} />
+        <div style={{ position: 'absolute', right: 24, bottom: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <MockBtn icon={<CommentOutlined />} shape="square" description="反馈" />
+          <MockBtn icon={<CustomerServiceOutlined />} shape="square" description="客服" />
+        </div>
+      </BrowserFrame>
+    );
+
+    const GroupDemo = () => (
+      <BrowserFrame height={260} url="https://app.example.com/page">
+        <PagePlaceholder lines={6} />
+        <div style={{ position: 'absolute', right: 24, bottom: 24, display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
+          <MockBtn icon={<CommentOutlined />} />
+          <MockBtn icon={<CustomerServiceOutlined />} />
+          <MockBtn icon={<QuestionCircleOutlined />} />
+          <MockBtn icon={<FileTextOutlined />} />
+        </div>
+      </BrowserFrame>
+    );
+
+    const MenuDemo = () => {
+      const [open, setOpen] = React.useState(false);
+      return (
+        <BrowserFrame height={300} url="https://app.example.com/workspace">
+          <PagePlaceholder lines={7} />
+          <div style={{ position: 'absolute', right: 24, bottom: 24, display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
+            {open && (
+              <>
+                <MockBtn icon={<CommentOutlined />} style={{ animation: 'fadeIn 0.2s' }} />
+                <MockBtn icon={<CustomerServiceOutlined />} style={{ animation: 'fadeIn 0.25s' }} />
+                <MockBtn icon={<QuestionCircleOutlined />} style={{ animation: 'fadeIn 0.3s' }} />
+              </>
+            )}
+            <MockBtn
+              icon={open ? <CloseOutlined style={{ transition: 'transform 0.3s' }} /> : <PlusOutlined />}
+              type="primary"
+              style={{ cursor: 'pointer' }}
+            />
+          </div>
+          <div
+            onClick={() => setOpen(!open)}
+            style={{ position: 'absolute', right: 24, bottom: 24, width: 40, height: 40, cursor: 'pointer', zIndex: 10, borderRadius: '50%' }}
+          />
+        </BrowserFrame>
+      );
+    };
+
+    const BackTopDemo = () => {
+      const scrollRef = React.useRef(null);
+      return (
+        <div className="demo-frame">
+          <div className="demo-chrome">
+            <div className="demo-dots">
+              <div className="demo-dot demo-dot-red" />
+              <div className="demo-dot demo-dot-yellow" />
+              <div className="demo-dot demo-dot-green" />
+            </div>
+            <div className="demo-url">https://docs.example.com/article</div>
+          </div>
+          <div
+            ref={scrollRef}
+            style={{
+              height: 220,
+              overflow: 'auto',
+              position: 'relative',
+              transform: 'scale(1)',
+              background: '#fff',
+            }}
+          >
+            <div style={{ padding: 24 }}>
+              <div style={{ fontSize: 18, fontWeight: 600, marginBottom: 16 }}>长文档内容示例</div>
+              {Array.from({ length: 20 }).map((_, i) => (
+                <p key={i} style={{ color: 'rgba(0,0,0,0.45)', lineHeight: 2, fontSize: 14 }}>
+                  这是第 {i + 1} 段文档内容，请向下滚动查看回到顶部按钮的出现效果。当滚动距离超过一定高度后，右下角将出现回到顶部按钮。
+                </p>
+              ))}
+            </div>
+            <FloatButton.BackTop
+              visibilityHeight={100}
+              target={() => scrollRef.current}
+              style={{ right: 24, bottom: 24 }}
+            />
+          </div>
+        </div>
+      );
+    };
+
+    const BadgeDemo = () => (
+      <BrowserFrame height={200} url="https://app.example.com/messages">
+        <PagePlaceholder lines={4} />
+        <div style={{ position: 'absolute', right: 24, bottom: 80 }}>
+          <MockBtn icon={<BellOutlined />} badgeCount={12} />
+        </div>
+        <div style={{ position: 'absolute', right: 24, bottom: 24 }}>
+          <MockBtn icon={<MessageOutlined />} badgeCount={5} />
+        </div>
+      </BrowserFrame>
+    );
+
+    /* ========== 1.3 Compare Panels ========== */
+
+    const ComparePanel = ({ doContent, dontContent, doText, dontText }) => (
+      <div className="compare-row">
+        <div className="compare-col">
+          <div className="compare-card compare-card-do">
+            <div className="demo-body demo-body-gray" style={{ height: 180, position: 'relative', transform: 'scale(1)', overflow: 'hidden' }}>
+              <PagePlaceholder lines={3} block={false} />
+              {doContent}
+            </div>
+            <div className="compare-footer compare-footer-do">
+              <CheckCircleFilled style={{ color: '#52c41a', fontSize: 16, marginTop: 2 }} />
+              <div>
+                <div style={{ fontWeight: 600, color: '#52c41a', marginBottom: 2 }}>推荐</div>
+                <div style={{ fontSize: 13, color: 'rgba(0,0,0,0.65)' }}>{doText}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="compare-col">
+          <div className="compare-card compare-card-dont">
+            <div className="demo-body demo-body-gray" style={{ height: 180, position: 'relative', transform: 'scale(1)', overflow: 'hidden' }}>
+              <PagePlaceholder lines={3} block={false} />
+              {dontContent}
+            </div>
+            <div className="compare-footer compare-footer-dont">
+              <CloseCircleFilled style={{ color: '#ff4d4f', fontSize: 16, marginTop: 2 }} />
+              <div>
+                <div style={{ fontWeight: 600, color: '#ff4d4f', marginBottom: 2 }}>不推荐</div>
+                <div style={{ fontSize: 13, color: 'rgba(0,0,0,0.65)' }}>{dontText}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+
+    /* ========== Mermaid ========== */
+
+    const MermaidChart = ({ chart }) => {
+      const ref = React.useRef(null);
+      const [svg, setSvg] = React.useState('');
+      React.useEffect(() => {
+        if (window.mermaid) {
+          const id = 'mermaid-' + Math.random().toString(36).substr(2, 9);
+          mermaid.render(id, chart).then(({ svg }) => setSvg(svg)).catch(() => {});
+        }
+      }, [chart]);
+      return <div dangerouslySetInnerHTML={{ __html: svg }} style={{ display: 'flex', justifyContent: 'center' }} />;
+    };
+
+    /* ========== Main App ========== */
+
+    const App = () => {
+      const anchorItems = [
+        {
+          key: 'desc', href: '#desc', title: '1.0 组件描述',
+        },
+        {
+          key: 'composition', href: '#composition', title: '1.1 组件构成',
+        },
+        {
+          key: 'types', href: '#types', title: '1.2 组件类型',
+          children: [
+            { key: 'type-single', href: '#type-single', title: '单悬浮按钮' },
+            { key: 'type-primary', href: '#type-primary', title: '主色调按钮' },
+            { key: 'type-square', href: '#type-square', title: '方形按钮' },
+            { key: 'type-group', href: '#type-group', title: '悬浮按钮组' },
+            { key: 'type-menu', href: '#type-menu', title: '菜单模式' },
+            { key: 'type-backtop', href: '#type-backtop', title: '回到顶部' },
+            { key: 'type-badge', href: '#type-badge', title: '带徽标按钮' },
+          ],
+        },
+        {
+          key: 'cases', href: '#cases', title: '1.3 典型案例',
+        },
+        {
+          key: 'selection', href: '#selection', title: '2.0 选型指南',
+        },
+        {
+          key: 'rules', href: '#rules', title: '3.0 交互规则',
+          children: [
+            { key: 'rule-multi', href: '#rule-multi', title: '展示与折叠' },
+            { key: 'rule-danger', href: '#rule-danger', title: '危险操作' },
+            { key: 'rule-position', href: '#rule-position', title: '摆放位置' },
+            { key: 'rule-order', href: '#rule-order', title: '顺序与对齐' },
+            { key: 'rule-state', href: '#rule-state', title: '状态与反馈' },
+            { key: 'rule-visual', href: '#rule-visual', title: '视觉规范' },
+          ],
+        },
+        {
+          key: 'faq', href: '#faq', title: '4.0 常见问题',
+        },
+      ];
+
+      const flowchart = `flowchart TD
+  A["开始：需要全局悬浮操作入口"] --> B{"是否为回到顶部的单一职责？"}
+  B -->|是| C["✅ 回到顶部"]
+  B -->|否| D{"是否为单一全局操作？"}
+  D -->|是| E{"是否为首要核心入口？"}
+  E -->|是| F["✅ 主色调悬浮按钮"]
+  E -->|否| G{"是否需要文字辅助说明？"}
+  G -->|是| H["✅ 方形悬浮按钮"]
+  G -->|否| I["✅ 单悬浮按钮"]
+  D -->|否| J{"是否有数量/状态需提示？"}
+  J -->|是| K["✅ 带徽标悬浮按钮"]
+  J -->|否| L{"子操作数量是否较多？"}
+  L -->|大于5个| M["✅ 菜单模式悬浮按钮"]
+  L -->|3~5个| N["✅ 悬浮按钮组"]
+  style A fill:#1677ff,color:#fff,stroke:none
+  style C fill:#52c41a,color:#fff,stroke:none
+  style F fill:#52c41a,color:#fff,stroke:none
+  style H fill:#52c41a,color:#fff,stroke:none
+  style I fill:#52c41a,color:#fff,stroke:none
+  style K fill:#52c41a,color:#fff,stroke:none
+  style M fill:#52c41a,color:#fff,stroke:none
+  style N fill:#52c41a,color:#fff,stroke:none`;
+
+      return (
+        <ConfigProvider theme={{ token: { colorPrimary: '#1677ff' } }}>
+          <div className="page-wrapper">
+            {/* Sidebar */}
+            <div className="sidebar">
+              <div style={{ marginBottom: 24, paddingRight: 16 }}>
+                <div style={{ fontSize: 13, color: 'rgba(0,0,0,0.45)', marginBottom: 4 }}>COMPONENT GUIDE</div>
+                <div style={{ fontSize: 16, fontWeight: 600 }}>FloatButton</div>
+              </div>
+              <Anchor items={anchorItems} offsetTop={32} />
+            </div>
+
+            {/* Main Content */}
+            <div className="main-content">
+              {/* Hero */}
+              <div className="hero">
+                <div className="hero-title">FloatButton 悬浮按钮</div>
+                <div className="hero-desc">
+                  悬浮按钮用于在页面上提供固定的全局操作入口，无论用户浏览到何处都可以看见并快速触达。
+                </div>
+                <div className="hero-tag">Ant Design 5.0 · 全局导航 · 操作入口</div>
+              </div>
+
+              {/* ========== 1.0 Description ========== */}
+              <div className="section" id="desc">
+                <SectionTitle id="desc">1.0 组件描述</SectionTitle>
+                <p className="section-desc">
+                  悬浮按钮（FloatButton）是一种固定在视口某一位置的操作入口，常用于承载全局性的快捷操作，如在线客服、意见反馈、回到顶部等。
+                  它始终悬浮于页面内容之上，不随页面滚动而消失，确保用户在浏览任何位置时都能快速触达核心操作。
+                </p>
+              </div>
+
+              {/* ========== 1.1 Composition ========== */}
+              <div className="section" id="composition">
+                <SectionTitle id="composition">1.1 组件构成</SectionTitle>
+                <p className="section-desc">
+                  悬浮按钮由以下基础要素构成，可按需组合使用：
+                </p>
+                <CompositionDiagram />
+                <div className="info-grid">
+                  <div className="info-item">
+                    <div className="info-item-label">1. 容器 Container</div>
+                    <div className="info-item-value">定义按钮的点击区域与整体形态，固定悬浮于视口某一位置，用于承载图标与可选文字。</div>
+                  </div>
+                  <div className="info-item">
+                    <div className="info-item-label">2. 图标 Icon</div>
+                    <div className="info-item-value">表达操作语义，为悬浮按钮的核心要素，必须清晰可识别。</div>
+                  </div>
+                  <div className="info-item" style={{ gridColumn: 'span 2' }}>
+                    <div className="info-item-label">3. 文字描述 Description（可选）</div>
+                    <div className="info-item-value">用于补充说明操作含义，仅在方形按钮中支持，需精简（推荐双字）。</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* ========== 1.2 Types ========== */}
+              <div className="section" id="types">
+                <SectionTitle id="types">1.2 组件类型</SectionTitle>
+                <p className="section-desc">FloatButton 提供了多种类型以适配不同的业务场景和交互需求。</p>
+
+                {/* 1.2.1 Single */}
+                <div id="type-single" className="type-card">
+                  <div className="type-header">
+                    <Tag color="blue">默认</Tag>
+                    <span style={{ fontSize: 18, fontWeight: 600 }}>单悬浮按钮</span>
+                  </div>
+                  <p className="section-desc" style={{ marginBottom: 16 }}>
+                    单个悬浮于页面上方的圆形按钮，承载单一全局操作。适用于网站上的全局功能入口，无论用户滚动到何处都需可见。
+                  </p>
+                  <SingleDemo />
+                  <div className="info-grid">
+                    <div className="info-item">
+                      <div className="info-item-label">典型场景</div>
+                      <div className="info-item-value">反馈入口、在线客服、快捷帮助、提交建议</div>
+                    </div>
+                    <div className="info-item">
+                      <div className="info-item-label">替代方案</div>
+                      <div className="info-item-value">若需收纳多个操作，改用悬浮按钮组或菜单模式</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 1.2.2 Primary */}
+                <div id="type-primary" className="type-card">
+                  <div className="type-header">
+                    <Tag color="geekblue">强调</Tag>
+                    <span style={{ fontSize: 18, fontWeight: 600 }}>主色调悬浮按钮</span>
+                  </div>
+                  <p className="section-desc" style={{ marginBottom: 16 }}>
+                    采用主色填充的悬浮按钮，用于强调当前页面的首要全局操作。视觉上需明显区别于默认类型，不可与多个同等强调的悬浮按钮并存。
+                  </p>
+                  <PrimaryDemo />
+                  <div className="info-grid">
+                    <div className="info-item">
+                      <div className="info-item-label">典型场景</div>
+                      <div className="info-item-value">主 CTA（如「立即咨询」）、核心业务入口、付费转化按钮</div>
+                    </div>
+                    <div className="info-item">
+                      <div className="info-item-label">替代方案</div>
+                      <div className="info-item-value">若操作非首要目标，改用默认悬浮按钮</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 1.2.3 Square */}
+                <div id="type-square" className="type-card">
+                  <div className="type-header">
+                    <Tag color="purple">扩展</Tag>
+                    <span style={{ fontSize: 18, fontWeight: 600 }}>方形悬浮按钮（带文字）</span>
+                  </div>
+                  <p className="section-desc" style={{ marginBottom: 16 }}>
+                    采用方形形态的悬浮按钮，可携带精简文字描述以增强识别。文字必须精简，推荐双字，仅方形支持文字内容。
+                  </p>
+                  <SquareDemo />
+                  <div className="info-grid">
+                    <div className="info-item">
+                      <div className="info-item-label">典型场景</div>
+                      <div className="info-item-value">反馈、客服、帮助、回到顶部</div>
+                    </div>
+                    <div className="info-item">
+                      <div className="info-item-label">替代方案</div>
+                      <div className="info-item-value">若语义通过图标已可识别，改用圆形悬浮按钮</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 1.2.4 Group */}
+                <div id="type-group" className="type-card">
+                  <div className="type-header">
+                    <Tag color="cyan">组合</Tag>
+                    <span style={{ fontSize: 18, fontWeight: 600 }}>悬浮按钮组</span>
+                  </div>
+                  <p className="section-desc" style={{ marginBottom: 16 }}>
+                    将多个同类悬浮按钮组合在一起，自上而下排列，无需二次点击即可看到全部选项。子按钮数量不宜超过 5 个。
+                  </p>
+                  <GroupDemo />
+                  <div className="info-grid">
+                    <div className="info-item">
+                      <div className="info-item-label">典型场景</div>
+                      <div className="info-item-value">反馈 + 帮助 + 客服、多种快捷入口并列</div>
+                    </div>
+                    <div className="info-item">
+                      <div className="info-item-label">替代方案</div>
+                      <div className="info-item-value">若子项过多或需收纳，改用菜单模式悬浮按钮</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 1.2.5 Menu */}
+                <div id="type-menu" className="type-card">
+                  <div className="type-header">
+                    <Tag color="orange">收纳</Tag>
+                    <span style={{ fontSize: 18, fontWeight: 600 }}>菜单模式悬浮按钮</span>
+                  </div>
+                  <p className="section-desc" style={{ marginBottom: 16 }}>
+                    点击或悬停后展开菜单，将多个操作收纳到单一触发入口中。主触发按钮必须明确表达「更多」或核心动作。点击下方 Primary 按钮体验交互 ↓
+                  </p>
+                  <MenuDemo />
+                  <div className="info-grid">
+                    <div className="info-item">
+                      <div className="info-item-label">典型场景</div>
+                      <div className="info-item-value">多种反馈入口、多项快捷操作、导出/分享/收藏等动作集合</div>
+                    </div>
+                    <div className="info-item">
+                      <div className="info-item-label">替代方案</div>
+                      <div className="info-item-value">若操作数量少且重要性相近，改用悬浮按钮组</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 1.2.6 BackTop */}
+                <div id="type-backtop" className="type-card">
+                  <div className="type-header">
+                    <Tag color="green">导航</Tag>
+                    <span style={{ fontSize: 18, fontWeight: 600 }}>回到顶部</span>
+                  </div>
+                  <p className="section-desc" style={{ marginBottom: 16 }}>
+                    专用于长页面滚动后，一键返回页面顶部的悬浮按钮。需在用户滚动一定高度后才出现，点击后平滑滚动至顶部。向下滚动下方内容区域即可体验 ↓
+                  </p>
+                  <BackTopDemo />
+                  <div className="info-grid">
+                    <div className="info-item">
+                      <div className="info-item-label">典型场景</div>
+                      <div className="info-item-value">文章页、列表页、详情页、文档页</div>
+                    </div>
+                    <div className="info-item">
+                      <div className="info-item-label">替代方案</div>
+                      <div className="info-item-value">若页面内容较短无需滚动，不必使用回到顶部</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 1.2.7 Badge */}
+                <div id="type-badge" className="type-card">
+                  <div className="type-header">
+                    <Tag color="red">提示</Tag>
+                    <span style={{ fontSize: 18, fontWeight: 600 }}>带徽标悬浮按钮</span>
+                  </div>
+                  <p className="section-desc" style={{ marginBottom: 16 }}>
+                    在悬浮按钮右上角附带数字徽标，提示待处理数量或新消息。徽标数字需与业务含义一致，不可滥用。
+                  </p>
+                  <BadgeDemo />
+                  <div className="info-grid">
+                    <div className="info-item">
+                      <div className="info-item-label">典型场景</div>
+                      <div className="info-item-value">消息通知、待处理数量、客服未读数</div>
+                    </div>
+                    <div className="info-item">
+                      <div className="info-item-label">替代方案</div>
+                      <div className="info-item-value">若无需数量提示，改用普通悬浮按钮</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* ========== 1.3 Cases ========== */}
+              <div className="section" id="cases">
+                <SectionTitle id="cases">1.3 各类型典型场景案例</SectionTitle>
+
+                <SectionTitle id="case-single" level={3}>1.3.1 单悬浮按钮</SectionTitle>
+                <ComparePanel
+                  doContent={
+                    <div style={{ position: 'absolute', right: 16, bottom: 16 }}>
+                      <MockBtn icon={<QuestionCircleOutlined />} size={36} />
+                    </div>
+                  }
+                  dontContent={
+                    <>
+                      <div style={{ position: 'absolute', right: 16, bottom: 16 }}>
+                        <MockBtn icon={<QuestionCircleOutlined />} size={36} />
+                      </div>
+                      <div style={{ position: 'absolute', right: 16, bottom: 68 }}>
+                        <MockBtn icon={<CustomerServiceOutlined />} size={36} />
+                      </div>
+                      <div style={{ position: 'absolute', right: 68, bottom: 16 }}>
+                        <MockBtn icon={<CommentOutlined />} size={36} />
+                      </div>
+                    </>
+                  }
+                  doText="单一全局入口使用单悬浮按钮，保持界面简洁"
+                  dontText="同一视口内出现多个独立悬浮按钮，造成视觉干扰"
+                />
+
+                <SectionTitle id="case-primary" level={3}>1.3.2 主色调与默认</SectionTitle>
+                <ComparePanel
+                  doContent={
+                    <div style={{ position: 'absolute', right: 16, bottom: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                      <MockBtn icon={<QuestionCircleOutlined />} size={36} />
+                      <MockBtn icon={<CustomerServiceOutlined />} type="primary" size={36} />
+                    </div>
+                  }
+                  dontContent={
+                    <div style={{ position: 'absolute', right: 16, bottom: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                      <MockBtn icon={<QuestionCircleOutlined />} type="primary" size={36} />
+                      <MockBtn icon={<CustomerServiceOutlined />} type="primary" size={36} />
+                      <MockBtn icon={<CommentOutlined />} type="primary" size={36} />
+                    </div>
+                  }
+                  doText="首要全局操作使用主色调，次要操作使用默认"
+                  dontText="多个同等强调的主色调悬浮按钮并存"
+                />
+
+                <SectionTitle id="case-group" level={3}>1.3.3 悬浮按钮组与菜单模式</SectionTitle>
+                <ComparePanel
+                  doContent={
+                    <div style={{ position: 'absolute', right: 16, bottom: 16, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                      <MockBtn icon={<CommentOutlined />} size={34} />
+                      <MockBtn icon={<CustomerServiceOutlined />} size={34} />
+                      <MockBtn icon={<QuestionCircleOutlined />} size={34} />
+                    </div>
+                  }
+                  dontContent={
+                    <div style={{ position: 'absolute', right: 16, bottom: 16, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      <MockBtn icon={<CommentOutlined />} size={30} />
+                      <MockBtn icon={<CustomerServiceOutlined />} size={30} />
+                      <MockBtn icon={<QuestionCircleOutlined />} size={30} />
+                      <MockBtn icon={<ShareAltOutlined />} size={30} />
+                      <MockBtn icon={<DownloadOutlined />} size={30} />
+                      <MockBtn icon={<StarOutlined />} size={30} />
+                      <MockBtn icon={<CopyOutlined />} size={30} />
+                    </div>
+                  }
+                  doText="操作数量少用悬浮按钮组直接展示，操作多用菜单模式收纳"
+                  dontText="大量操作平铺在悬浮按钮组中，造成选择困难"
+                />
+
+                <SectionTitle id="case-backtop" level={3}>1.3.4 回到顶部</SectionTitle>
+                <ComparePanel
+                  doContent={
+                    <>
+                      <div style={{ padding: '8px 16px' }}>
+                        {Array.from({ length: 8 }).map((_, i) => (
+                          <div key={i} className="ph-line" style={{ width: `${50 + Math.random() * 40}%`, height: 6, marginBottom: 6 }} />
+                        ))}
+                      </div>
+                      <div style={{ position: 'absolute', right: 16, bottom: 16 }}>
+                        <MockBtn icon={<VerticalAlignTopOutlined />} size={36} />
+                      </div>
+                      <div style={{ position: 'absolute', left: 12, top: 8, fontSize: 11, color: 'rgba(0,0,0,0.3)' }}>
+                        ↕ 长页面 · 可滚动
+                      </div>
+                    </>
+                  }
+                  dontContent={
+                    <>
+                      <div style={{ padding: '8px 16px' }}>
+                        <div className="ph-line" style={{ width: '60%', height: 6, marginBottom: 6 }} />
+                        <div className="ph-line" style={{ width: '40%', height: 6 }} />
+                      </div>
+                      <div style={{ position: 'absolute', right: 16, bottom: 16 }}>
+                        <MockBtn icon={<VerticalAlignTopOutlined />} size={36} />
+                      </div>
+                      <div style={{ position: 'absolute', left: 12, top: 8, fontSize: 11, color: 'rgba(0,0,0,0.3)' }}>
+                        短页面 · 无需滚动
+                      </div>
+                    </>
+                  }
+                  doText="长内容页面、需滚动浏览时使用回到顶部"
+                  dontText="内容不足以产生滚动的页面放置回到顶部"
+                />
+              </div>
+
+              {/* ========== 2.0 Selection Guide ========== */}
+              <div className="section" id="selection">
+                <SectionTitle id="selection">2.0 选型指南</SectionTitle>
+                <p className="section-desc">
+                  根据以下决策流程，快速选择最适合业务场景的悬浮按钮类型：
+                </p>
+                <div className="mermaid-wrapper">
+                  <MermaidChart chart={flowchart} />
+                </div>
+              </div>
+
+              {/* ========== 3.0 Rules ========== */}
+              <div className="section" id="rules">
+                <SectionTitle id="rules">3.0 交互与排版规则</SectionTitle>
+
+                {/* 3.1 Multi-action */}
+                <div id="rule-multi">
+                  <SectionTitle id="rule-multi" level={3}>3.1 多操作的展示与折叠策略</SectionTitle>
+                  <p className="section-desc">当悬浮区域需要承载多个全局操作时，需按以下逻辑决定展示与收纳：</p>
+                  <div className="rule-card">
+                    <ul className="rule-list">
+                      <li><strong>直接展示：</strong>3–5 个同等重要、使用频率高的操作，使用悬浮按钮组自上而下展开。</li>
+                      <li><strong>收纳展示：</strong>超过 5 个操作，或操作重要性差异明显时，使用菜单模式悬浮按钮，通过点击或悬停展开。</li>
+                      <li><strong>单一优先：</strong>若只有一个核心全局入口，使用单悬浮按钮；避免为凑齐多个而强行增加入口。</li>
+                    </ul>
+                  </div>
+                  <div style={{ display: 'flex', gap: 24 }}>
+                    <div style={{ flex: 1 }}>
+                      <BrowserFrame height={240} url="直接展示 · 3–5 个操作">
+                        <PagePlaceholder lines={5} />
+                        <div style={{ position: 'absolute', right: 24, bottom: 24, display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'center' }}>
+                          <MockBtn icon={<CommentOutlined />} size={36} />
+                          <MockBtn icon={<CustomerServiceOutlined />} size={36} />
+                          <MockBtn icon={<QuestionCircleOutlined />} size={36} />
+                        </div>
+                      </BrowserFrame>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <BrowserFrame height={240} url="收纳展示 · 菜单模式">
+                        <PagePlaceholder lines={5} />
+                        <div style={{ position: 'absolute', right: 16, bottom: 24 }}>
+                          <div style={{
+                            background: '#fff',
+                            borderRadius: 8,
+                            boxShadow: '0 6px 16px rgba(0,0,0,0.08)',
+                            padding: '4px 0',
+                            marginBottom: 12,
+                            width: 140,
+                          }}>
+                            {['反馈', '客服', '帮助', '分享', '收藏', '下载'].map((item, i) => (
+                              <div key={i} style={{
+                                padding: '8px 16px',
+                                fontSize: 13,
+                                color: 'rgba(0,0,0,0.75)',
+                                cursor: 'pointer',
+                                borderBottom: i < 5 ? '1px solid #f5f5f5' : 'none',
+                              }}>
+                                {item}
+                              </div>
+                            ))}
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <MockBtn icon={<PlusOutlined />} type="primary" size={36} />
+                          </div>
+                        </div>
+                      </BrowserFrame>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3.2 Danger */}
+                <div id="rule-danger" style={{ marginTop: 32 }}>
+                  <SectionTitle id="rule-danger" level={3}>3.2 危险操作</SectionTitle>
+                  <p className="section-desc">悬浮按钮通常不承载危险操作。若业务强需求在悬浮入口中提供删除、停用等操作：</p>
+                  <div className="rule-card">
+                    <ul className="rule-list">
+                      <li><strong>收纳：</strong>危险操作必须收纳在菜单模式或悬浮按钮组中，不可作为主触发按钮。</li>
+                      <li><strong>二次确认：</strong>点击后必须通过弹窗进行二次确认，再执行。</li>
+                      <li><strong>视觉隔离：</strong>在展开列表中，危险项需通过红色或弱化样式与常规项区分。</li>
+                    </ul>
+                  </div>
+                  <BrowserFrame height={280} url="危险操作收纳示例">
+                    <PagePlaceholder lines={6} />
+                    <div style={{ position: 'absolute', right: 16, bottom: 24 }}>
+                      <div style={{
+                        background: '#fff',
+                        borderRadius: 8,
+                        boxShadow: '0 6px 16px rgba(0,0,0,0.08)',
+                        padding: '4px 0',
+                        marginBottom: 12,
+                        width: 150,
+                      }}>
+                        {[
+                          { label: '编辑', icon: <EditOutlined />, color: 'rgba(0,0,0,0.75)' },
+                          { label: '复制', icon: <CopyOutlined />, color: 'rgba(0,0,0,0.75)' },
+                          { label: '导出', icon: <ExportOutlined />, color: 'rgba(0,0,0,0.75)' },
+                        ].map((item, i) => (
+                          <div key={i} style={{
+                            padding: '8px 16px',
+                            fontSize: 13,
+                            color: item.color,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 8,
+                            borderBottom: '1px solid #f5f5f5',
+                          }}>
+                            {item.icon} {item.label}
+                          </div>
+                        ))}
+                        <div style={{ height: 1, background: '#f0f0f0', margin: '4px 0' }} />
+                        <div style={{
+                          padding: '8px 16px',
+                          fontSize: 13,
+                          color: '#ff4d4f',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 8,
+                        }}>
+                          <DeleteOutlined /> 删除
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <MockBtn icon={<PlusOutlined />} type="primary" size={36} />
+                      </div>
+                    </div>
+                  </BrowserFrame>
+                </div>
+
+                {/* 3.3 Position */}
+                <div id="rule-position" style={{ marginTop: 32 }}>
+                  <SectionTitle id="rule-position" level={3}>3.3 摆放位置</SectionTitle>
+                  <p className="section-desc">悬浮按钮的固定位置需与用户视线及操作习惯匹配：</p>
+                  <div className="rule-card">
+                    <ul className="rule-list">
+                      <li><strong>默认右下角：</strong>适用于多数桌面端页面，符合「从右到左」的视线落点，不遮挡主体内容。</li>
+                      <li><strong>自定义方向：</strong>若右下角已被占用，可调整至左下、左上或右上；需保证不与核心内容重叠。</li>
+                      <li><strong>移动端：</strong>需考虑拇指可触达区域，通常仍为右下角或底部居中偏右。</li>
+                      <li><strong>与内容边距：</strong>悬浮按钮与视口边缘需保持固定间距，避免贴边或遮挡滚动条。</li>
+                    </ul>
+                  </div>
+                  <div className="position-grid">
+                    {[
+                      { pos: '右下角（默认）', r: 12, b: 12, rec: true },
+                      { pos: '左下角', l: 12, b: 12 },
+                      { pos: '右上角', r: 12, t: 40 },
+                    ].map((item, idx) => (
+                      <div key={idx} className="demo-frame" style={{ margin: 0 }}>
+                        <div className="demo-chrome" style={{ height: 28, padding: '0 8px' }}>
+                          <div className="demo-dots" style={{ gap: 4 }}>
+                            <div className="demo-dot demo-dot-red" style={{ width: 8, height: 8 }} />
+                            <div className="demo-dot demo-dot-yellow" style={{ width: 8, height: 8 }} />
+                            <div className="demo-dot demo-dot-green" style={{ width: 8, height: 8 }} />
+                          </div>
+                        </div>
+                        <div style={{ height: 140, position: 'relative', background: '#fafafa', padding: 12 }}>
+                          <div className="ph-line" style={{ width: '50%', height: 6, marginBottom: 6 }} />
+                          <div className="ph-line" style={{ width: '70%', height: 6, marginBottom: 6 }} />
+                          <div className="ph-line" style={{ width: '40%', height: 6 }} />
+                          <div style={{
+                            position: 'absolute',
+                            ...(item.r !== undefined ? { right: item.r } : {}),
+                            ...(item.l !== undefined ? { left: item.l } : {}),
+                            ...(item.b !== undefined ? { bottom: item.b } : {}),
+                            ...(item.t !== undefined ? { top: item.t } : {}),
+                          }}>
+                            <MockBtn icon={<QuestionCircleOutlined />} size={32} />
+                          </div>
+                        </div>
+                        <div style={{
+                          padding: '8px 12px',
+                          fontSize: 12,
+                          color: item.rec ? '#1677ff' : 'rgba(0,0,0,0.65)',
+                          fontWeight: item.rec ? 600 : 400,
+                          background: item.rec ? '#e6f4ff' : '#fff',
+                          textAlign: 'center',
+                        }}>
+                          {item.pos}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* 3.4 Order */}
+                <div id="rule-order" style={{ marginTop: 32 }}>
+                  <SectionTitle id="rule-order" level={3}>3.4 顺序与对齐逻辑</SectionTitle>
+                  <p className="section-desc">悬浮按钮组或菜单模式中，子项顺序需符合业务优先级与用户预期：</p>
+                  <div className="rule-card">
+                    <ul className="rule-list">
+                      <li><strong>自上而下：</strong>主操作或高频操作排在顶部；危险操作排在底部。</li>
+                      <li><strong>逻辑分组：</strong>同类操作可相邻排列；不同类型间可适当留白或分隔。</li>
+                      <li><strong>回到顶部：</strong>若与其它悬浮入口并存，回到顶部宜单独放置或放在最底部。</li>
+                    </ul>
+                  </div>
+                  <BrowserFrame height={300} url="子项排列顺序示例">
+                    <PagePlaceholder lines={7} />
+                    <div style={{ position: 'absolute', right: 24, bottom: 24, display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}>
+                      <div style={{ position: 'relative' }}>
+                        <MockBtn icon={<CustomerServiceOutlined />} type="primary" size={36} />
+                        <div style={{ position: 'absolute', right: 48, top: '50%', transform: 'translateY(-50%)', whiteSpace: 'nowrap', fontSize: 12, color: '#1677ff', background: '#e6f4ff', padding: '2px 8px', borderRadius: 4 }}>
+                          ← 主操作（顶部）
+                        </div>
+                      </div>
+                      <MockBtn icon={<CommentOutlined />} size={36} />
+                      <MockBtn icon={<QuestionCircleOutlined />} size={36} />
+                      <div style={{ width: 28, borderTop: '1px dashed #d9d9d9' }} />
+                      <div style={{ position: 'relative' }}>
+                        <MockBtn icon={<VerticalAlignTopOutlined />} size={36} />
+                        <div style={{ position: 'absolute', right: 48, top: '50%', transform: 'translateY(-50%)', whiteSpace: 'nowrap', fontSize: 12, color: 'rgba(0,0,0,0.45)', background: '#fafafa', padding: '2px 8px', borderRadius: 4 }}>
+                          ← 回到顶部（底部）
+                        </div>
+                      </div>
+                    </div>
+                  </BrowserFrame>
+                </div>
+
+                {/* 3.5 States */}
+                <div id="rule-state" style={{ marginTop: 32 }}>
+                  <SectionTitle id="rule-state" level={3}>3.5 状态与交互反馈</SectionTitle>
+                  <p className="section-desc">悬浮按钮需提供清晰的状态与反馈：</p>
+                  <div className="state-grid">
+                    <div className="state-item">
+                      <MockBtn icon={<QuestionCircleOutlined />} />
+                      <span className="state-label">默认</span>
+                    </div>
+                    <div className="state-item">
+                      <MockBtn icon={<QuestionCircleOutlined />} hovered />
+                      <span className="state-label">悬停 Hover</span>
+                    </div>
+                    <div className="state-item">
+                      <MockBtn icon={<QuestionCircleOutlined />} pressed />
+                      <span className="state-label">按下 Pressed</span>
+                    </div>
+                    <div className="state-item">
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}>
+                        <MockBtn icon={<CommentOutlined />} size={32} />
+                        <MockBtn icon={<CloseOutlined />} type="primary" size={32} style={{ transform: 'rotate(0deg)' }} />
+                      </div>
+                      <span className="state-label">展开中</span>
+                    </div>
+                    <div className="state-item">
+                      <MockBtn icon={<QuestionCircleOutlined />} loading />
+                      <span className="state-label">加载中</span>
+                    </div>
+                  </div>
+                  <div className="rule-card">
+                    <ul className="rule-list">
+                      <li><strong>默认：</strong>可点击性明确，与背景有足够对比。</li>
+                      <li><strong>悬停：</strong>提供可点击暗示（如轻微放大、阴影增强）。</li>
+                      <li><strong>按下：</strong>提供明确的按压反馈（缩小、颜色加深）。</li>
+                      <li><strong>展开中：</strong>悬浮按钮组或菜单展开时，主按钮应有状态变化（如旋转、高亮）。</li>
+                      <li><strong>加载中：</strong>若操作触发异步请求，需进入加载状态并锁定，防止重复点击。</li>
+                    </ul>
+                  </div>
+                </div>
+
+                {/* 3.6 Visual */}
+                <div id="rule-visual" style={{ marginTop: 32 }}>
+                  <SectionTitle id="rule-visual" level={3}>3.6 视觉规范与形态选择</SectionTitle>
+                  <p className="section-desc">选择合适的形态和尺寸，确保视觉协调与操作便捷：</p>
+                  <div style={{ display: 'flex', gap: 24, marginBottom: 24 }}>
+                    <div style={{ flex: 1, background: '#fff', borderRadius: 12, border: '1px solid #f0f0f0', padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: 'rgba(0,0,0,0.85)' }}>圆形 Circle</div>
+                      <div style={{ display: 'flex', gap: 20, alignItems: 'flex-end' }}>
+                        <div style={{ textAlign: 'center' }}>
+                          <MockBtn icon={<QuestionCircleOutlined />} size={32} />
+                          <div style={{ fontSize: 11, color: 'rgba(0,0,0,0.45)', marginTop: 8 }}>Small 32px</div>
+                        </div>
+                        <div style={{ textAlign: 'center' }}>
+                          <MockBtn icon={<QuestionCircleOutlined />} size={40} />
+                          <div style={{ fontSize: 11, color: '#1677ff', marginTop: 8, fontWeight: 500 }}>Default 40px</div>
+                        </div>
+                        <div style={{ textAlign: 'center' }}>
+                          <MockBtn icon={<QuestionCircleOutlined />} size={48} />
+                          <div style={{ fontSize: 11, color: 'rgba(0,0,0,0.45)', marginTop: 8 }}>Large 48px</div>
+                        </div>
+                      </div>
+                      <div style={{ fontSize: 13, color: 'rgba(0,0,0,0.45)', textAlign: 'center' }}>默认形态，适合纯图标</div>
+                    </div>
+                    <div style={{ flex: 1, background: '#fff', borderRadius: 12, border: '1px solid #f0f0f0', padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: 'rgba(0,0,0,0.85)' }}>方形 Square</div>
+                      <div style={{ display: 'flex', gap: 20, alignItems: 'flex-end' }}>
+                        <div style={{ textAlign: 'center' }}>
+                          <MockBtn icon={<CommentOutlined />} shape="square" size={32} />
+                          <div style={{ fontSize: 11, color: 'rgba(0,0,0,0.45)', marginTop: 8 }}>纯图标</div>
+                        </div>
+                        <div style={{ textAlign: 'center' }}>
+                          <MockBtn icon={<CommentOutlined />} shape="square" description="反馈" size={40} />
+                          <div style={{ fontSize: 11, color: '#1677ff', marginTop: 8, fontWeight: 500 }}>图标+文字</div>
+                        </div>
+                        <div style={{ textAlign: 'center' }}>
+                          <MockBtn icon={<CustomerServiceOutlined />} shape="square" description="客服" size={40} type="primary" />
+                          <div style={{ fontSize: 11, color: 'rgba(0,0,0,0.45)', marginTop: 8 }}>主色调</div>
+                        </div>
+                      </div>
+                      <div style={{ fontSize: 13, color: 'rgba(0,0,0,0.45)', textAlign: 'center' }}>适用于需携带文字的场景</div>
+                    </div>
+                  </div>
+                  <div className="rule-card">
+                    <ul className="rule-list">
+                      <li><strong>圆形与方形：</strong>圆形为默认形态，适合纯图标；方形适用于需携带文字的场景，文字需精简。</li>
+                      <li><strong>尺寸：</strong>悬浮按钮需足够大以方便点击，同时不可过大以免遮挡内容；与其它悬浮元素保持协调。</li>
+                      <li><strong>层级：</strong>悬浮按钮层级应高于普通内容，低于模态框、抽屉等全屏覆盖层。</li>
+                      <li><strong>图标选择：</strong>图标语义必须与操作一致，优先使用行业共识强的图标（如客服、反馈、回到顶部）。</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* ========== 4.0 FAQ ========== */}
+              <div className="section" id="faq">
+                <SectionTitle id="faq">4.0 常见问题</SectionTitle>
+
+                <div className="faq-card">
+                  <div className="faq-q">
+                    <InfoCircleOutlined style={{ color: '#1677ff', fontSize: 18, marginTop: 2 }} />
+                    悬浮按钮组和菜单模式悬浮按钮有什么区别？
+                  </div>
+                  <div className="faq-a">
+                    <strong>悬浮按钮组：</strong>点击主按钮后，子按钮直接展开在旁，所有选项一目了然，适合 3–5 个平级操作。
+                    <br /><br />
+                    <strong>菜单模式悬浮按钮：</strong>点击或悬停后展开的是菜单列表，适合更多操作或需要收纳的场景，主按钮通常表达「更多」或核心动作。
+                  </div>
+                </div>
+
+                <div className="faq-card">
+                  <div className="faq-q">
+                    <InfoCircleOutlined style={{ color: '#1677ff', fontSize: 18, marginTop: 2 }} />
+                    回到顶部什么时候出现比较合适？
+                  </div>
+                  <div className="faq-a">
+                    建议在用户滚动高度超过一屏（如 400px）后再显示回到顶部按钮，避免短页面也出现该按钮造成干扰。Ant Design 的 <code>FloatButton.BackTop</code> 组件默认 <code>visibilityHeight</code> 为 400px。
+                  </div>
+                </div>
+
+                <div className="faq-card">
+                  <div className="faq-q">
+                    <InfoCircleOutlined style={{ color: '#1677ff', fontSize: 18, marginTop: 2 }} />
+                    如何快速接入 AntD FloatButton？
+                  </div>
+                  <div className="faq-a">
+                    <pre style={{ background: '#f6f8fa', padding: 16, borderRadius: 8, fontSize: 13, lineHeight: 1.8, overflow: 'auto', margin: '8px 0' }}>
+{`import { FloatButton } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+
+// 基础用法
+<FloatButton icon={<QuestionCircleOutlined />} />
+
+// 主色调
+<FloatButton type="primary" icon={<CustomerServiceOutlined />} />
+
+// 方形+文字
+<FloatButton shape="square" description="反馈" icon={<CommentOutlined />} />
+
+// 按钮组
+<FloatButton.Group shape="circle">
+  <FloatButton icon={<CommentOutlined />} />
+  <FloatButton icon={<CustomerServiceOutlined />} />
+</FloatButton.Group>
+
+// 菜单模式
+<FloatButton.Group trigger="click" icon={<PlusOutlined />}>
+  <FloatButton icon={<CommentOutlined />} />
+  <FloatButton icon={<CustomerServiceOutlined />} />
+</FloatButton.Group>
+
+// 回到顶部
+<FloatButton.BackTop />
+
+// 带徽标
+<FloatButton badge={{ count: 5 }} icon={<BellOutlined />} />`}
+                    </pre>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <Divider />
+              <div style={{ textAlign: 'center', padding: '24px 0 48px', color: 'rgba(0,0,0,0.35)', fontSize: 13 }}>
+                FloatButton 悬浮按钮组件设计指南 · Powered by Ant Design 5.0
+              </div>
+            </div>
+          </div>
+        </ConfigProvider>
+      );
+    };
+
+    // Initialize Mermaid
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'default',
+      flowchart: { curve: 'basis', padding: 20 },
+      themeVariables: {
+        primaryColor: '#e6f4ff',
+        primaryTextColor: '#1677ff',
+        primaryBorderColor: '#91caff',
+        lineColor: '#91caff',
+        secondaryColor: '#f6ffed',
+        tertiaryColor: '#fff7e6',
+      },
+    });
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

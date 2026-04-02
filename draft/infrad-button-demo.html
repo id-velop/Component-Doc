@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InfraD Button Demo</title>
+  <!-- InfraD CSS (primary-color: #2673dd) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/infrad@4.21.1/dist/antd.min.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 40px;
+      background: #f5f5f5;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    .demo-container {
+      max-width: 760px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 8px;
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    h1 { font-size: 24px; margin-bottom: 4px; }
+    .subtitle { color: #888; font-size: 13px; margin-bottom: 32px; }
+    .subtitle a { color: #2673dd; text-decoration: none; }
+    .section { margin-bottom: 28px; }
+    .section-title { font-size: 14px; color: #555; margin-bottom: 12px; font-weight: 600; }
+    .section-desc { font-size: 12px; color: #999; margin-bottom: 10px; }
+    .button-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-size: 12px; color: #d56161; }
+    .props-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+    .props-table th { text-align: left; padding: 8px 12px; background: #fafafa; border-bottom: 1px solid #eee; color: #555; }
+    .props-table td { padding: 8px 12px; border-bottom: 1px solid #f0f0f0; }
+    .props-table td:first-child { font-weight: 500; color: #2673dd; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/react@17/umd/react.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@17/umd/react-dom.production.min.js"></script>
+  <!-- Ant Design 4.21 JS runtime (same API as InfraD, CSS class names match) -->
+  <script src="https://cdn.jsdelivr.net/npm/antd@4.21.7/dist/antd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@ant-design/icons@4/dist/index.umd.min.js"></script>
+
+  <script type="text/babel">
+    const { Button } = antd;
+    const { SearchOutlined, DownloadOutlined, PoweroffOutlined } = icons;
+
+    /*
+     * In a SPACE project:
+     *   import { Button } from 'infrad';            // or '@infrad/component'
+     *   import { SearchOutlined } from 'infra-design-icons';
+     * Docs: https://infrad.shopee.io/components/button
+     * Primary color: #2673dd
+     */
+
+    function App() {
+      const [loadingIdx, setLoadingIdx] = React.useState([]);
+
+      const enterLoading = (idx) => {
+        setLoadingIdx((prev) => [...prev, idx]);
+        setTimeout(() => {
+          setLoadingIdx((prev) => prev.filter((i) => i !== idx));
+        }, 3000);
+      };
+
+      return (
+        <div className="demo-container">
+          <h1>InfraD Button</h1>
+          <div className="subtitle">
+            <code>import {"{ Button }"} from 'infrad'</code>
+            &nbsp;|&nbsp;
+            Primary color: <span style={{ color: '#2673dd', fontWeight: 600 }}>#2673dd</span>
+            &nbsp;|&nbsp;
+            <a href="https://infrad.shopee.io/components/button" target="_blank">Docs</a>
+          </div>
+
+          <div className="section">
+            <div className="section-title">Type</div>
+            <div className="section-desc">5 types: primary, default, dashed, text, link</div>
+            <div className="button-row">
+              <Button type="primary">Primary</Button>
+              <Button>Default</Button>
+              <Button type="dashed">Dashed</Button>
+              <Button type="text">Text</Button>
+              <Button type="link">Link</Button>
+            </div>
+          </div>
+
+          <div className="section">
+            <div className="section-title">Size</div>
+            <div className="section-desc">Prop: <code>size</code> = large | middle | small</div>
+            <div className="button-row">
+              <Button type="primary" size="large">Large</Button>
+              <Button type="primary">Middle</Button>
+              <Button type="primary" size="small">Small</Button>
+            </div>
+          </div>
+
+          <div className="section">
+            <div className="section-title">Shape</div>
+            <div className="section-desc">Prop: <code>shape</code> = default | round | circle</div>
+            <div className="button-row">
+              <Button type="primary">Default</Button>
+              <Button type="primary" shape="round">Round</Button>
+              <Button type="primary" shape="circle" icon={<SearchOutlined />} />
+            </div>
+          </div>
+
+          <div className="section">
+            <div className="section-title">Icon</div>
+            <div className="section-desc">Prop: <code>icon</code> = ReactNode &nbsp;(from <code>infra-design-icons</code>)</div>
+            <div className="button-row">
+              <Button type="primary" icon={<SearchOutlined />}>Search</Button>
+              <Button icon={<DownloadOutlined />}>Download</Button>
+              <Button type="primary" shape="circle" icon={<SearchOutlined />} />
+              <Button type="dashed" shape="circle" icon={<DownloadOutlined />} />
+            </div>
+          </div>
+
+          <div className="section">
+            <div className="section-title">Danger</div>
+            <div className="section-desc">Prop: <code>danger</code> = boolean</div>
+            <div className="button-row">
+              <Button type="primary" danger>Primary Danger</Button>
+              <Button danger>Default Danger</Button>
+              <Button type="dashed" danger>Dashed Danger</Button>
+              <Button type="text" danger>Text Danger</Button>
+              <Button type="link" danger>Link Danger</Button>
+            </div>
+          </div>
+
+          <div className="section">
+            <div className="section-title">Ghost</div>
+            <div className="section-desc">Prop: <code>ghost</code> = boolean — transparent background, for colored backgrounds</div>
+            <div className="button-row" style={{ background: '#bec8d8', padding: 16, borderRadius: 6 }}>
+              <Button type="primary" ghost>Primary</Button>
+              <Button ghost>Default</Button>
+              <Button type="dashed" ghost>Dashed</Button>
+              <Button type="primary" danger ghost>Danger</Button>
+            </div>
+          </div>
+
+          <div className="section">
+            <div className="section-title">Loading</div>
+            <div className="section-desc">Prop: <code>loading</code> = boolean | {"{ delay: number }"} — click to try</div>
+            <div className="button-row">
+              <Button type="primary" loading>Loading</Button>
+              <Button type="primary"
+                icon={<PoweroffOutlined />}
+                loading={loadingIdx.includes(1)}
+                onClick={() => enterLoading(1)}
+              >
+                Click me
+              </Button>
+            </div>
+          </div>
+
+          <div className="section">
+            <div className="section-title">Disabled</div>
+            <div className="section-desc">Prop: <code>disabled</code> = boolean</div>
+            <div className="button-row">
+              <Button type="primary" disabled>Primary</Button>
+              <Button disabled>Default</Button>
+              <Button type="dashed" disabled>Dashed</Button>
+              <Button type="text" disabled>Text</Button>
+              <Button type="link" disabled>Link</Button>
+            </div>
+          </div>
+
+          <div className="section">
+            <div className="section-title">Block</div>
+            <div className="section-desc">Prop: <code>block</code> = boolean — fit button width to parent width</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <Button type="primary" block>Primary Block</Button>
+              <Button block>Default Block</Button>
+            </div>
+          </div>
+
+          <div className="section">
+            <div className="section-title">API Reference</div>
+            <table className="props-table">
+              <thead>
+                <tr><th>Property</th><th>Type</th><th>Default</th><th>Description</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>type</td><td>primary | ghost | dashed | link | text | default</td><td>default</td><td>Button type</td></tr>
+                <tr><td>size</td><td>large | middle | small</td><td>middle</td><td>Button size</td></tr>
+                <tr><td>shape</td><td>default | circle | round</td><td>default</td><td>Button shape</td></tr>
+                <tr><td>icon</td><td>ReactNode</td><td>-</td><td>Icon component</td></tr>
+                <tr><td>danger</td><td>boolean</td><td>false</td><td>Danger status (red)</td></tr>
+                <tr><td>ghost</td><td>boolean</td><td>false</td><td>Transparent background</td></tr>
+                <tr><td>loading</td><td>boolean | {"{ delay: number }"}</td><td>false</td><td>Loading spinner</td></tr>
+                <tr><td>disabled</td><td>boolean</td><td>false</td><td>Disabled state</td></tr>
+                <tr><td>block</td><td>boolean</td><td>false</td><td>Fit parent width</td></tr>
+                <tr><td>href</td><td>string</td><td>-</td><td>Link URL</td></tr>
+                <tr><td>htmlType</td><td>string</td><td>button</td><td>Native button type</td></tr>
+                <tr><td>onClick</td><td>(event) =&gt; void</td><td>-</td><td>Click handler</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>

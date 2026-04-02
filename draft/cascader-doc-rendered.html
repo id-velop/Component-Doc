@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cascader 级联选择 — 组件文档</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5/dist/reset.css" />
+<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/antd@5/dist/antd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ant-design/icons@5/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+<style>
+  :root {
+    --primary: #2673dd;
+    --text: #1d1d1f;
+    --text-2: #515154;
+    --text-3: #86868b;
+    --border: #e5e5e7;
+    --bg: #fbfbfd;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--text);
+    background: #fff;
+    line-height: 1.8;
+    -webkit-font-smoothing: antialiased;
+  }
+  .doc-body { max-width: 1140px; margin: 0 auto; padding: 40px 24px 80px; }
+  h1 { font-size: 30px; font-weight: 700; margin: 44px 0 14px; letter-spacing: -0.3px; }
+  h2 { font-size: 22px; font-weight: 700; margin: 36px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 17px; font-weight: 600; margin: 28px 0 8px; }
+  p { font-size: 14px; color: var(--text-2); margin: 6px 0; }
+  ul { padding-left: 22px; margin: 6px 0 12px; }
+  li { font-size: 14px; color: var(--text-2); margin: 3px 0; }
+  strong { color: var(--text); }
+  code { background: #f5f5f7; padding: 2px 6px; border-radius: 3px; font-size: 13px; font-family: "SF Mono", Menlo, monospace; }
+  hr.sep { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+  .demo-wrap {
+    background: #F5F5F5;
+    border-radius: 0;
+    padding: 16px;
+    margin: 16px 0 24px;
+  }
+  .demo-wrap > div {
+    background: #fff;
+    padding: 20px 24px;
+    border-radius: 0;
+    min-height: 40px;
+  }
+
+  .rec-block { margin: 8px 0 16px; padding: 10px 16px; border-radius: 6px; font-size: 14px; color: var(--text-2); }
+  .rec-block.good { background: #f6ffed; border-left: 3px solid #52c41a; }
+  .rec-block.bad { background: #fff2f0; border-left: 3px solid #ff4d4f; }
+
+  #flowchart-root {
+    background: #F5F5F5;
+    padding: 16px;
+    margin: 16px 0 24px;
+  }
+  #flowchart-root > div {
+    background: #fff;
+    padding: 24px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="doc-body">
+<h1>1. 简洁易读部份</h1>
+
+<h2>1.0. 组件描述</h2>
+
+<p>级联选择组件用于从一组具有层级关系的数据中进行选择，可在同一浮层内逐级展开并完成选择。适用于省市区、组织架构、分类目录等具有父子层级的数据结构，相比 Select 能在同一弹层中完成多级选择，体验更连贯。</p>
+
+<h2>1.1. 组件构成</h2>
+
+<p>级联选择由以下基础要素构成，可按需组合使用：</p>
+<div class="demo-wrap"><div id="demo-0"></div></div><div class="demo-wrap"><div id="demo-1"></div></div>
+<p>&emsp;&emsp;1. <strong>触发器</strong> 展示当前选中结果或占位提示，点击后展开下拉浮层；可自定义为按钮或其它样式。</p>
+
+<p>&emsp;&emsp;2. <strong>下拉浮层</strong> 承载多级选项的展开区域，可配置弹出位置与宽度。</p>
+
+<p>&emsp;&emsp;3. <strong>多列菜单</strong> 每级选项占据一列，选择父级后展开子级，形成级联关系。</p>
+
+<p>&emsp;&emsp;4. <strong>选中回填</strong> 选择完成后，触发器展示选中路径（如「浙江 / 杭州 / 西湖」），支持自定义回填格式。</p>
+
+<hr class="sep">
+
+<h2>1.2. 组件包含哪些不同类型</h2>
+
+<h3>1.2.1 基本单选级联</h3>
+
+<p>&emsp;<strong>是什么</strong>：逐级点击展开子级，必须选到叶子节点才算完成选择，选中路径以文本形式回填</p>
+<div class="demo-wrap"><div id="demo-2"></div></div>
+<p>&emsp;<strong>简单用法</strong>：适用于数据结构清晰、层级固定的场景；用户必须选到最末级；默认点击展开子级，选择完成后浮层关闭</p>
+
+<p>&emsp;<strong>典型场景</strong>：省市区选择、组织架构选择、多级分类选择</p>
+<div class="demo-wrap"><div id="demo-3"></div></div>
+<p>&emsp;<strong>替代方案</strong>：若只需选父级不选子级，改用「选择即改变」；若选项过多需搜索，改用带搜索的级联</p>
+
+<h3>1.2.2 多选级联</h3>
+
+<p>&emsp;<strong>是什么</strong>：在同一层级结构中可勾选多个节点，选中项以标签或聚合形式回填，支持父子联动</p>
+<div class="demo-wrap"><div id="demo-4"></div></div>
+<p>&emsp;<strong>简单用法</strong>：必须用于「需同时选择多个层级路径」的场景；可配置回填策略（只显子节点或父节点）；父子选中关系可联动（全选父级即选子级，或反之）</p>
+
+<p>&emsp;<strong>典型场景</strong>：批量选择地区、多品类筛选、权限树多选</p>
+<div class="demo-wrap"><div id="demo-5"></div></div>
+<p>&emsp;<strong>替代方案</strong>：若只需选一条路径，用单选级联；若结构非层级而是平铺，用 Checkbox 组或 TreeSelect</p>
+
+<h3>1.2.3 移入展开</h3>
+
+<p>&emsp;<strong>是什么</strong>：鼠标移入选项即可展开子级，无需点击；点击选项完成选择</p>
+<div class="demo-wrap"><div id="demo-6"></div></div>
+<p>&emsp;<strong>简单用法</strong>：适用于层级较多、用户需快速浏览的场景；移入即展开减少点击次数；点击仍用于确认选择</p>
+
+<p>&emsp;<strong>典型场景</strong>：深层级分类浏览、地区快速定位</p>
+<div class="demo-wrap"><div id="demo-7"></div></div>
+<p>&emsp;<strong>替代方案</strong>：若层级较浅或用户易误触，用默认点击展开</p>
+
+<h3>1.2.4 选择即改变</h3>
+
+<p>&emsp;<strong>是什么</strong>：点击任意层级选项即可完成选择，不必选到叶子节点；父级选项也可作为最终值</p>
+<div class="demo-wrap"><div id="demo-8"></div></div>
+<p>&emsp;<strong>简单用法</strong>：必须用于「父级本身可作为有效选择」的场景；选中父级后浮层关闭，回填父级路径；适用于可选范围灵活的配置</p>
+
+<p>&emsp;<strong>典型场景</strong>：仅选省份、仅选大分类、灵活粒度选择</p>
+<div class="demo-wrap"><div id="demo-9"></div></div>
+<p>&emsp;<strong>替代方案</strong>：若业务要求必须选到叶子节点，用基本单选级联</p>
+
+<h3>1.2.5 带搜索的级联</h3>
+
+<p>&emsp;<strong>是什么</strong>：在选择框中显示搜索输入，用户输入关键词可快速过滤并定位到匹配节点</p>
+<div class="demo-wrap"><div id="demo-10"></div></div>
+<p>&emsp;<strong>简单用法</strong>：适用于选项数量大、层级深的场景；搜索在当前数据源内匹配，暂不支持服务端搜索；匹配结果需能明确展示层级路径</p>
+
+<p>&emsp;<strong>典型场景</strong>：省市区快速搜索、大量分类的快速定位</p>
+<div class="demo-wrap"><div id="demo-11"></div></div>
+<p>&emsp;<strong>替代方案</strong>：若选项不多无需搜索，用基本级联；若需服务端检索，可考虑 AutoComplete 或自定义组合</p>
+
+<h3>1.2.6 面板模式（内嵌）</h3>
+
+<p>&emsp;<strong>是什么</strong>：级联选择不以浮层形式弹出，而是内嵌在页面或卡片中，作为固定面板使用</p>
+<div class="demo-wrap"><div id="demo-12"></div></div>
+<p>&emsp;<strong>简单用法</strong>：必须用于「级联需常驻可见、与周围内容协同展示」的场景；不占用浮层层级，适合侧边栏、筛选区等固定区域</p>
+
+<p>&emsp;<strong>典型场景</strong>：筛选侧边栏、配置页内嵌分类选择、看板内的分类切换</p>
+<div class="demo-wrap"><div id="demo-13"></div></div>
+<p>&emsp;<strong>替代方案</strong>：若空间有限或选择为辅助操作，用默认浮层模式</p>
+
+<hr class="sep">
+
+<h2>1.3. 各类型典型场景案例</h2>
+
+<h3>1.3.1 基本单选与选择即改变</h3>
+<div class="demo-wrap"><div id="demo-14"></div></div>
+<div class="rec-block good">✅ <strong>推荐：</strong> 根据业务是否要求「选到最末级」正确选用基本单选或选择即改变</div>
+
+<hr>
+
+<div class="rec-block bad">❌ <strong>不推荐：</strong> 在需要父级作为有效值的场景强求选到叶子节点；在必须精确到末级的场景允许只选父级</div>
+
+<h3>1.3.2 多选与单选</h3>
+<div class="demo-wrap"><div id="demo-15"></div></div>
+<div class="rec-block good">✅ <strong>推荐：</strong> 单选用于「只选一条路径」；多选用于「同时选多条路径或多个节点」</div>
+
+<hr>
+
+<div class="rec-block bad">❌ <strong>不推荐：</strong> 在只需一条路径的场景滥用多选；在需多选的场景用单选导致重复操作</div>
+
+<h3>1.3.3 带搜索与面板模式</h3>
+<div class="demo-wrap"><div id="demo-16"></div></div>
+<div class="rec-block good">✅ <strong>推荐：</strong> 选项多、层级深时启用搜索；级联需常驻可见时使用面板模式</div>
+
+<hr>
+
+<div class="rec-block bad">❌ <strong>不推荐：</strong> 选项很少时强行加搜索增加复杂度；浮层模式在狭窄空间使用导致遮挡或滚动问题</div>
+
+<hr class="sep">
+
+<h1>2. 选型指南</h1>
+
+<h2>2.1 选择流程</h2>
+
+<div id="flowchart-root"></div>
+<hr class="sep">
+
+<h1>3. 细致专业部份（交互与排版规则）</h1>
+
+<h2>3.1 多操作的展示与折叠策略</h2>
+
+<p>级联选择作为单控件时，不涉及多操作折叠。若所在区域（如筛选栏）有多个筛选项：</p>
+
+<ul>
+<li><strong>级联优先展示</strong>：当级联为常用筛选项时，可直接展示；当筛选项过多时，可将低频级联收纳至「更多筛选」。</li>
+<li><strong>多列宽度</strong>：级联每列宽度需保证选项文本完整展示，列数过多时考虑横向滚动或限制展示列数。</li>
+</ul>
+<div class="demo-wrap"><div id="demo-17"></div></div>
+<h2>3.2 危险操作（删除/清空/停用）</h2>
+
+<ul>
+<li><strong>清除选择</strong>：级联的清除属于轻量操作，仅清空当前选中值，不涉及数据删除；可配置清除按钮。</li>
+<li><strong>禁用选项</strong>：通过数据源中的 disabled 标记可禁用某些节点，用户无法选择该节点；适用于「存在但不能选」的配置。</li>
+</ul>
+<div class="demo-wrap"><div id="demo-18"></div></div>
+<h2>3.3 摆放位置（按页面场景划分）</h2>
+
+<ul>
+<li><strong>表单内</strong>：作为表单项时，放在对应标签下方，与其它控件对齐；宽度与同表单其它输入控件协调。</li>
+<li><strong>筛选区</strong>：作为筛选条件时，放在筛选栏中，与其它筛选项（如 Select、DatePicker）统一排列规则。</li>
+<li><strong>侧边栏 / 固定面板</strong>：使用面板模式时，放在侧边栏或固定配置区内，与周围区块对齐。</li>
+</ul>
+<div class="demo-wrap"><div id="demo-19"></div></div>
+<h2>3.4 顺序与对齐逻辑</h2>
+
+<ul>
+<li><strong>多筛选项</strong>：级联与其它筛选项按业务重要性或使用频率排列；常见顺序为「关键词 → 分类/级联 → 时间 → 其它」。</li>
+<li><strong>表单内</strong>：与同组表单项保持相同对齐方式（左对齐或网格对齐），标签与控件的对齐关系一致。</li>
+</ul>
+<div class="demo-wrap"><div id="demo-20"></div></div>
+<h2>3.5 状态与交互反馈</h2>
+
+<ul>
+<li><strong>默认</strong>：触发器展示占位文案或已选路径，边框与背景清晰。</li>
+<li><strong>展开</strong>：点击后浮层展开，首列选项展示；若有默认值，可高亮已选路径。</li>
+<li><strong>逐级选择</strong>：选择父级后子级列展开；选中项高亮，路径可追溯。</li>
+<li><strong>选择完成</strong>：选到有效节点后浮层关闭，触发器回填；多选时回填策略（子节点或父节点）需符合业务预期。</li>
+<li><strong>禁用</strong>：触发器置灰，不可展开；或部分节点禁用，不可选。</li>
+<li><strong>错误/警告</strong>：校验失败时通过 status 或边框色、提示文案标明。</li>
+</ul>
+
+<h2>3.6 视觉规范与形态选择</h2>
+
+<ul>
+<li><strong>形态变体</strong>：支持 outlined、filled、borderless、underlined，与同页其它输入类控件统一。</li>
+<li><strong>回填展示</strong>：路径过长时可通过省略、tooltip 展示完整路径；多选时标签数量可限制，超出部分折叠。</li>
+<li><strong>浮层层级</strong>：确保浮层不被其它元素遮挡， z-index 与弹窗、抽屉等协调。</li>
+</ul>
+<div class="demo-wrap"><div id="demo-21"></div></div>
+<hr class="sep">
+
+<h2>4.0. 常见问题</h2>
+
+<h3>1. Cascader 和 Select、TreeSelect 的区别？</h3>
+
+<ul>
+<li><strong>Cascader</strong>：层级数据逐列展开选择，同一浮层完成多级选择；适合省市区、分类等明确层级。</li>
+<li><strong>Select</strong>：扁平选项单选或多选，无层级展开；适合简单列表选择。</li>
+<li><strong>TreeSelect</strong>：树形结构，可展开折叠节点；适合树形数据且需展示完整树结构时使用。</li>
+</ul>
+
+<h3>2. 选择即改变和基本单选如何选择？</h3>
+
+<ul>
+<li><strong>基本单选</strong>：必须选到叶子节点；适用于需要精确到最末级的场景（如详细地址）。</li>
+<li><strong>选择即改变</strong>：任意层级可选；适用于父级本身有意义的场景（如仅选省份、仅选大分类）。</li>
+</ul>
+</div>
+
+<script>
+var Infrad = antd;
+var Icons = icons;
+</script>
+<script type="text/babel">
+var Infrad = antd;
+var Icons = icons;
+var theme = {
+  token: {
+    colorPrimary: '#2673dd',
+    colorLink: '#2673dd',
+    colorText: '#333',
+    fontFamily: 'Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+  }
+};
+
+/* ======== FLOWCHART SVG ======== */
+var FcRect = function(props) {
+  return React.createElement("g", null,
+    React.createElement("rect", { x: props.x, y: props.y, width: props.w, height: props.h, rx: 6, fill: props.fill || "#e6f0ff", stroke: "#2673dd", strokeWidth: 1.5 }),
+    React.createElement("text", { x: props.x + props.w/2, y: props.y + props.h/2 + 1, textAnchor: "middle", dominantBaseline: "central", fontSize: 12, fill: "#333", fontWeight: 500 }, props.text)
+  );
+};
+var FcDiamond = function(props) {
+  var cx=props.cx, cy=props.cy, w=props.w, h=props.h, lines=props.lines;
+  var pts = cx+","+(cy-h/2)+" "+(cx+w/2)+","+cy+" "+cx+","+(cy+h/2)+" "+(cx-w/2)+","+cy;
+  return React.createElement("g", null,
+    React.createElement("polygon", { points: pts, fill: "#f0f5ff", stroke: "#2673dd", strokeWidth: 1.5 }),
+    lines.map(function(line, i) {
+      return React.createElement("text", { key: i, x: cx, y: cy - ((lines.length-1)*7) + i*14 + 1, textAnchor: "middle", dominantBaseline: "central", fontSize: 11, fill: "#333", fontWeight: 500 }, line);
+    })
+  );
+};
+var FcResult = function(props) {
+  return React.createElement("g", null,
+    React.createElement("rect", { x: props.x, y: props.y, width: props.w, height: props.h, rx: 14, fill: "#2673dd", stroke: "#2673dd", strokeWidth: 1.5 }),
+    React.createElement("text", { x: props.x + props.w/2, y: props.y + props.h/2 + 1, textAnchor: "middle", dominantBaseline: "central", fontSize: 11, fill: "#fff", fontWeight: 600 }, props.text)
+  );
+};
+var FcArrow = function(props) {
+  return React.createElement("line", { x1: props.x1, y1: props.y1, x2: props.x2, y2: props.y2, stroke: "#2673dd", strokeWidth: 1.5, markerEnd: "url(#ah)" });
+};
+var FcLabel = function(props) {
+  return React.createElement("text", { x: props.x, y: props.y, textAnchor: "middle", dominantBaseline: "central", fontSize: 11, fill: "#2673dd", fontWeight: 600 }, props.text);
+};
+
+function FlowchartApp() {
+  return (
+    <div style={ background: "#fff", padding: 24, textAlign: "center" }>
+      <svg width="780" height="600" viewBox="0 0 780 600" fill="none" xmlns="http://www.w3.org/2000/svg" style={ display: "block", margin: "0 auto" }>
+        <defs><marker id="ah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2673dd" /></marker></defs>
+        <FcRect x={280} y={10} w={220} h={36} text="开始：需要从层级数据中选择" />
+        <FcArrow x1={390} y1={46} x2={390} y2={75} />
+        <FcDiamond cx={390} cy={110} w={260} h={70} lines={["是否需要同时选择","多个节点/路径？"]} />
+        <FcArrow x1={520} y1={110} x2={660} y2={110} /><FcLabel x={590} y={100} text="是" />
+        <FcResult x={660} y={96} w={110} h={28} text="多选级联" />
+        <FcArrow x1={390} y1={145} x2={390} y2={175} /><FcLabel x={405} y={162} text="否" />
+        <FcDiamond cx={390} cy={210} w={280} h={70} lines={["是否允许只选父级、","不必选到叶子？"]} />
+        <FcArrow x1={530} y1={210} x2={660} y2={210} /><FcLabel x={595} y={200} text="是" />
+        <FcResult x={660} y={196} w={110} h={28} text="选择即改变" />
+        <FcArrow x1={390} y1={245} x2={390} y2={275} /><FcLabel x={405} y={262} text="否" />
+        <FcDiamond cx={390} cy={310} w={290} h={70} lines={["级联是否需要常驻","可见、内嵌布局？"]} />
+        <FcArrow x1={535} y1={310} x2={660} y2={310} /><FcLabel x={598} y={300} text="是" />
+        <FcResult x={660} y={296} w={110} h={28} text="面板模式" />
+        <FcArrow x1={390} y1={345} x2={390} y2={375} /><FcLabel x={405} y={362} text="否" />
+        <FcDiamond cx={390} cy={410} w={280} h={70} lines={["选项是否很多、","需要快速定位？"]} />
+        <FcArrow x1={530} y1={410} x2={660} y2={410} /><FcLabel x={595} y={400} text="是" />
+        <FcResult x={660} y={396} w={110} h={28} text="带搜索的级联" />
+        <FcArrow x1={390} y1={445} x2={390} y2={475} /><FcLabel x={405} y={462} text="否" />
+        <FcDiamond cx={390} cy={510} w={280} h={70} lines={["是否希望通过移入","减少点击？"]} />
+        <FcArrow x1={530} y1={510} x2={660} y2={510} /><FcLabel x={595} y={500} text="是" />
+        <FcResult x={660} y={496} w={110} h={28} text="移入展开" />
+        <FcArrow x1={390} y1={545} x2={390} y2={572} /><FcLabel x={405} y={560} text="否" />
+        <FcResult x={325} y={572} w={130} h={28} text="基本单选级联" />
+      </svg>
+    </div>
+  );
+}
+
+/* ======== ALL DEMOS ======== */
+function Demo_0() {
+  const { Cascader, Space, Typography } = Infrad;
+  const { Text } = Typography;
+  const options = [
+    { value: "zhejiang", label: "浙江", children: [
+      { value: "hangzhou", label: "杭州", children: [
+        { value: "xihu", label: "西湖" }, { value: "binjiang", label: "滨江" }
+      ]},
+      { value: "ningbo", label: "宁波", children: [
+        { value: "haishu", label: "海曙" }
+      ]}
+    ]},
+    { value: "jiangsu", label: "江苏", children: [
+      { value: "nanjing", label: "南京", children: [
+        { value: "xuanwu", label: "玄武" }, { value: "qinhuai", label: "秦淮" }
+      ]}
+    ]}
+  ];
+  return (
+    <div style={{ padding: 24 }}>
+      <Text type="secondary" style={{ display: "block", marginBottom: 12, fontSize: 13 }}>逐级点击展开，必须选到叶子节点完成选择</Text>
+      <Cascader options={options} placeholder="请选择省/市/区" style={{ width: 280 }} />
+    </div>
+  );
+}
+function Demo_1() {
+  const { Tag, Typography } = Infrad;
+  const { Text } = Typography;
+  const labelStyle = { position: "absolute", background: "#1677ff", color: "#fff", borderRadius: 4, padding: "2px 8px", fontSize: 12, fontWeight: 600, whiteSpace: "nowrap", zIndex: 10 };
+  const provinces = ["浙江", "江苏", "广东"];
+  const cities = ["杭州", "宁波", "温州"];
+  const districts = ["西湖", "滨江", "余杭"];
+  const itemStyle = { padding: "6px 32px 6px 12px", cursor: "pointer", fontSize: 14, borderRadius: 4 };
+  const activeStyle = { ...itemStyle, background: "#e6f4ff", color: "#1677ff", fontWeight: 500 };
+  return (
+    <div style={{ padding: 32, position: "relative" }}>
+      <div style={{ ...labelStyle, top: -2, left: 60 }}>① 触发器</div>
+      <div style={{ border: "1px solid #d9d9d9", borderRadius: 6, padding: "5px 12px", width: 240, background: "#fff", marginBottom: 8, fontSize: 14, color: "#333" }}>浙江 / 杭州 / 西湖<span style={{ float: "right", color: "#bbb" }}>▼</span></div>
+      <div style={{ ...labelStyle, top: -2, right: 0 }}>④ 选中回填</div>
+      <div style={{ position: "relative" }}>
+        <div style={{ ...labelStyle, top: -14, left: 280 }}>② 下拉浮层</div>
+        <div style={{ border: "1px solid #d9d9d9", borderRadius: 8, boxShadow: "0 6px 16px rgba(0,0,0,0.08)", background: "#fff", display: "inline-flex", overflow: "hidden" }}>
+          <div style={{ ...labelStyle, bottom: -28, left: "50%", transform: "translateX(-50%)" }}>③ 多列菜单</div>
+          <div style={{ borderRight: "1px solid #f0f0f0", padding: "4px 0", minWidth: 100 }}>
+            {provinces.map(function(p) { return <div key={p} style={p === "浙江" ? activeStyle : itemStyle}>{p}{p === "浙江" && <span style={{ float: "right", color: "#bbb", fontSize: 12 }}>›</span>}</div>; })}
+          </div>
+          <div style={{ borderRight: "1px solid #f0f0f0", padding: "4px 0", minWidth: 100 }}>
+            {cities.map(function(c) { return <div key={c} style={c === "杭州" ? activeStyle : itemStyle}>{c}{c === "杭州" && <span style={{ float: "right", color: "#bbb", fontSize: 12 }}>›</span>}</div>; })}
+          </div>
+          <div style={{ padding: "4px 0", minWidth: 100 }}>
+            {districts.map(function(d) { return <div key={d} style={d === "西湖" ? activeStyle : itemStyle}>{d}</div>; })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+function Demo_2() {
+  const { Cascader, Space, Typography } = Infrad;
+  const { Text } = Typography;
+  const options = [
+    { value: "zhejiang", label: "浙江", children: [
+      { value: "hangzhou", label: "杭州", children: [
+        { value: "xihu", label: "西湖" }, { value: "binjiang", label: "滨江" }
+      ]},
+      { value: "ningbo", label: "宁波", children: [
+        { value: "haishu", label: "海曙" }
+      ]}
+    ]},
+    { value: "jiangsu", label: "江苏", children: [
+      { value: "nanjing", label: "南京", children: [
+        { value: "xuanwu", label: "玄武" }, { value: "qinhuai", label: "秦淮" }
+      ]}
+    ]}
+  ];
+  return (
+    <div style={{ padding: 24 }}>
+      <Text type="secondary" style={{ display: "block", marginBottom: 12, fontSize: 13 }}>逐级点击展开，必须选到叶子节点完成选择</Text>
+      <Cascader options={options} placeholder="请选择省/市/区" style={{ width: 280 }} />
+    </div>
+  );
+}
+function Demo_3() {
+  const { Form, Input, Cascader, Button, Card } = Infrad;
+  const options = [
+    { value: "zhejiang", label: "浙江", children: [
+      { value: "hangzhou", label: "杭州", children: [
+        { value: "xihu", label: "西湖区" }, { value: "binjiang", label: "滨江区" }
+      ]},
+      { value: "ningbo", label: "宁波", children: [
+        { value: "haishu", label: "海曙区" }
+      ]}
+    ]},
+    { value: "jiangsu", label: "江苏", children: [
+      { value: "nanjing", label: "南京", children: [
+        { value: "xuanwu", label: "玄武区" }
+      ]}
+    ]}
+  ];
+  return (
+    <Card title="收货地址" style={{ width: 480 }}>
+      <Form layout="vertical">
+        <Form.Item label="收件人" required><Input placeholder="请输入收件人姓名" /></Form.Item>
+        <Form.Item label="所在地区" required><Cascader options={options} placeholder="请选择省/市/区" style={{ width: "100%" }} /></Form.Item>
+        <Form.Item label="详细地址" required><Input.TextArea placeholder="请输入详细地址" rows={2} /></Form.Item>
+        <Form.Item><Button type="primary">保存地址</Button></Form.Item>
+      </Form>
+    </Card>
+  );
+}
+function Demo_4() {
+  const { Cascader, Typography } = Infrad;
+  const { Text } = Typography;
+  const options = [
+    { value: "zhejiang", label: "浙江", children: [
+      { value: "hangzhou", label: "杭州" }, { value: "ningbo", label: "宁波" }, { value: "wenzhou", label: "温州" }
+    ]},
+    { value: "jiangsu", label: "江苏", children: [
+      { value: "nanjing", label: "南京" }, { value: "suzhou", label: "苏州" }
+    ]},
+    { value: "guangdong", label: "广东", children: [
+      { value: "guangzhou", label: "广州" }, { value: "shenzhen", label: "深圳" }
+    ]}
+  ];
+  return (
+    <div style={{ padding: 24 }}>
+      <Text type="secondary" style={{ display: "block", marginBottom: 12, fontSize: 13 }}>可勾选多个节点，选中项以标签形式回填</Text>
+      <Cascader options={options} multiple placeholder="请选择地区（可多选）" style={{ width: 360 }} maxTagCount="responsive" />
+    </div>
+  );
+}
+function Demo_5() {
+  const { Cascader, Card, Space, Button, Input, DatePicker, Typography } = Infrad;
+  const { Text } = Typography;
+  const { RangePicker } = DatePicker;
+  const options = [
+    { value: "zhejiang", label: "浙江", children: [
+      { value: "hangzhou", label: "杭州" }, { value: "ningbo", label: "宁波" }
+    ]},
+    { value: "jiangsu", label: "江苏", children: [
+      { value: "nanjing", label: "南京" }, { value: "suzhou", label: "苏州" }
+    ]},
+    { value: "guangdong", label: "广东", children: [
+      { value: "guangzhou", label: "广州" }, { value: "shenzhen", label: "深圳" }
+    ]}
+  ];
+  return (
+    <Card title="订单筛选" style={{ width: 600 }}>
+      <Space wrap>
+        <div><Text style={{ display: "block", marginBottom: 4, fontSize: 13 }}>配送地区</Text><Cascader options={options} multiple placeholder="选择地区" style={{ width: 260 }} maxTagCount={2} /></div>
+        <div><Text style={{ display: "block", marginBottom: 4, fontSize: 13 }}>下单时间</Text><RangePicker /></div>
+      </Space>
+      <div style={{ marginTop: 16 }}><Button type="primary" style={{ marginRight: 8 }}>查询</Button><Button>重置</Button></div>
+    </Card>
+  );
+}
+function Demo_6() {
+  const { Cascader, Typography } = Infrad;
+  const { Text } = Typography;
+  const options = [
+    { value: "zhejiang", label: "浙江", children: [
+      { value: "hangzhou", label: "杭州", children: [
+        { value: "xihu", label: "西湖" }, { value: "binjiang", label: "滨江" }
+      ]},
+      { value: "ningbo", label: "宁波", children: [{ value: "haishu", label: "海曙" }] }
+    ]},
+    { value: "jiangsu", label: "江苏", children: [
+      { value: "nanjing", label: "南京", children: [{ value: "xuanwu", label: "玄武" }] }
+    ]},
+    { value: "guangdong", label: "广东", children: [
+      { value: "guangzhou", label: "广州", children: [{ value: "tianhe", label: "天河" }] }
+    ]}
+  ];
+  return (
+    <div style={{ padding: 24 }}>
+      <Text type="secondary" style={{ display: "block", marginBottom: 12, fontSize: 13 }}>鼠标移入即展开子级，无需点击；点击选项完成选择</Text>
+      <Cascader options={options} expandTrigger="hover" placeholder="移入展开 - 请选择" style={{ width: 280 }} />
+    </div>
+  );
+}
+function Demo_7() {
+  const { Cascader, Card, Form, Button } = Infrad;
+  const options = [
+    { value: "zhejiang", label: "浙江", children: [
+      { value: "hangzhou", label: "杭州", children: [
+        { value: "xihu", label: "西湖区" }, { value: "binjiang", label: "滨江区" }, { value: "yuhang", label: "余杭区" }
+      ]},
+      { value: "ningbo", label: "宁波", children: [{ value: "haishu", label: "海曙区" }, { value: "jiangbei", label: "江北区" }] },
+      { value: "wenzhou", label: "温州", children: [{ value: "lucheng", label: "鹿城区" }] }
+    ]},
+    { value: "jiangsu", label: "江苏", children: [
+      { value: "nanjing", label: "南京", children: [{ value: "xuanwu", label: "玄武区" }, { value: "qinhuai", label: "秦淮区" }] },
+      { value: "suzhou", label: "苏州", children: [{ value: "gusu", label: "姑苏区" }] }
+    ]}
+  ];
+  return (
+    <Card title="快速定位地区" style={{ width: 400 }}>
+      <Form layout="vertical">
+        <Form.Item label="配送区域">
+          <Cascader options={options} expandTrigger="hover" placeholder="悬停快速浏览，点击确认" style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item><Button type="primary">确认</Button></Form.Item>
+      </Form>
+    </Card>
+  );
+}
+function Demo_8() {
+  const { Cascader, Typography } = Infrad;
+  const { Text } = Typography;
+  const [val, setVal] = React.useState(undefined);
+  const options = [
+    { value: "zhejiang", label: "浙江", children: [
+      { value: "hangzhou", label: "杭州", children: [{ value: "xihu", label: "西湖" }] },
+      { value: "ningbo", label: "宁波", children: [{ value: "haishu", label: "海曙" }] }
+    ]},
+    { value: "jiangsu", label: "江苏", children: [
+      { value: "nanjing", label: "南京", children: [{ value: "xuanwu", label: "玄武" }] }
+    ]}
+  ];
+  return (
+    <div style={{ padding: 24 }}>
+      <Text type="secondary" style={{ display: "block", marginBottom: 12, fontSize: 13 }}>点击任意层级即可完成选择，不必选到叶子节点</Text>
+      <Cascader options={options} changeOnSelect placeholder="选择即改变 - 可选任意层级" style={{ width: 300 }} value={val} onChange={setVal} />
+      {val && <Text style={{ display: "block", marginTop: 8 }}>当前选中：{val.join(" / ")}</Text>}
+    </div>
+  );
+}
+function Demo_9() {
+  const { Cascader, Card, Form, Button, Typography } = Infrad;
+  const { Text } = Typography;
+  const options = [
+    { value: "zhejiang", label: "浙江", children: [
+      { value: "hangzhou", label: "杭州" }, { value: "ningbo", label: "宁波" }
+    ]},
+    { value: "jiangsu", label: "江苏", children: [
+      { value: "nanjing", label: "南京" }, { value: "suzhou", label: "苏州" }
+    ]},
+    { value: "guangdong", label: "广东", children: [
+      { value: "guangzhou", label: "广州" }, { value: "shenzhen", label: "深圳" }
+    ]}
+  ];
+  return (
+    <Card title="配送范围设置" style={{ width: 420 }}>
+      <Text type="secondary" style={{ marginBottom: 16, display: "block" }}>可只选省份作为配送范围，无需细化到城市</Text>
+      <Form layout="vertical">
+        <Form.Item label="配送范围">
+          <Cascader options={options} changeOnSelect placeholder="选择省份或城市" style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item><Button type="primary">保存设置</Button></Form.Item>
+      </Form>
+    </Card>
+  );
+}
+function Demo_10() {
+  const { Cascader, Typography } = Infrad;
+  const { Text } = Typography;
+  const options = [
+    { value: "zhejiang", label: "浙江", children: [
+      { value: "hangzhou", label: "杭州", children: [
+        { value: "xihu", label: "西湖" }, { value: "binjiang", label: "滨江" }, { value: "yuhang", label: "余杭" }
+      ]},
+      { value: "ningbo", label: "宁波", children: [{ value: "haishu", label: "海曙" }] }
+    ]},
+    { value: "jiangsu", label: "江苏", children: [
+      { value: "nanjing", label: "南京", children: [{ value: "xuanwu", label: "玄武" }, { value: "qinhuai", label: "秦淮" }] },
+      { value: "suzhou", label: "苏州", children: [{ value: "gusu", label: "姑苏" }] }
+    ]}
+  ];
+  var filter = function(inputValue, path) {
+    return path.some(function(option) {
+      return option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1;
+    });
+  };
+  return (
+    <div style={{ padding: 24 }}>
+      <Text type="secondary" style={{ display: "block", marginBottom: 12, fontSize: 13 }}>输入关键词快速过滤并定位到匹配节点</Text>
+      <Cascader options={options} showSearch={{ filter: filter }} placeholder="搜索地区，如西湖" style={{ width: 300 }} />
+    </div>
+  );
+}
+function Demo_11() {
+  const { Cascader, Card, Form, Button, Typography } = Infrad;
+  const { Text } = Typography;
+  const options = [
+    { value: "zhejiang", label: "浙江", children: [
+      { value: "hangzhou", label: "杭州", children: [
+        { value: "xihu", label: "西湖" }, { value: "binjiang", label: "滨江" }, { value: "yuhang", label: "余杭" }, { value: "xiaoshan", label: "萧山" }
+      ]},
+      { value: "ningbo", label: "宁波", children: [{ value: "haishu", label: "海曙" }, { value: "jiangbei", label: "江北" }] },
+      { value: "wenzhou", label: "温州", children: [{ value: "lucheng", label: "鹿城" }] }
+    ]},
+    { value: "jiangsu", label: "江苏", children: [
+      { value: "nanjing", label: "南京", children: [{ value: "xuanwu", label: "玄武" }, { value: "qinhuai", label: "秦淮" }] },
+      { value: "suzhou", label: "苏州", children: [{ value: "gusu", label: "姑苏" }, { value: "huqiu", label: "虎丘" }] }
+    ]}
+  ];
+  var filter = function(inputValue, path) {
+    return path.some(function(option) {
+      return option.label.indexOf(inputValue) > -1;
+    });
+  };
+  return (
+    <Card title="快速定位区域" style={{ width: 420 }}>
+      <Text type="secondary" style={{ marginBottom: 16, display: "block" }}>输入"西湖"可快速定位到 浙江 / 杭州 / 西湖</Text>
+      <Form layout="vertical">
+        <Form.Item label="目标区域">
+          <Cascader options={options} showSearch={{ filter: filter }} placeholder="输入关键词搜索" style={{ width: "100%" }} />
+        </Form.Item>
+        <Form.Item><Button type="primary">确认</Button></Form.Item>
+      </Form>
+    </Card>
+  );
+}
+function Demo_12() {
+  const { Typography } = Infrad;
+  const { Text } = Typography;
+  const provinces = ["浙江", "江苏", "广东"];
+  const cities = ["杭州", "宁波", "温州"];
+  const districts = ["西湖区", "滨江区", "余杭区"];
+  const [selected, setSelected] = React.useState({ p: "浙江", c: "杭州", d: null });
+  var itemStyle = { padding: "8px 32px 8px 12px", cursor: "pointer", fontSize: 14, borderRadius: 4, position: "relative" };
+  var activeStyle = Object.assign({}, itemStyle, { background: "#e6f4ff", color: "#1677ff", fontWeight: 500 });
+  var arrow = React.createElement("span", { style: { position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", color: "#bbb", fontSize: 12 } }, "›");
+  return (
+    <div style={{ padding: 24 }}>
+      <Text type="secondary" style={{ display: "block", marginBottom: 12, fontSize: 13 }}>级联面板直接内嵌在页面中，无弹出浮层</Text>
+      <div style={{ border: "1px solid #d9d9d9", borderRadius: 8, display: "inline-flex", background: "#fff", overflow: "hidden" }}>
+        <div style={{ borderRight: "1px solid #f0f0f0", padding: "4px 0", minWidth: 110 }}>
+          {provinces.map(function(p) { return React.createElement("div", { key: p, style: p === selected.p ? activeStyle : itemStyle, onClick: function() { setSelected({ p: p, c: null, d: null }); } }, p, p === selected.p && arrow); })}
+        </div>
+        {selected.p && <div style={{ borderRight: "1px solid #f0f0f0", padding: "4px 0", minWidth: 110 }}>
+          {cities.map(function(c) { return React.createElement("div", { key: c, style: c === selected.c ? activeStyle : itemStyle, onClick: function() { setSelected({ p: selected.p, c: c, d: null }); } }, c, c === selected.c && arrow); })}
+        </div>}
+        {selected.c && <div style={{ padding: "4px 0", minWidth: 110 }}>
+          {districts.map(function(d) { return React.createElement("div", { key: d, style: d === selected.d ? activeStyle : itemStyle, onClick: function() { setSelected({ p: selected.p, c: selected.c, d: d }); } }, d); })}
+        </div>}
+      </div>
+      {selected.d && <div style={{ marginTop: 12 }}><Text>已选：{selected.p} / {selected.c} / {selected.d}</Text></div>}
+    </div>
+  );
+}
+function Demo_13() {
+  const { Card, Typography, Table, Tag } = Infrad;
+  const { Text, Title } = Typography;
+  var categories = ["电子产品", "服装鞋包", "食品饮料"];
+  var subCats = ["手机", "电脑", "平板", "配件"];
+  var items = ["iPhone 15", "Galaxy S24", "Pixel 8"];
+  var [sel, setSel] = React.useState({ cat: "电子产品", sub: "手机", item: null });
+  var itemStyle = { padding: "6px 24px 6px 12px", cursor: "pointer", fontSize: 13, borderRadius: 4, position: "relative" };
+  var activeStyle = Object.assign({}, itemStyle, { background: "#e6f4ff", color: "#1677ff", fontWeight: 500 });
+  var arrow = React.createElement("span", { style: { position: "absolute", right: 6, top: "50%", transform: "translateY(-50%)", color: "#bbb", fontSize: 11 } }, "›");
+  var columns = [{ title: "商品", dataIndex: "name" }, { title: "分类", dataIndex: "category" }, { title: "状态", dataIndex: "status", render: function(s) { return React.createElement(Tag, { color: s === "在售" ? "green" : "default" }, s); } }];
+  var data = [{ key: "1", name: "iPhone 15", category: "手机", status: "在售" }, { key: "2", name: "Galaxy S24", category: "手机", status: "在售" }, { key: "3", name: "Pixel 8", category: "手机", status: "下架" }];
+  return (
+    <div style={{ display: "flex", gap: 16 }}>
+      <Card title="商品分类" size="small" style={{ width: 320, flexShrink: 0 }}>
+        <div style={{ display: "flex", border: "1px solid #f0f0f0", borderRadius: 6, overflow: "hidden" }}>
+          <div style={{ borderRight: "1px solid #f0f0f0", padding: "4px 0", minWidth: 90 }}>
+            {categories.map(function(c) { return React.createElement("div", { key: c, style: c === sel.cat ? activeStyle : itemStyle, onClick: function() { setSel({ cat: c, sub: null, item: null }); } }, c, c === sel.cat && arrow); })}
+          </div>
+          {sel.cat && <div style={{ padding: "4px 0", minWidth: 80 }}>
+            {subCats.map(function(s) { return React.createElement("div", { key: s, style: s === sel.sub ? activeStyle : itemStyle, onClick: function() { setSel({ cat: sel.cat, sub: s, item: null }); } }, s); })}
+          </div>}
+        </div>
+      </Card>
+      <Card title={sel.sub ? sel.cat + " / " + sel.sub : "全部商品"} size="small" style={{ flex: 1 }}>
+        <Table columns={columns} dataSource={data} pagination={false} size="small" />
+      </Card>
+    </div>
+  );
+}
+function Demo_14() {
+  const { Cascader, Typography, Divider } = Infrad;
+  const { Text, Title } = Typography;
+  const { CheckCircleOutlined, CloseCircleOutlined } = Icons;
+  const options = [
+    { value: "zhejiang", label: "浙江", children: [
+      { value: "hangzhou", label: "杭州", children: [
+        { value: "xihu", label: "西湖" }, { value: "binjiang", label: "滨江" }
+      ]}
+    ]},
+    { value: "jiangsu", label: "江苏", children: [
+      { value: "nanjing", label: "南京", children: [{ value: "xuanwu", label: "玄武" }] }
+    ]}
+  ];
+  return (
+    <div style={{ padding: 24 }}>
+      <div style={{ display: "flex", gap: 32 }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
+            <CheckCircleOutlined style={{ color: "#52c41a" }} />
+            <Text strong>基本单选：必须选到叶子节点</Text>
+          </div>
+          <Cascader options={options} placeholder="请选择省/市/区" style={{ width: "100%" }} />
+          <Text type="secondary" style={{ display: "block", marginTop: 8, fontSize: 12 }}>适用于必须精确到末级的场景，如收货地址</Text>
+        </div>
+        <Divider type="vertical" style={{ height: "auto" }} />
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
+            <CheckCircleOutlined style={{ color: "#52c41a" }} />
+            <Text strong>选择即改变：父级即可作为有效值</Text>
+          </div>
+          <Cascader options={options} changeOnSelect placeholder="可选任意层级" style={{ width: "100%" }} />
+          <Text type="secondary" style={{ display: "block", marginTop: 8, fontSize: 12 }}>适用于父级本身可作为有效选择的场景，如配送范围</Text>
+        </div>
+      </div>
+    </div>
+  );
+}
+function Demo_15() {
+  const { Cascader, Typography, Divider } = Infrad;
+  const { Text } = Typography;
+  const { CheckCircleOutlined } = Icons;
+  const options = [
+    { value: "zhejiang", label: "浙江", children: [
+      { value: "hangzhou", label: "杭州" }, { value: "ningbo", label: "宁波" }
+    ]},
+    { value: "jiangsu", label: "江苏", children: [
+      { value: "nanjing", label: "南京" }, { value: "suzhou", label: "苏州" }
+    ]},
+    { value: "guangdong", label: "广东", children: [
+      { value: "guangzhou", label: "广州" }, { value: "shenzhen", label: "深圳" }
+    ]}
+  ];
+  return (
+    <div style={{ padding: 24 }}>
+      <div style={{ display: "flex", gap: 32 }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
+            <CheckCircleOutlined style={{ color: "#52c41a" }} />
+            <Text strong>单选：只选一条路径</Text>
+          </div>
+          <Cascader options={options} placeholder="选择配送地址" style={{ width: "100%" }} />
+          <Text type="secondary" style={{ display: "block", marginTop: 8, fontSize: 12 }}>适用于单一配送地址选择等场景</Text>
+        </div>
+        <Divider type="vertical" style={{ height: "auto" }} />
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
+            <CheckCircleOutlined style={{ color: "#52c41a" }} />
+            <Text strong>多选：同时选多条路径</Text>
+          </div>
+          <Cascader options={options} multiple placeholder="选择多个地区" style={{ width: "100%" }} maxTagCount="responsive" />
+          <Text type="secondary" style={{ display: "block", marginTop: 8, fontSize: 12 }}>适用于多地区筛选、批量选择等场景</Text>
+        </div>
+      </div>
+    </div>
+  );
+}
+function Demo_16() {
+  const { Cascader, Typography, Divider } = Infrad;
+  const { Text } = Typography;
+  const { CheckCircleOutlined } = Icons;
+  const options = [
+    { value: "zhejiang", label: "浙江", children: [
+      { value: "hangzhou", label: "杭州", children: [
+        { value: "xihu", label: "西湖" }, { value: "binjiang", label: "滨江" }
+      ]},
+      { value: "ningbo", label: "宁波", children: [{ value: "haishu", label: "海曙" }] }
+    ]},
+    { value: "jiangsu", label: "江苏", children: [
+      { value: "nanjing", label: "南京", children: [{ value: "xuanwu", label: "玄武" }] }
+    ]}
+  ];
+  var filter = function(inputValue, path) {
+    return path.some(function(option) { return option.label.indexOf(inputValue) > -1; });
+  };
+  var cats = ["电子", "服装", "食品"];
+  var subs = ["手机", "电脑", "配件"];
+  var itemStyle = { padding: "6px 20px 6px 10px", cursor: "pointer", fontSize: 13, borderRadius: 4 };
+  var activeStyle = Object.assign({}, itemStyle, { background: "#e6f4ff", color: "#1677ff", fontWeight: 500 });
+  return (
+    <div style={{ padding: 24 }}>
+      <div style={{ display: "flex", gap: 32 }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
+            <CheckCircleOutlined style={{ color: "#52c41a" }} />
+            <Text strong>带搜索：选项多时快速定位</Text>
+          </div>
+          <Cascader options={options} showSearch={{ filter: filter }} placeholder="输入关键词搜索" style={{ width: "100%" }} />
+          <Text type="secondary" style={{ display: "block", marginTop: 8, fontSize: 12 }}>选项多、层级深时启用搜索提升效率</Text>
+        </div>
+        <Divider type="vertical" style={{ height: "auto" }} />
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
+            <CheckCircleOutlined style={{ color: "#52c41a" }} />
+            <Text strong>面板模式：常驻可见，内嵌布局</Text>
+          </div>
+          <div style={{ border: "1px solid #d9d9d9", borderRadius: 6, display: "inline-flex", overflow: "hidden", background: "#fff" }}>
+            <div style={{ borderRight: "1px solid #f0f0f0", padding: "4px 0" }}>
+              {cats.map(function(c) { return React.createElement("div", { key: c, style: c === "电子" ? activeStyle : itemStyle }, c); })}
+            </div>
+            <div style={{ padding: "4px 0" }}>
+              {subs.map(function(s) { return React.createElement("div", { key: s, style: s === "手机" ? activeStyle : itemStyle }, s); })}
+            </div>
+          </div>
+          <Text type="secondary" style={{ display: "block", marginTop: 8, fontSize: 12 }}>级联需常驻可见时使用面板模式</Text>
+        </div>
+      </div>
+    </div>
+  );
+}
+function Demo_17() {
+  const { Cascader, Select, DatePicker, Input, Button, Space, Card, Typography } = Infrad;
+  const { Text } = Typography;
+  const { SearchOutlined } = Icons;
+  const { RangePicker } = DatePicker;
+  const options = [
+    { value: "electronics", label: "电子产品", children: [
+      { value: "phone", label: "手机" }, { value: "computer", label: "电脑" }
+    ]},
+    { value: "clothing", label: "服装", children: [
+      { value: "mens", label: "男装" }, { value: "womens", label: "女装" }
+    ]}
+  ];
+  return (
+    <Card title="商品管理" style={{ width: 700 }}>
+      <Space wrap style={{ marginBottom: 16 }}>
+        <Input placeholder="搜索关键词" prefix={<SearchOutlined />} style={{ width: 180 }} />
+        <Cascader options={options} placeholder="商品分类" style={{ width: 180 }} />
+        <RangePicker style={{ width: 240 }} />
+        <Select placeholder="状态" style={{ width: 100 }} options={[{ value: "on", label: "在售" }, { value: "off", label: "下架" }]} />
+      </Space>
+      <div><Button type="primary" style={{ marginRight: 8 }}>查询</Button><Button>重置</Button></div>
+    </Card>
+  );
+}
+function Demo_18() {
+  const { Cascader, Typography } = Infrad;
+  const { Text } = Typography;
+  const options = [
+    { value: "zhejiang", label: "浙江", children: [
+      { value: "hangzhou", label: "杭州", children: [
+        { value: "xihu", label: "西湖" }, { value: "binjiang", label: "滨江", disabled: true }
+      ]},
+      { value: "ningbo", label: "宁波", disabled: true, children: [{ value: "haishu", label: "海曙" }] }
+    ]},
+    { value: "jiangsu", label: "江苏", children: [
+      { value: "nanjing", label: "南京", children: [{ value: "xuanwu", label: "玄武" }] }
+    ]}
+  ];
+  return (
+    <div style={{ padding: 24 }}>
+      <Text type="secondary" style={{ display: "block", marginBottom: 12, fontSize: 13 }}>部分节点设为 disabled，用户无法选择（如"宁波"和"滨江"已禁用）</Text>
+      <Cascader options={options} placeholder="含禁用选项的级联" style={{ width: 300 }} />
+    </div>
+  );
+}
+function Demo_19() {
+  const { Cascader, Form, Input, Card, Space, Select, DatePicker, Button, Typography, Divider, Table, Tag } = Infrad;
+  const { Text, Title } = Typography;
+  const { RangePicker } = DatePicker;
+  const { SearchOutlined } = Icons;
+  var opts = [
+    { value: "cat1", label: "电子产品", children: [{ value: "phone", label: "手机" }, { value: "pc", label: "电脑" }] },
+    { value: "cat2", label: "服装", children: [{ value: "mens", label: "男装" }, { value: "womens", label: "女装" }] }
+  ];
+  var itemStyle = { padding: "6px 20px 6px 10px", cursor: "pointer", fontSize: 13, borderRadius: 4 };
+  var activeStyle = Object.assign({}, itemStyle, { background: "#e6f4ff", color: "#1677ff", fontWeight: 500 });
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <div>
+        <Text strong style={{ marginBottom: 8, display: "block" }}>表单内</Text>
+        <Card size="small" style={{ width: 400 }}>
+          <Form layout="vertical" size="small">
+            <Form.Item label="商品名称"><Input placeholder="请输入" /></Form.Item>
+            <Form.Item label="商品分类"><Cascader options={opts} placeholder="请选择分类" style={{ width: "100%" }} /></Form.Item>
+          </Form>
+        </Card>
+      </div>
+      <Divider style={{ margin: 0 }} />
+      <div>
+        <Text strong style={{ marginBottom: 8, display: "block" }}>筛选区</Text>
+        <Card size="small" style={{ width: 600 }}>
+          <Space wrap>
+            <Input placeholder="关键词" prefix={<SearchOutlined />} style={{ width: 150 }} size="small" />
+            <Cascader options={opts} placeholder="分类" style={{ width: 160 }} size="small" />
+            <Select placeholder="状态" style={{ width: 100 }} size="small" options={[{ value: "on", label: "在售" }]} />
+          </Space>
+        </Card>
+      </div>
+      <Divider style={{ margin: 0 }} />
+      <div>
+        <Text strong style={{ marginBottom: 8, display: "block" }}>侧边栏（面板模式）</Text>
+        <div style={{ display: "flex", gap: 12 }}>
+          <Card size="small" title="分类" style={{ width: 200 }}>
+            <div style={{ border: "1px solid #f0f0f0", borderRadius: 6, overflow: "hidden" }}>
+              {["电子产品", "服装", "食品"].map(function(c) { return React.createElement("div", { key: c, style: c === "电子产品" ? activeStyle : itemStyle }, c); })}
+            </div>
+          </Card>
+          <Card size="small" title="商品列表" style={{ flex: 1, minWidth: 200 }}>
+            <Text type="secondary">商品内容区域</Text>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}
+function Demo_20() {
+  const { Input, Cascader, DatePicker, Select, Button, Space, Card, Typography } = Infrad;
+  const { Text } = Typography;
+  const { SearchOutlined } = Icons;
+  const { RangePicker } = DatePicker;
+  var opts = [
+    { value: "cat1", label: "电子产品", children: [{ value: "phone", label: "手机" }, { value: "pc", label: "电脑" }] },
+    { value: "cat2", label: "服装", children: [{ value: "mens", label: "男装" }] }
+  ];
+  return (
+    <Card title="筛选项排列顺序示例" style={{ width: 700 }}>
+      <Text type="secondary" style={{ display: "block", marginBottom: 12, fontSize: 13 }}>常见顺序：关键词 → 分类/级联 → 时间 → 其它</Text>
+      <Space wrap>
+        <div><Text style={{ display: "block", marginBottom: 4, fontSize: 12, color: "#1677ff" }}>① 关键词</Text><Input placeholder="搜索" prefix={<SearchOutlined />} style={{ width: 160 }} /></div>
+        <div><Text style={{ display: "block", marginBottom: 4, fontSize: 12, color: "#1677ff" }}>② 分类级联</Text><Cascader options={opts} placeholder="选择分类" style={{ width: 160 }} /></div>
+        <div><Text style={{ display: "block", marginBottom: 4, fontSize: 12, color: "#1677ff" }}>③ 时间</Text><RangePicker style={{ width: 240 }} /></div>
+        <div><Text style={{ display: "block", marginBottom: 4, fontSize: 12, color: "#1677ff" }}>④ 其它</Text><Select placeholder="状态" style={{ width: 100 }} options={[{ value: "on", label: "在售" }, { value: "off", label: "下架" }]} /></div>
+      </Space>
+      <div style={{ marginTop: 16 }}><Button type="primary" style={{ marginRight: 8 }}>查询</Button><Button>重置</Button></div>
+    </Card>
+  );
+}
+function Demo_21() {
+  const { Cascader, Typography, Space, Divider } = Infrad;
+  const { Text } = Typography;
+  var opts = [
+    { value: "zhejiang", label: "浙江", children: [
+      { value: "hangzhou", label: "杭州", children: [
+        { value: "xihu", label: "西湖" }, { value: "binjiang", label: "滨江" }
+      ]}
+    ]},
+    { value: "jiangsu", label: "江苏", children: [
+      { value: "nanjing", label: "南京", children: [{ value: "xuanwu", label: "玄武" }] }
+    ]}
+  ];
+  var defaultVal = ["zhejiang", "hangzhou", "xihu"];
+  return (
+    <div style={{ padding: 24 }}>
+      <Text strong style={{ display: "block", marginBottom: 16 }}>形态变体</Text>
+      <Space direction="vertical" style={{ width: 300 }}>
+        <div><Text type="secondary" style={{ fontSize: 12 }}>Outlined（默认）</Text><Cascader options={opts} defaultValue={defaultVal} style={{ width: "100%" }} /></div>
+        <div><Text type="secondary" style={{ fontSize: 12 }}>Filled</Text><Cascader options={opts} defaultValue={defaultVal} variant="filled" style={{ width: "100%" }} /></div>
+        <div><Text type="secondary" style={{ fontSize: 12 }}>Borderless</Text><Cascader options={opts} defaultValue={defaultVal} variant="borderless" style={{ width: "100%" }} /></div>
+      </Space>
+      <Divider />
+      <Text strong style={{ display: "block", marginBottom: 12 }}>多选回填展示</Text>
+      <Cascader options={opts} multiple defaultValue={[["zhejiang", "hangzhou", "xihu"], ["jiangsu", "nanjing", "xuanwu"]]} style={{ width: 360 }} maxTagCount={1} />
+      <Text type="secondary" style={{ display: "block", marginTop: 8, fontSize: 12 }}>maxTagCount 限制标签数量，超出部分折叠显示</Text>
+    </div>
+  );
+}
+
+(function() {
+  var el = document.getElementById("demo-0");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_0)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 0 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-1");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_1)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 1 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-2");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_2)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 2 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-3");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_3)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 3 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-4");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_4)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 4 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-5");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_5)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 5 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-6");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_6)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 6 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-7");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_7)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 7 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-8");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_8)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 8 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-9");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_9)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 9 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-10");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_10)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 10 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-11");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_11)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 11 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-12");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_12)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 12 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-13");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_13)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 13 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-14");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_14)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 14 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-15");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_15)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 15 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-16");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_16)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 16 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-17");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_17)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 17 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-18");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_18)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 18 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-19");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_19)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 19 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-20");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_20)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 20 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+(function() {
+  var el = document.getElementById("demo-21");
+  if (el) {
+    try {
+      ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(Demo_21)));
+    } catch(e) {
+      el.innerHTML = '<div style="color:red;padding:16px">Demo 21 error: ' + e.message + '</div>';
+    }
+  }
+})();
+
+/* ======== FLOWCHART RENDER ======== */
+(function() {
+  var el = document.getElementById("flowchart-root");
+  if (el) {
+    ReactDOM.createRoot(el).render(React.createElement(antd.ConfigProvider, { theme: theme }, React.createElement(FlowchartApp)));
+  }
+})();
+</script>
+</body>
+</html>

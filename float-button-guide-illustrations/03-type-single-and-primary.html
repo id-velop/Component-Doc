@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.2.1-1.2.2 单悬浮按钮 & 主色调悬浮按钮</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.22.6/dist/reset.min.css">
+<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/antd@5.22.6/dist/antd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ant-design/icons@5/dist/index.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f7f8fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  .root { width: 960px; margin: 0 auto; padding: 40px; }
+  .section { margin-bottom: 40px; }
+  .title { font-size: 18px; font-weight: 600; color: #1d2129; margin-bottom: 6px; }
+  .desc { font-size: 13px; color: #86909c; margin-bottom: 20px; }
+  .demo-row { display: flex; gap: 20px; }
+  .demo-box {
+    flex: 1; background: #fff; border-radius: 12px; border: 1px solid #e5e6eb;
+    overflow: hidden;
+  }
+  .demo-header {
+    padding: 12px 16px; font-size: 12px; font-weight: 600; border-bottom: 1px solid #f2f3f5;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .demo-content {
+    height: 220px; background: #fafbfc; position: relative; overflow: hidden;
+  }
+  .page-sim {
+    margin: 12px; background: #fff; border-radius: 6px; border: 1px solid #e5e6eb;
+    padding: 12px; height: calc(100% - 24px); overflow: hidden;
+  }
+  .line { height: 6px; background: #e5e6eb; border-radius: 3px; margin-bottom: 8px; }
+  .line.w60 { width: 60%; }
+  .line.w80 { width: 80%; }
+  .line.w40 { width: 40%; }
+  .line.thick { height: 10px; background: #c9cdd4; margin-bottom: 12px; width: 40%; }
+  .fb {
+    width: 48px; height: 48px; border-radius: 50%; background: #fff;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08), 0 3px 6px -4px rgba(0,0,0,0.12), 0 9px 28px 8px rgba(0,0,0,0.05);
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid #f0f0f0; position: absolute;
+  }
+  .fb-primary { background: #165dff; border-color: #165dff; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px;
+    border-radius: 4px; font-size: 11px; font-weight: 500;
+  }
+  .chip-default { background: #f2f3f5; color: #4e5969; }
+  .chip-primary { background: #e8f3ff; color: #165dff; }
+  .tooltip {
+    position: absolute; background: rgba(0,0,0,0.75); color: #fff; font-size: 11px;
+    padding: 4px 10px; border-radius: 4px; white-space: nowrap;
+  }
+  .tooltip::after {
+    content: ''; position: absolute; border: 5px solid transparent;
+  }
+  .tooltip-left::after {
+    right: -10px; top: 50%; transform: translateY(-50%);
+    border-left-color: rgba(0,0,0,0.75);
+  }
+  .vs-badge {
+    position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+    padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  .vs-default { background: #f2f3f5; color: #86909c; }
+  .vs-primary-badge { background: #e8f3ff; color: #165dff; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { QuestionCircleOutlined, CustomerServiceOutlined, CommentOutlined } = icons;
+
+function SingleAndPrimary() {
+  return (
+    <div className="root">
+      {/* Section 1.2.1 */}
+      <div className="section">
+        <div className="title">1.2.1 单悬浮按钮（默认）</div>
+        <div className="desc">单个悬浮于页面上方的圆形按钮，承载单一全局操作 — 如反馈入口、在线客服、快捷帮助</div>
+        <div className="demo-row">
+          <div className="demo-box">
+            <div className="demo-header">
+              <span style={{color: '#165dff'}}>●</span> 示例：页面右下角「帮助」入口
+            </div>
+            <div className="demo-content">
+              <div className="page-sim">
+                <div className="line thick" />
+                <div className="line w80" />
+                <div className="line w60" />
+                <div className="line" />
+                <div className="line w80" />
+                <div className="line w40" />
+                <div className="line" />
+                <div className="line w60" />
+              </div>
+              <div className="fb" style={{ bottom: 20, right: 20 }}>
+                <QuestionCircleOutlined style={{ fontSize: 20, color: 'rgba(0,0,0,0.88)' }} />
+              </div>
+              <div className="tooltip tooltip-left" style={{ bottom: 30, right: 76 }}>
+                帮助
+              </div>
+            </div>
+          </div>
+          <div className="demo-box">
+            <div className="demo-header">
+              <span style={{color: '#165dff'}}>●</span> 示例：页面右下角「反馈」入口
+            </div>
+            <div className="demo-content">
+              <div className="page-sim">
+                <div className="line thick" />
+                <div className="line w80" />
+                <div className="line w60" />
+                <div className="line" />
+                <div className="line w80" />
+                <div className="line w40" />
+                <div className="line" />
+                <div className="line w60" />
+              </div>
+              <div className="fb" style={{ bottom: 20, right: 20 }}>
+                <CommentOutlined style={{ fontSize: 20, color: 'rgba(0,0,0,0.88)' }} />
+              </div>
+              <div className="tooltip tooltip-left" style={{ bottom: 30, right: 76 }}>
+                反馈
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Section 1.2.2 */}
+      <div className="section">
+        <div className="title">1.2.2 主色调悬浮按钮</div>
+        <div className="desc">采用主色填充的悬浮按钮，用于强调当前页面的首要全局操作 — 如立即咨询、核心业务入口</div>
+        <div className="demo-row">
+          <div className="demo-box">
+            <div className="demo-header">
+              <span style={{color: '#00b42a'}}>●</span> 对比：Default vs Primary
+            </div>
+            <div className="demo-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 60 }}>
+              {/* Default */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+                <div className="chip chip-default">type="default"</div>
+                <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#fff',
+                  boxShadow: '0 6px 16px rgba(0,0,0,0.08), 0 3px 6px -4px rgba(0,0,0,0.12), 0 9px 28px 8px rgba(0,0,0,0.05)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #f0f0f0' }}>
+                  <QuestionCircleOutlined style={{ fontSize: 22, color: 'rgba(0,0,0,0.88)' }} />
+                </div>
+                <span style={{ fontSize: 11, color: '#86909c' }}>次要操作</span>
+              </div>
+              {/* VS */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                <span style={{ fontSize: 12, fontWeight: 600, color: '#c9cdd4' }}>VS</span>
+              </div>
+              {/* Primary */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+                <div className="chip chip-primary">type="primary"</div>
+                <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#165dff',
+                  boxShadow: '0 6px 16px rgba(22,93,255,0.3), 0 3px 6px -4px rgba(22,93,255,0.2)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <CustomerServiceOutlined style={{ fontSize: 22, color: '#fff' }} />
+                </div>
+                <span style={{ fontSize: 11, color: '#165dff', fontWeight: 500 }}>首要操作</span>
+              </div>
+            </div>
+          </div>
+          <div className="demo-box">
+            <div className="demo-header">
+              <span style={{color: '#165dff'}}>●</span> 场景：首要核心入口
+            </div>
+            <div className="demo-content">
+              <div className="page-sim">
+                <div className="line thick" />
+                <div className="line w80" />
+                <div className="line w60" />
+                <div className="line" />
+                <div className="line w80" />
+                <div className="line w40" />
+                <div className="line" />
+                <div className="line w60" />
+              </div>
+              <div className="fb fb-primary" style={{ bottom: 20, right: 20 }}>
+                <CustomerServiceOutlined style={{ fontSize: 20, color: '#fff' }} />
+              </div>
+              <div className="tooltip tooltip-left" style={{ bottom: 30, right: 76 }}>
+                立即咨询
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<SingleAndPrimary />);
+</script>
+</body>
+</html>

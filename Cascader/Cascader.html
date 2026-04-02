@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cascader 级联选择 — 组件文档</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5/dist/reset.css" />
+<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/antd@5/dist/antd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ant-design/icons@5/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+<style>
+  :root {
+    --primary: #2673dd;
+    --text: #333;
+    --text-2: #666;
+    --text-3: #999;
+    --border: #e8e8e8;
+    --bg: #fafbfc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--text); background: #fff; line-height: 1.8; }
+  .doc-body { max-width: 1140px; margin: 0 auto; padding: 40px 18px 80px; }
+  h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+  .subtitle { font-size: 14px; color: var(--text-3); margin-bottom: 36px; }
+  h2 { font-size: 22px; font-weight: 700; margin: 48px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 17px; font-weight: 600; margin: 28px 0 8px; }
+  h4 { font-size: 15px; font-weight: 600; margin: 18px 0 6px; }
+  p, li { font-size: 14px; color: var(--text-2); }
+  p { margin: 6px 0; }
+  ul { padding-left: 20px; margin: 6px 0 12px; }
+  li { margin: 3px 0; }
+  strong { color: var(--text); }
+  hr.sep { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+  code { background: #f5f5f5; padding: 2px 6px; border-radius: 3px; font-size: 13px; font-family: "SF Mono", Menlo, monospace; }
+
+  .illus { width: 1104px; background: #F5F5F5; border-radius: 0; padding: 16px; margin: 16px 0 24px; display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
+  .illus-inner { width: 100%; background: #fff; padding: 24px 28px; }
+
+  .compare-wrap { width: 1104px; background: #F5F5F5; border-radius: 0; padding: 16px; margin: 16px 0 8px; }
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .compare-item { display: flex; flex-direction: column; }
+  .compare-card { background: #fff; border-radius: 8px; flex: 1; padding: 20px; min-height: 120px; display: flex; align-items: center; justify-content: center; }
+  .compare-bar { height: 4px; }
+  .compare-bar.do { background: linear-gradient(90deg, #52c41a 0%, rgba(82,196,26,0.15) 100%); }
+  .compare-bar.dont { background: linear-gradient(90deg, #ff4d4f 0%, rgba(255,77,79,0.15) 100%); }
+  .compare-label { text-align: left; padding: 6px 0 0; font-size: 14px; font-weight: 700; }
+  .compare-label.do { color: #52c41a; }
+  .compare-label.dont { color: #ff4d4f; }
+  .compare-desc { font-size: 13px; color: var(--text-2); padding: 2px 0 0; display: flex; align-items: flex-start; gap: 6px; }
+  .compare-desc .anticon { flex-shrink: 0; margin-top: 2px; }
+
+  .mock { background: #fafbfc; border-radius: 8px; border: 1px solid #e8e8e8; position: relative; padding: 14px; }
+  .mock .ant-skeleton-title { height: 8px !important; margin-bottom: 12px !important; }
+  .mock .ant-skeleton-paragraph > li { height: 5px !important; }
+
+  .rec-block { margin: 8px 0 20px; padding: 10px 16px; border-radius: 6px; font-size: 13px; }
+  .rec-block.good { background: #f6ffed; border-left: 3px solid #52c41a; }
+  .rec-block.bad { background: #fff2f0; border-left: 3px solid #ff4d4f; }
+
+  .faq-item { margin: 16px 0; }
+  .faq-item h4 { color: var(--primary); }
+
+  .indent { padding-left: 24px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { ConfigProvider, Cascader, Space, Tag, Divider, Skeleton, Form, Input, DatePicker, Button, Select, Checkbox, Card, Typography, Tooltip } = antd;
+const { CheckCircleFilled, CloseCircleFilled, RightOutlined, SearchOutlined, DownOutlined, CloseOutlined } = icons;
+const { Text, Title } = Typography;
+
+const theme = {
+  token: {
+    colorPrimary: '#2673dd',
+    colorLink: '#2673dd',
+    colorText: '#333',
+    fontFamily: 'Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+  }
+};
+
+const options = [
+  {
+    value: 'zhejiang', label: '浙江',
+    children: [
+      { value: 'hangzhou', label: '杭州',
+        children: [
+          { value: 'xihu', label: '西湖' },
+          { value: 'binjiang', label: '滨江' },
+        ]
+      },
+      { value: 'ningbo', label: '宁波',
+        children: [
+          { value: 'haishu', label: '海曙' },
+          { value: 'yinzhou', label: '鄞州' },
+        ]
+      },
+    ]
+  },
+  {
+    value: 'jiangsu', label: '江苏',
+    children: [
+      { value: 'nanjing', label: '南京',
+        children: [
+          { value: 'xuanwu', label: '玄武' },
+          { value: 'gulou', label: '鼓楼' },
+        ]
+      },
+      { value: 'suzhou', label: '苏州',
+        children: [
+          { value: 'gusu', label: '姑苏' },
+          { value: 'huqiu', label: '虎丘' },
+        ]
+      },
+    ]
+  },
+  {
+    value: 'guangdong', label: '广东',
+    children: [
+      { value: 'guangzhou', label: '广州',
+        children: [
+          { value: 'tianhe', label: '天河' },
+          { value: 'yuexiu', label: '越秀' },
+        ]
+      },
+      { value: 'shenzhen', label: '深圳',
+        children: [
+          { value: 'nanshan', label: '南山' },
+          { value: 'futian', label: '福田' },
+        ]
+      },
+    ]
+  },
+];
+
+const optionsWithDisabled = [
+  {
+    value: 'zhejiang', label: '浙江',
+    children: [
+      { value: 'hangzhou', label: '杭州',
+        children: [
+          { value: 'xihu', label: '西湖' },
+          { value: 'binjiang', label: '滨江' },
+        ]
+      },
+      { value: 'ningbo', label: '宁波', disabled: true,
+        children: [
+          { value: 'haishu', label: '海曙' },
+          { value: 'yinzhou', label: '鄞州' },
+        ]
+      },
+    ]
+  },
+  {
+    value: 'jiangsu', label: '江苏',
+    children: [
+      { value: 'nanjing', label: '南京',
+        children: [
+          { value: 'xuanwu', label: '玄武', disabled: true },
+          { value: 'gulou', label: '鼓楼' },
+        ]
+      },
+      { value: 'suzhou', label: '苏州',
+        children: [
+          { value: 'gusu', label: '姑苏' },
+          { value: 'huqiu', label: '虎丘' },
+        ]
+      },
+    ]
+  },
+];
+
+const categoryOptions = [
+  {
+    value: 'electronics', label: '电子产品',
+    children: [
+      { value: 'phone', label: '手机',
+        children: [
+          { value: 'smartphone', label: '智能手机' },
+          { value: 'feature', label: '功能机' },
+        ]
+      },
+      { value: 'computer', label: '电脑',
+        children: [
+          { value: 'laptop', label: '笔记本' },
+          { value: 'desktop', label: '台式机' },
+        ]
+      },
+    ]
+  },
+  {
+    value: 'clothing', label: '服饰',
+    children: [
+      { value: 'men', label: '男装',
+        children: [
+          { value: 'shirt', label: '衬衫' },
+          { value: 'pants', label: '长裤' },
+        ]
+      },
+      { value: 'women', label: '女装',
+        children: [
+          { value: 'dress', label: '连衣裙' },
+          { value: 'skirt', label: '半裙' },
+        ]
+      },
+    ]
+  },
+  {
+    value: 'food', label: '食品',
+    children: [
+      { value: 'fresh', label: '生鲜',
+        children: [
+          { value: 'fruit', label: '水果' },
+          { value: 'vegetable', label: '蔬菜' },
+        ]
+      },
+      { value: 'snack', label: '零食',
+        children: [
+          { value: 'biscuit', label: '饼干' },
+          { value: 'candy', label: '糖果' },
+        ]
+      },
+    ]
+  },
+];
+
+const Illus = ({ children, style }) => (
+  <div className="illus" style={style}>
+    <div className="illus-inner">{children}</div>
+  </div>
+);
+
+const CompareWrap = ({ children }) => (
+  <div className="compare-wrap">
+    <div className="compare">{children}</div>
+  </div>
+);
+
+const CompareItem = ({ type, children, label, desc }) => (
+  <div className="compare-item">
+    <div className="compare-card">{children}</div>
+    <div className={`compare-bar ${type}`} />
+    <div className={`compare-label ${type}`}>{type === 'do' ? 'Do' : 'Don\u2019t'}</div>
+    <div className="compare-desc">
+      {type === 'do' ? <CheckCircleFilled style={{ color: '#52c41a' }} /> : <CloseCircleFilled style={{ color: '#ff4d4f' }} />}
+      <span>{desc}</span>
+    </div>
+  </div>
+);
+
+/* ============ SVG FLOWCHART HELPERS ============ */
+const FcRect = ({ x, y, w, h, text, fill = '#e6f0ff' }) => (
+  <g>
+    <rect x={x} y={y} width={w} height={h} rx={6} fill={fill} stroke="#2673dd" strokeWidth={1.5} />
+    <text x={x + w / 2} y={y + h / 2 + 1} textAnchor="middle" dominantBaseline="central" fontSize={12} fill="#333" fontWeight={500}>{text}</text>
+  </g>
+);
+const FcDiamond = ({ cx, cy, w, h, lines }) => {
+  const pts = `${cx},${cy - h / 2} ${cx + w / 2},${cy} ${cx},${cy + h / 2} ${cx - w / 2},${cy}`;
+  return (
+    <g>
+      <polygon points={pts} fill="#f0f5ff" stroke="#2673dd" strokeWidth={1.5} />
+      {lines.map((line, i) => (
+        <text key={i} x={cx} y={cy - ((lines.length - 1) * 7) + i * 14 + 1} textAnchor="middle" dominantBaseline="central" fontSize={11} fill="#333" fontWeight={500}>{line}</text>
+      ))}
+    </g>
+  );
+};
+const FcResult = ({ x, y, w, h, text }) => (
+  <g>
+    <rect x={x} y={y} width={w} height={h} rx={14} fill="#2673dd" stroke="#2673dd" strokeWidth={1.5} />
+    <text x={x + w / 2} y={y + h / 2 + 1} textAnchor="middle" dominantBaseline="central" fontSize={11} fill="#fff" fontWeight={600}>{text}</text>
+  </g>
+);
+const Arrow = ({ x1, y1, x2, y2 }) => (
+  <line x1={x1} y1={y1} x2={x2} y2={y2} stroke="#2673dd" strokeWidth={1.5} markerEnd="url(#arrowhead)" />
+);
+const ArrowPath = ({ d }) => (
+  <path d={d} fill="none" stroke="#2673dd" strokeWidth={1.5} markerEnd="url(#arrowhead)" />
+);
+const Label = ({ x, y, text, color = '#2673dd' }) => (
+  <text x={x} y={y} textAnchor="middle" dominantBaseline="central" fontSize={11} fill={color} fontWeight={600}>{text}</text>
+);
+
+/* ============ ANATOMY SVG ============ */
+function AnatomySVG() {
+  return (
+    <svg width="760" height="340" viewBox="0 0 760 340" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', margin: '0 auto' }}>
+      {/* Trigger */}
+      <rect x="40" y="30" width="260" height="36" rx="6" fill="#fff" stroke="#d9d9d9" strokeWidth={1} />
+      <text x="54" y="50" fontSize={13} fill="#bbb">请选择</text>
+      <text x="280" y="50" fontSize={12} fill="#bbb">▾</text>
+      <rect x="40" y="30" width="260" height="36" rx="6" fill="none" stroke="#2673dd" strokeWidth={1.5} strokeDasharray="4 3" />
+
+      {/* Callout 1 */}
+      <line x1="310" y1="48" x2="370" y2="48" stroke="#2673dd" strokeWidth={1} />
+      <circle cx="382" cy="48" r="11" fill="#2673dd" />
+      <text x="382" y="49" textAnchor="middle" dominantBaseline="central" fontSize={10} fill="#fff" fontWeight={700}>1</text>
+      <text x="400" y="52" fontSize={12} fill="#333" fontWeight={500}>触发器</text>
+
+      {/* Dropdown panel */}
+      <rect x="40" y="80" width="480" height="210" rx="8" fill="#fff" stroke="#e8e8e8" strokeWidth={1} filter="url(#shadow)" />
+      <rect x="40" y="80" width="480" height="210" rx="8" fill="none" stroke="#2673dd" strokeWidth={1.5} strokeDasharray="4 3" />
+
+      {/* Callout 2 */}
+      <line x1="530" y1="120" x2="590" y2="120" stroke="#2673dd" strokeWidth={1} />
+      <circle cx="602" cy="120" r="11" fill="#2673dd" />
+      <text x="602" y="121" textAnchor="middle" dominantBaseline="central" fontSize={10} fill="#fff" fontWeight={700}>2</text>
+      <text x="620" y="124" fontSize={12} fill="#333" fontWeight={500}>下拉浮层</text>
+
+      {/* Column dividers */}
+      <line x1="200" y1="90" x2="200" y2="280" stroke="#f0f0f0" strokeWidth={1} />
+      <line x1="360" y1="90" x2="360" y2="280" stroke="#f0f0f0" strokeWidth={1} />
+
+      {/* Column 1 items */}
+      <rect x="52" y="96" width="136" height="32" rx="4" fill="#e6f0ff" />
+      <text x="120" y="114" textAnchor="middle" fontSize={13} fill="#2673dd" fontWeight={500}>浙江</text>
+      <text x="178" y="114" fontSize={10} fill="#2673dd">›</text>
+      <rect x="52" y="136" width="136" height="32" rx="4" fill="transparent" />
+      <text x="120" y="154" textAnchor="middle" fontSize={13} fill="#333">江苏</text>
+      <text x="178" y="154" fontSize={10} fill="#999">›</text>
+      <rect x="52" y="176" width="136" height="32" rx="4" fill="transparent" />
+      <text x="120" y="194" textAnchor="middle" fontSize={13} fill="#333">广东</text>
+      <text x="178" y="194" fontSize={10} fill="#999">›</text>
+
+      {/* Column 2 items */}
+      <rect x="212" y="96" width="136" height="32" rx="4" fill="#e6f0ff" />
+      <text x="280" y="114" textAnchor="middle" fontSize={13} fill="#2673dd" fontWeight={500}>杭州</text>
+      <text x="338" y="114" fontSize={10} fill="#2673dd">›</text>
+      <rect x="212" y="136" width="136" height="32" rx="4" fill="transparent" />
+      <text x="280" y="154" textAnchor="middle" fontSize={13} fill="#333">宁波</text>
+      <text x="338" y="154" fontSize={10} fill="#999">›</text>
+
+      {/* Column 3 items */}
+      <rect x="372" y="96" width="136" height="32" rx="4" fill="#e6f0ff" />
+      <text x="440" y="114" textAnchor="middle" fontSize={13} fill="#2673dd" fontWeight={500}>西湖</text>
+      <rect x="372" y="136" width="136" height="32" rx="4" fill="transparent" />
+      <text x="440" y="154" textAnchor="middle" fontSize={13} fill="#333">滨江</text>
+
+      {/* Callout 3 - columns */}
+      <line x1="280" y1="280" x2="280" y2="310" stroke="#2673dd" strokeWidth={1} />
+      <circle cx="280" cy="322" r="11" fill="#2673dd" />
+      <text x="280" y="323" textAnchor="middle" dominantBaseline="central" fontSize={10} fill="#fff" fontWeight={700}>3</text>
+      <text x="300" y="326" fontSize={12} fill="#333" fontWeight={500}>多列菜单</text>
+
+      {/* Selected result trigger (below) */}
+      <rect x="540" y="220" width="200" height="36" rx="6" fill="#fff" stroke="#2673dd" strokeWidth={1.5} />
+      <text x="554" y="240" fontSize={12} fill="#333">浙江 / 杭州 / 西湖</text>
+      <rect x="540" y="220" width="200" height="36" rx="6" fill="none" stroke="#2673dd" strokeWidth={1.5} strokeDasharray="4 3" />
+
+      {/* Callout 4 */}
+      <line x1="640" y1="260" x2="640" y2="300" stroke="#2673dd" strokeWidth={1} />
+      <circle cx="640" cy="312" r="11" fill="#2673dd" />
+      <text x="640" y="313" textAnchor="middle" dominantBaseline="central" fontSize={10} fill="#fff" fontWeight={700}>4</text>
+      <text x="660" y="316" fontSize={12} fill="#333" fontWeight={500}>选中回填</text>
+
+      <defs>
+        <filter id="shadow" x="-4" y="-2" width="108%" height="115%">
+          <feDropShadow dx="0" dy="2" stdDeviation="6" floodColor="#000" floodOpacity="0.08" />
+        </filter>
+      </defs>
+    </svg>
+  );
+}
+
+/* ============ SELECTION FLOWCHART SVG ============ */
+function FlowchartSVG() {
+  const cxMain = 400;
+  return (
+    <svg width="820" height="620" viewBox="0 0 820 620" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', margin: '0 auto' }}>
+      <defs>
+        <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="#2673dd" />
+        </marker>
+      </defs>
+
+      {/* Start */}
+      <FcRect x={300} y={10} w={200} h={36} text="开始：需要从层级数据中选择" fill="#e6f0ff" />
+
+      {/* Q1 */}
+      <Arrow x1={400} y1={46} x2={400} y2={75} />
+      <FcDiamond cx={400} cy={110} w={260} h={70} lines={["是否需要同时选择","多个节点/路径？"]} />
+
+      {/* Q1 YES -> 多选级联 */}
+      <Arrow x1={530} y1={110} x2={690} y2={110} />
+      <Label x={610} y={100} text="是" />
+      <FcResult x={690} y={96} w={110} h={28} text="多选级联" />
+
+      {/* Q1 NO -> Q2 */}
+      <Arrow x1={400} y1={145} x2={400} y2={175} />
+      <Label x={415} y={162} text="否" />
+      <FcDiamond cx={400} cy={210} w={280} h={70} lines={["是否允许只选父级、","不必选到叶子？"]} />
+
+      {/* Q2 YES -> 选择即改变 */}
+      <Arrow x1={540} y1={210} x2={690} y2={210} />
+      <Label x={615} y={200} text="是" />
+      <FcResult x={690} y={196} w={110} h={28} text="选择即改变" />
+
+      {/* Q2 NO -> Q3 */}
+      <Arrow x1={400} y1={245} x2={400} y2={275} />
+      <Label x={415} y={262} text="否" />
+      <FcDiamond cx={400} cy={310} w={290} h={70} lines={["级联是否需要常驻","可见、内嵌布局？"]} />
+
+      {/* Q3 YES -> 面板模式 */}
+      <Arrow x1={545} y1={310} x2={690} y2={310} />
+      <Label x={618} y={300} text="是" />
+      <FcResult x={690} y={296} w={110} h={28} text="面板模式" />
+
+      {/* Q3 NO -> Q4 */}
+      <Arrow x1={400} y1={345} x2={400} y2={375} />
+      <Label x={415} y={362} text="否" />
+      <FcDiamond cx={400} cy={410} w={280} h={70} lines={["选项是否很多、","需要快速定位？"]} />
+
+      {/* Q4 YES -> 带搜索的级联 */}
+      <Arrow x1={540} y1={410} x2={690} y2={410} />
+      <Label x={615} y={400} text="是" />
+      <FcResult x={690} y={396} w={110} h={28} text="带搜索的级联" />
+
+      {/* Q4 NO -> Q5 */}
+      <Arrow x1={400} y1={445} x2={400} y2={475} />
+      <Label x={415} y={462} text="否" />
+      <FcDiamond cx={400} cy={510} w={280} h={70} lines={["是否希望通过移入","减少点击？"]} />
+
+      {/* Q5 YES -> 移入展开 */}
+      <Arrow x1={540} y1={510} x2={690} y2={510} />
+      <Label x={615} y={500} text="是" />
+      <FcResult x={690} y={496} w={110} h={28} text="移入展开" />
+
+      {/* Q5 NO -> 基本单选级联 */}
+      <Arrow x1={400} y1={545} x2={400} y2={572} />
+      <Label x={415} y={560} text="否" />
+      <FcResult x={335} y={575} w={130} h={28} text="基本单选级联" />
+    </svg>
+  );
+}
+
+function App() {
+  const [basicValue, setBasicValue] = React.useState(['zhejiang', 'hangzhou', 'xihu']);
+
+  return (
+    <ConfigProvider theme={theme}>
+      <div className="doc-body">
+        <h1>Cascader 级联选择</h1>
+        <p className="subtitle">
+          在 SPACE 项目中引用：<code>import {'{ Cascader }'} from 'infrad';</code>
+        </p>
+
+        {/* ======== 1. 简洁易读部份 ======== */}
+        <h2>1. 简洁易读部份</h2>
+
+        <h3>1.0 组件描述</h3>
+        <p>级联选择组件用于从一组具有层级关系的数据中进行选择，可在同一浮层内逐级展开并完成选择。适用于省市区、组织架构、分类目录等具有父子层级的数据结构，相比 Select 能在同一弹层中完成多级选择，体验更连贯。</p>
+
+        <h3>1.1 组件构成</h3>
+        <p>级联选择由以下基础要素构成，可按需组合使用：</p>
+
+        <Illus>
+          <AnatomySVG />
+        </Illus>
+
+        <div className="indent">
+          <p><strong>1. 触发器</strong> — 展示当前选中结果或占位提示，点击后展开下拉浮层；可自定义为按钮或其它样式。</p>
+          <p><strong>2. 下拉浮层</strong> — 承载多级选项的展开区域，可配置弹出位置与宽度。</p>
+          <p><strong>3. 多列菜单</strong> — 每级选项占据一列，选择父级后展开子级，形成级联关系。</p>
+          <p><strong>4. 选中回填</strong> — 选择完成后，触发器展示选中路径（如「浙江 / 杭州 / 西湖」），支持自定义回填格式。</p>
+        </div>
+
+        <hr className="sep" />
+
+        {/* ======== 1.2 组件类型 ======== */}
+        <h3>1.2 组件包含哪些不同类型</h3>
+
+        {/* 1.2.1 基本单选 */}
+        <h4>1.2.1 基本单选级联</h4>
+        <p><strong>是什么</strong>：逐级点击展开子级，必须选到叶子节点才算完成选择，选中路径以文本形式回填。</p>
+        <Illus>
+          <Space direction="vertical" size={16} style={{ width: '100%' }}>
+            <Cascader
+              options={options}
+              defaultValue={['zhejiang', 'hangzhou', 'xihu']}
+              placeholder="请选择省/市/区"
+              style={{ width: 320 }}
+            />
+            <Cascader
+              options={options}
+              placeholder="请选择省/市/区"
+              style={{ width: 320 }}
+            />
+          </Space>
+        </Illus>
+        <p><strong>简单用法</strong>：适用于数据结构清晰、层级固定的场景；用户必须选到最末级；默认点击展开子级，选择完成后浮层关闭。</p>
+        <p><strong>典型场景</strong>：省市区选择、组织架构选择、多级分类选择。</p>
+        <Illus>
+          <div className="mock" style={{ maxWidth: 500, padding: 24 }}>
+            <Form layout="vertical" style={{ maxWidth: 400 }}>
+              <Form.Item label="收货人" style={{ marginBottom: 16 }}>
+                <Input placeholder="请输入姓名" defaultValue="张三" />
+              </Form.Item>
+              <Form.Item label="收货地区" style={{ marginBottom: 16 }}>
+                <Cascader options={options} defaultValue={['zhejiang', 'hangzhou', 'xihu']} style={{ width: '100%' }} />
+              </Form.Item>
+              <Form.Item label="详细地址" style={{ marginBottom: 0 }}>
+                <Input placeholder="请输入详细地址" defaultValue="文三路 138 号" />
+              </Form.Item>
+            </Form>
+          </div>
+        </Illus>
+        <p><strong>替代方案</strong>：若只需选父级不选子级，改用「选择即改变」；若选项过多需搜索，改用带搜索的级联。</p>
+
+        {/* 1.2.2 多选级联 */}
+        <h4>1.2.2 多选级联</h4>
+        <p><strong>是什么</strong>：在同一层级结构中可勾选多个节点，选中项以标签或聚合形式回填，支持父子联动。</p>
+        <Illus>
+          <Space direction="vertical" size={16} style={{ width: '100%' }}>
+            <Cascader
+              options={options}
+              multiple
+              defaultValue={[['zhejiang', 'hangzhou', 'xihu'], ['jiangsu', 'nanjing', 'gulou']]}
+              placeholder="请选择地区"
+              style={{ width: 420 }}
+              maxTagCount="responsive"
+            />
+            <Cascader
+              options={options}
+              multiple
+              placeholder="请选择地区（可多选）"
+              style={{ width: 420 }}
+            />
+          </Space>
+        </Illus>
+        <p><strong>简单用法</strong>：必须用于「需同时选择多个层级路径」的场景；可配置回填策略（只显子节点或父节点）；父子选中关系可联动。</p>
+        <p><strong>典型场景</strong>：批量选择地区、多品类筛选、权限树多选。</p>
+        <Illus>
+          <div className="mock" style={{ maxWidth: 600, padding: 24 }}>
+            <Space direction="vertical" size={12} style={{ width: '100%' }}>
+              <Text strong style={{ fontSize: 14 }}>筛选条件</Text>
+              <Space size={16} wrap>
+                <Space direction="vertical" size={4}>
+                  <Text type="secondary" style={{ fontSize: 12 }}>配送地区</Text>
+                  <Cascader
+                    options={options}
+                    multiple
+                    defaultValue={[['zhejiang', 'hangzhou', 'xihu'], ['guangdong', 'shenzhen', 'nanshan']]}
+                    style={{ width: 340 }}
+                    maxTagCount={2}
+                  />
+                </Space>
+                <Space direction="vertical" size={4}>
+                  <Text type="secondary" style={{ fontSize: 12 }}>商品分类</Text>
+                  <Cascader
+                    options={categoryOptions}
+                    multiple
+                    defaultValue={[['electronics', 'phone', 'smartphone']]}
+                    style={{ width: 240 }}
+                    maxTagCount={1}
+                  />
+                </Space>
+              </Space>
+            </Space>
+          </div>
+        </Illus>
+        <p><strong>替代方案</strong>：若只需选一条路径，用单选级联；若结构非层级而是平铺，用 Checkbox 组或 TreeSelect。</p>
+
+        {/* 1.2.3 移入展开 */}
+        <h4>1.2.3 移入展开</h4>
+        <p><strong>是什么</strong>：鼠标移入选项即可展开子级，无需点击；点击选项完成选择。</p>
+        <Illus>
+          <Space size={24}>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>移入展开（expandTrigger="hover"）</Text>
+              <Cascader
+                options={options}
+                expandTrigger="hover"
+                placeholder="鼠标移入即展开"
+                style={{ width: 260 }}
+              />
+            </Space>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>默认点击展开</Text>
+              <Cascader
+                options={options}
+                placeholder="点击才展开"
+                style={{ width: 260 }}
+              />
+            </Space>
+          </Space>
+        </Illus>
+        <p><strong>简单用法</strong>：适用于层级较多、用户需快速浏览的场景；移入即展开减少点击次数；点击仍用于确认选择。</p>
+        <p><strong>典型场景</strong>：深层级分类浏览、地区快速定位。</p>
+        <Illus>
+          <div className="mock" style={{ maxWidth: 500, padding: 24 }}>
+            <Form layout="vertical" style={{ maxWidth: 400 }}>
+              <Form.Item label="快速定位配送区域" style={{ marginBottom: 0 }}>
+                <Cascader
+                  options={options}
+                  expandTrigger="hover"
+                  placeholder="鼠标移入快速浏览层级"
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+            </Form>
+          </div>
+        </Illus>
+        <p><strong>替代方案</strong>：若层级较浅或用户易误触，用默认点击展开。</p>
+
+        {/* 1.2.4 选择即改变 */}
+        <h4>1.2.4 选择即改变</h4>
+        <p><strong>是什么</strong>：点击任意层级选项即可完成选择，不必选到叶子节点；父级选项也可作为最终值。</p>
+        <Illus>
+          <Space size={24}>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>选择即改变（changeOnSelect）</Text>
+              <Cascader
+                options={options}
+                changeOnSelect
+                placeholder="选任意层级即可"
+                style={{ width: 260 }}
+              />
+            </Space>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>已选父级</Text>
+              <Cascader
+                options={options}
+                changeOnSelect
+                defaultValue={['zhejiang']}
+                style={{ width: 260 }}
+              />
+            </Space>
+          </Space>
+        </Illus>
+        <p><strong>简单用法</strong>：必须用于「父级本身可作为有效选择」的场景；选中父级后浮层关闭，回填父级路径；适用于可选范围灵活的配置。</p>
+        <p><strong>典型场景</strong>：仅选省份、仅选大分类、灵活粒度选择。</p>
+        <Illus>
+          <div className="mock" style={{ maxWidth: 500, padding: 24 }}>
+            <Form layout="vertical" style={{ maxWidth: 400 }}>
+              <Form.Item label="配送范围" style={{ marginBottom: 16 }}>
+                <Cascader
+                  options={options}
+                  changeOnSelect
+                  defaultValue={['zhejiang']}
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+              <Form.Item label="备注" style={{ marginBottom: 0 }}>
+                <Input.TextArea rows={2} placeholder="仅选「浙江省」即可作为配送范围" />
+              </Form.Item>
+            </Form>
+          </div>
+        </Illus>
+        <p><strong>替代方案</strong>：若业务要求必须选到叶子节点，用基本单选级联。</p>
+
+        {/* 1.2.5 带搜索的级联 */}
+        <h4>1.2.5 带搜索的级联</h4>
+        <p><strong>是什么</strong>：在选择框中显示搜索输入，用户输入关键词可快速过滤并定位到匹配节点。</p>
+        <Illus>
+          <Space size={24}>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>带搜索（showSearch）</Text>
+              <Cascader
+                options={options}
+                showSearch={{ filter: (inputValue, path) => path.some(option => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1) }}
+                placeholder="输入关键词搜索"
+                style={{ width: 300 }}
+              />
+            </Space>
+          </Space>
+        </Illus>
+        <p><strong>简单用法</strong>：适用于选项数量大、层级深的场景；搜索在当前数据源内匹配，暂不支持服务端搜索；匹配结果需能明确展示层级路径。</p>
+        <p><strong>典型场景</strong>：省市区快速搜索、大量分类的快速定位。</p>
+        <Illus>
+          <div className="mock" style={{ maxWidth: 500, padding: 24 }}>
+            <Form layout="vertical" style={{ maxWidth: 400 }}>
+              <Form.Item label="搜索地区" style={{ marginBottom: 0 }}>
+                <Cascader
+                  options={options}
+                  showSearch={{ filter: (inputValue, path) => path.some(option => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1) }}
+                  placeholder="试试输入「西湖」快速定位"
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+            </Form>
+          </div>
+        </Illus>
+        <p><strong>替代方案</strong>：若选项不多无需搜索，用基本级联；若需服务端检索，可考虑 AutoComplete 或自定义组合。</p>
+
+        {/* 1.2.6 面板模式 */}
+        <h4>1.2.6 面板模式（内嵌）</h4>
+        <p><strong>是什么</strong>：级联选择不以浮层形式弹出，而是内嵌在页面或卡片中，作为固定面板使用。</p>
+        <Illus>
+          <Cascader.Panel options={options} style={{ width: '100%' }} />
+        </Illus>
+        <p><strong>简单用法</strong>：必须用于「级联需常驻可见、与周围内容协同展示」的场景；不占用浮层层级，适合侧边栏、筛选区等固定区域。</p>
+        <p><strong>典型场景</strong>：筛选侧边栏、配置页内嵌分类选择、看板内的分类切换。</p>
+        <Illus>
+          <div style={{ display: 'flex', gap: 16 }}>
+            <div style={{ width: 480, border: '1px solid #e8e8e8', borderRadius: 8, background: '#fafbfc' }}>
+              <div style={{ padding: '10px 16px', borderBottom: '1px solid #e8e8e8', fontWeight: 600, fontSize: 13 }}>分类筛选</div>
+              <div style={{ padding: 2 }}>
+                <Cascader.Panel options={categoryOptions} />
+              </div>
+            </div>
+            <div style={{ flex: 1, minWidth: 200 }}>
+              <div className="mock" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <Skeleton active paragraph={{ rows: 4 }} />
+              </div>
+            </div>
+          </div>
+        </Illus>
+        <p><strong>替代方案</strong>：若空间有限或选择为辅助操作，用默认浮层模式。</p>
+
+        <hr className="sep" />
+
+        {/* ======== 1.3 典型场景案例 ======== */}
+        <h3>1.3 各类型典型场景案例</h3>
+
+        <h4>1.3.1 基本单选与选择即改变</h4>
+        <CompareWrap>
+          <CompareItem type="do" desc="根据业务是否要求「选到最末级」正确选用基本单选或选择即改变">
+            <Space size={32}>
+              <Space direction="vertical" size={4} align="center">
+                <Cascader options={options} defaultValue={['zhejiang', 'hangzhou', 'xihu']} style={{ width: 200 }} disabled />
+                <Text type="secondary" style={{ fontSize: 11 }}>精确到区（单选）</Text>
+              </Space>
+              <Space direction="vertical" size={4} align="center">
+                <Cascader options={options} changeOnSelect defaultValue={['zhejiang']} style={{ width: 200 }} disabled />
+                <Text type="secondary" style={{ fontSize: 11 }}>仅选省份（选择即改变）</Text>
+              </Space>
+            </Space>
+          </CompareItem>
+          <CompareItem type="dont" desc="在需要父级作为有效值的场景强求选到叶子节点；在必须精确到末级的场景允许只选父级">
+            <Space size={32}>
+              <Space direction="vertical" size={4} align="center">
+                <Cascader options={options} defaultValue={['zhejiang']} changeOnSelect style={{ width: 200 }} status="error" disabled />
+                <Text type="secondary" style={{ fontSize: 11 }}>需精确地址却只选省份</Text>
+              </Space>
+              <Space direction="vertical" size={4} align="center">
+                <Cascader options={options} defaultValue={['zhejiang', 'hangzhou', 'xihu']} style={{ width: 200 }} status="warning" disabled />
+                <Text type="secondary" style={{ fontSize: 11 }}>只需省份却强制选到区</Text>
+              </Space>
+            </Space>
+          </CompareItem>
+        </CompareWrap>
+
+        <div className="rec-block good">✅ <strong>推荐：</strong>根据业务是否要求「选到最末级」正确选用基本单选或选择即改变。</div>
+        <div className="rec-block bad">❌ <strong>不推荐：</strong>在需要父级作为有效值的场景强求选到叶子节点；在必须精确到末级的场景允许只选父级。</div>
+
+        <h4>1.3.2 多选与单选</h4>
+        <CompareWrap>
+          <CompareItem type="do" desc="单选用于「只选一条路径」；多选用于「同时选多条路径或多个节点」">
+            <Space size={32}>
+              <Space direction="vertical" size={4} align="center">
+                <Cascader options={options} defaultValue={['zhejiang', 'hangzhou', 'xihu']} style={{ width: 190 }} disabled />
+                <Text type="secondary" style={{ fontSize: 11 }}>单一地址选择</Text>
+              </Space>
+              <Space direction="vertical" size={4} align="center">
+                <Cascader options={options} multiple defaultValue={[['zhejiang', 'hangzhou', 'xihu'], ['jiangsu', 'nanjing', 'gulou']]} style={{ width: 230 }} maxTagCount={2} disabled />
+                <Text type="secondary" style={{ fontSize: 11 }}>多地区筛选</Text>
+              </Space>
+            </Space>
+          </CompareItem>
+          <CompareItem type="dont" desc="在只需一条路径的场景滥用多选；在需多选的场景用单选导致重复操作">
+            <Space size={32}>
+              <Space direction="vertical" size={4} align="center">
+                <Cascader options={options} multiple defaultValue={[['zhejiang', 'hangzhou', 'xihu']]} style={{ width: 230 }} maxTagCount={1} status="error" disabled />
+                <Text type="secondary" style={{ fontSize: 11 }}>只选一个地址却用多选</Text>
+              </Space>
+            </Space>
+          </CompareItem>
+        </CompareWrap>
+
+        <div className="rec-block good">✅ <strong>推荐：</strong>单选用于「只选一条路径」；多选用于「同时选多条路径或多个节点」。</div>
+        <div className="rec-block bad">❌ <strong>不推荐：</strong>在只需一条路径的场景滥用多选；在需多选的场景用单选导致重复操作。</div>
+
+        <h4>1.3.3 带搜索与面板模式</h4>
+        <CompareWrap>
+          <CompareItem type="do" desc="选项多、层级深时启用搜索提升效率；级联需常驻可见时使用面板模式">
+            <Space size={24}>
+              <Space direction="vertical" size={4} align="center">
+                <Cascader options={options} showSearch placeholder="搜索" style={{ width: 180 }} />
+                <Text type="secondary" style={{ fontSize: 11 }}>选项多时启用搜索</Text>
+              </Space>
+              <Space direction="vertical" size={4} align="center">
+                <div style={{ border: '1px solid #e8e8e8', borderRadius: 6, width: 200, overflow: 'hidden' }}>
+                  <Cascader.Panel options={options} style={{ width: '100%' }} />
+                </div>
+                <Text type="secondary" style={{ fontSize: 11 }}>侧边栏常驻面板</Text>
+              </Space>
+            </Space>
+          </CompareItem>
+          <CompareItem type="dont" desc="选项很少时强行加搜索增加复杂度；浮层模式在狭窄空间使用导致遮挡问题">
+            <Space size={24}>
+              <Space direction="vertical" size={4} align="center">
+                <Cascader
+                  options={[{ value: 'a', label: '选项A' }, { value: 'b', label: '选项B' }]}
+                  showSearch
+                  placeholder="搜索"
+                  style={{ width: 180 }}
+                  status="error"
+                />
+                <Text type="secondary" style={{ fontSize: 11 }}>仅两个选项却加搜索</Text>
+              </Space>
+            </Space>
+          </CompareItem>
+        </CompareWrap>
+
+        <div className="rec-block good">✅ <strong>推荐：</strong>选项多、层级深时启用搜索；级联需常驻可见时使用面板模式。</div>
+        <div className="rec-block bad">❌ <strong>不推荐：</strong>选项很少时强行加搜索增加复杂度；浮层模式在狭窄空间使用导致遮挡或滚动问题。</div>
+
+        <hr className="sep" />
+
+        {/* ======== 2. 选型指南 ======== */}
+        <h2>2. 选型指南</h2>
+
+        <h3>2.1 选择流程</h3>
+        <Illus>
+          <FlowchartSVG />
+        </Illus>
+
+        <hr className="sep" />
+
+        {/* ======== 3. 细致专业部份 ======== */}
+        <h2>3. 细致专业部份（交互与排版规则）</h2>
+
+        <h3>3.1 多操作的展示与折叠策略</h3>
+        <p>级联选择作为单控件时，不涉及多操作折叠。若所在区域（如筛选栏）有多个筛选项：</p>
+        <ul>
+          <li><strong>级联优先展示</strong>：当级联为常用筛选项时，可直接展示；当筛选项过多时，可将低频级联收纳至「更多筛选」。</li>
+          <li><strong>多列宽度</strong>：级联每列宽度需保证选项文本完整展示，列数过多时考虑横向滚动或限制展示列数。</li>
+        </ul>
+        <Illus>
+          <div className="mock" style={{ maxWidth: 900, padding: 20 }}>
+            <Space size={16} wrap align="end">
+              <Space direction="vertical" size={4}>
+                <Text type="secondary" style={{ fontSize: 12 }}>关键词</Text>
+                <Input placeholder="请输入" style={{ width: 160 }} />
+              </Space>
+              <Space direction="vertical" size={4}>
+                <Text type="secondary" style={{ fontSize: 12 }}>地区</Text>
+                <Cascader options={options} placeholder="请选择地区" style={{ width: 200 }} />
+              </Space>
+              <Space direction="vertical" size={4}>
+                <Text type="secondary" style={{ fontSize: 12 }}>分类</Text>
+                <Cascader options={categoryOptions} placeholder="请选择分类" style={{ width: 200 }} />
+              </Space>
+              <Space direction="vertical" size={4}>
+                <Text type="secondary" style={{ fontSize: 12 }}>时间</Text>
+                <DatePicker.RangePicker style={{ width: 240 }} />
+              </Space>
+              <Button type="primary">查询</Button>
+              <Button>重置</Button>
+            </Space>
+          </div>
+        </Illus>
+
+        <h3>3.2 危险操作（删除/清空/停用）</h3>
+        <ul>
+          <li><strong>清除选择</strong>：级联的清除属于轻量操作，仅清空当前选中值，不涉及数据删除；可配置清除按钮。</li>
+          <li><strong>禁用选项</strong>：通过数据源中的 <code>disabled</code> 标记可禁用某些节点，用户无法选择该节点；适用于「存在但不能选」的配置。</li>
+        </ul>
+        <Illus>
+          <Space size={32}>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>可清除（allowClear）</Text>
+              <Cascader
+                options={options}
+                defaultValue={['zhejiang', 'hangzhou', 'xihu']}
+                allowClear
+                style={{ width: 240 }}
+              />
+            </Space>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>含禁用选项</Text>
+              <Cascader
+                options={optionsWithDisabled}
+                placeholder="部分选项已禁用"
+                style={{ width: 240 }}
+              />
+            </Space>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>整体禁用</Text>
+              <Cascader
+                options={options}
+                defaultValue={['zhejiang', 'hangzhou', 'xihu']}
+                disabled
+                style={{ width: 240 }}
+              />
+            </Space>
+          </Space>
+        </Illus>
+
+        <h3>3.3 摆放位置（按页面场景划分）</h3>
+        <ul>
+          <li><strong>表单内</strong>：作为表单项时，放在对应标签下方，与其它控件对齐；宽度与同表单其它输入控件协调。</li>
+          <li><strong>筛选区</strong>：作为筛选条件时，放在筛选栏中，与其它筛选项统一排列规则。</li>
+          <li><strong>侧边栏 / 固定面板</strong>：使用面板模式时，放在侧边栏或固定配置区内，与周围区块对齐。</li>
+        </ul>
+        <Illus>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16 }}>
+            {/* 表单 */}
+            <div>
+              <Text strong style={{ fontSize: 12, display: 'block', marginBottom: 8 }}>表单内</Text>
+              <div className="mock" style={{ padding: 16 }}>
+                <Form layout="vertical" size="small">
+                  <Form.Item label="姓名" style={{ marginBottom: 10 }}>
+                    <Input placeholder="请输入" defaultValue="张三" />
+                  </Form.Item>
+                  <Form.Item label="地区" style={{ marginBottom: 10 }}>
+                    <Cascader options={options} defaultValue={['zhejiang', 'hangzhou', 'xihu']} style={{ width: '100%' }} size="small" />
+                  </Form.Item>
+                  <Form.Item label="地址" style={{ marginBottom: 0 }}>
+                    <Input placeholder="请输入" />
+                  </Form.Item>
+                </Form>
+              </div>
+            </div>
+            {/* 筛选区 */}
+            <div>
+              <Text strong style={{ fontSize: 12, display: 'block', marginBottom: 8 }}>筛选区</Text>
+              <div className="mock" style={{ padding: 16 }}>
+                <Space direction="vertical" size={8} style={{ width: '100%' }}>
+                  <Input placeholder="关键词" size="small" />
+                  <Cascader options={options} placeholder="地区" style={{ width: '100%' }} size="small" />
+                  <DatePicker style={{ width: '100%' }} size="small" />
+                  <Button type="primary" size="small" block>查询</Button>
+                </Space>
+              </div>
+            </div>
+            {/* 侧边栏 */}
+            <div>
+              <Text strong style={{ fontSize: 12, display: 'block', marginBottom: 8 }}>侧边栏面板</Text>
+              <div className="mock" style={{ padding: 0 }}>
+                <div style={{ padding: '8px 12px', borderBottom: '1px solid #e8e8e8', fontSize: 12, fontWeight: 600 }}>分类</div>
+                <div style={{ padding: 2 }}>
+                  <Cascader.Panel options={categoryOptions} style={{ width: '100%' }} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </Illus>
+
+        <h3>3.4 顺序与对齐逻辑</h3>
+        <ul>
+          <li><strong>多筛选项</strong>：级联与其它筛选项按业务重要性或使用频率排列；常见顺序为「关键词 → 分类/级联 → 时间 → 其它」。</li>
+          <li><strong>表单内</strong>：与同组表单项保持相同对齐方式（左对齐或网格对齐），标签与控件的对齐关系一致。</li>
+        </ul>
+        <Illus>
+          <div className="mock" style={{ maxWidth: 800, padding: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap' }}>
+              <Space direction="vertical" size={2}>
+                <Text type="secondary" style={{ fontSize: 11 }}>① 关键词</Text>
+                <Input placeholder="搜索" style={{ width: 140 }} size="small" />
+              </Space>
+              <Space direction="vertical" size={2}>
+                <Text type="secondary" style={{ fontSize: 11 }}>② 分类 / 级联</Text>
+                <Cascader options={categoryOptions} placeholder="分类" style={{ width: 180 }} size="small" />
+              </Space>
+              <Space direction="vertical" size={2}>
+                <Text type="secondary" style={{ fontSize: 11 }}>③ 地区</Text>
+                <Cascader options={options} placeholder="地区" style={{ width: 180 }} size="small" />
+              </Space>
+              <Space direction="vertical" size={2}>
+                <Text type="secondary" style={{ fontSize: 11 }}>④ 时间</Text>
+                <DatePicker.RangePicker style={{ width: 200 }} size="small" />
+              </Space>
+              <Button type="primary" size="small">查询</Button>
+            </div>
+          </div>
+        </Illus>
+
+        <h3>3.5 状态与交互反馈</h3>
+        <ul>
+          <li><strong>默认</strong>：触发器展示占位文案或已选路径，边框与背景清晰。</li>
+          <li><strong>展开</strong>：点击后浮层展开，首列选项展示；若有默认值，可高亮已选路径。</li>
+          <li><strong>逐级选择</strong>：选择父级后子级列展开；选中项高亮，路径可追溯。</li>
+          <li><strong>选择完成</strong>：选到有效节点后浮层关闭，触发器回填；多选时回填策略需符合业务预期。</li>
+          <li><strong>禁用</strong>：触发器置灰，不可展开；或部分节点禁用，不可选。</li>
+          <li><strong>错误 / 警告</strong>：校验失败时通过 <code>status</code> 或边框色、提示文案标明。</li>
+        </ul>
+        <Illus>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>默认态</Text>
+              <Cascader options={options} placeholder="请选择" style={{ width: '100%' }} />
+            </Space>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>已选中</Text>
+              <Cascader options={options} defaultValue={['zhejiang', 'hangzhou', 'xihu']} style={{ width: '100%' }} />
+            </Space>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>禁用态</Text>
+              <Cascader options={options} defaultValue={['zhejiang', 'hangzhou', 'xihu']} disabled style={{ width: '100%' }} />
+            </Space>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>错误状态</Text>
+              <Cascader options={options} placeholder="请选择" status="error" style={{ width: '100%' }} />
+            </Space>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>警告状态</Text>
+              <Cascader options={options} placeholder="请选择" status="warning" style={{ width: '100%' }} />
+            </Space>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>可清除</Text>
+              <Cascader options={options} defaultValue={['jiangsu', 'nanjing', 'xuanwu']} allowClear style={{ width: '100%' }} />
+            </Space>
+          </div>
+        </Illus>
+
+        <h3>3.6 视觉规范与形态选择</h3>
+        <ul>
+          <li><strong>形态变体</strong>：支持 <code>outlined</code>、<code>filled</code>、<code>borderless</code>，与同页其它输入类控件统一。</li>
+          <li><strong>回填展示</strong>：路径过长时可通过省略、tooltip 展示完整路径；多选时标签数量可限制，超出部分折叠。</li>
+          <li><strong>浮层层级</strong>：确保浮层不被其它元素遮挡，z-index 与弹窗、抽屉等协调。</li>
+        </ul>
+        <Illus>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>Outlined（默认）</Text>
+              <Cascader options={options} defaultValue={['zhejiang', 'hangzhou', 'xihu']} variant="outlined" style={{ width: '100%' }} />
+            </Space>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>Filled</Text>
+              <Cascader options={options} defaultValue={['zhejiang', 'hangzhou', 'xihu']} variant="filled" style={{ width: '100%' }} />
+            </Space>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>Borderless</Text>
+              <Cascader options={options} defaultValue={['zhejiang', 'hangzhou', 'xihu']} variant="borderless" style={{ width: '100%' }} />
+            </Space>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>多选标签折叠</Text>
+              <Cascader
+                options={options}
+                multiple
+                defaultValue={[['zhejiang', 'hangzhou', 'xihu'], ['jiangsu', 'nanjing', 'gulou'], ['guangdong', 'shenzhen', 'nanshan']]}
+                maxTagCount={2}
+                style={{ width: '100%' }}
+              />
+            </Space>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>自定义回填格式</Text>
+              <Cascader
+                options={options}
+                defaultValue={['zhejiang', 'hangzhou', 'xihu']}
+                displayRender={(labels) => labels[labels.length - 1]}
+                style={{ width: '100%' }}
+              />
+            </Space>
+            <Space direction="vertical" size={4}>
+              <Text type="secondary" style={{ fontSize: 12 }}>大尺寸</Text>
+              <Cascader options={options} defaultValue={['zhejiang', 'hangzhou', 'xihu']} size="large" style={{ width: '100%' }} />
+            </Space>
+          </div>
+        </Illus>
+
+        <hr className="sep" />
+
+        {/* ======== 4. 常见问题 ======== */}
+        <h2>4. 常见问题</h2>
+
+        <div className="faq-item">
+          <h4>1. Cascader 和 Select、TreeSelect 的区别？</h4>
+          <ul>
+            <li><strong>Cascader</strong>：层级数据逐列展开选择，同一浮层完成多级选择；适合省市区、分类等明确层级。</li>
+            <li><strong>Select</strong>：扁平选项单选或多选，无层级展开；适合简单列表选择。</li>
+            <li><strong>TreeSelect</strong>：树形结构，可展开折叠节点；适合树形数据且需展示完整树结构时使用。</li>
+          </ul>
+          <Illus>
+            <Space size={24}>
+              <Space direction="vertical" size={4} align="center">
+                <Cascader options={options} placeholder="Cascader" style={{ width: 200 }} />
+                <Text type="secondary" style={{ fontSize: 11 }}>级联选择</Text>
+              </Space>
+              <Space direction="vertical" size={4} align="center">
+                <Select placeholder="Select" style={{ width: 200 }} options={[{ value: '1', label: '选项一' }, { value: '2', label: '选项二' }, { value: '3', label: '选项三' }]} />
+                <Text type="secondary" style={{ fontSize: 11 }}>普通选择</Text>
+              </Space>
+            </Space>
+          </Illus>
+        </div>
+
+        <div className="faq-item">
+          <h4>2. 选择即改变和基本单选如何选择？</h4>
+          <ul>
+            <li><strong>基本单选</strong>：必须选到叶子节点；适用于需要精确到最末级的场景（如详细地址）。</li>
+            <li><strong>选择即改变</strong>：任意层级可选；适用于父级本身有意义的场景（如仅选省份、仅选大分类）。</li>
+          </ul>
+          <Illus>
+            <Space size={32}>
+              <Space direction="vertical" size={4} align="center">
+                <Cascader options={options} defaultValue={['zhejiang', 'hangzhou', 'xihu']} style={{ width: 230 }} disabled />
+                <Text type="secondary" style={{ fontSize: 11 }}>基本单选 — 必须选到叶子</Text>
+              </Space>
+              <Space direction="vertical" size={4} align="center">
+                <Cascader options={options} changeOnSelect defaultValue={['zhejiang']} style={{ width: 230 }} disabled />
+                <Text type="secondary" style={{ fontSize: 11 }}>选择即改变 — 父级即可</Text>
+              </Space>
+            </Space>
+          </Illus>
+        </div>
+
+      </div>
+    </ConfigProvider>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+</body>
+</html>

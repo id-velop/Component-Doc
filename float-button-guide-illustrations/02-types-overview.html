@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.2 组件类型总览 - 悬浮按钮</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.22.6/dist/reset.min.css">
+<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/antd@5.22.6/dist/antd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ant-design/icons@5/dist/index.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f7f8fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  .root { width: 960px; margin: 0 auto; padding: 40px; }
+  .title { font-size: 20px; font-weight: 600; color: #1d2129; margin-bottom: 8px; }
+  .desc { font-size: 14px; color: #86909c; margin-bottom: 32px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .card {
+    background: #fff; border-radius: 12px; border: 1px solid #e5e6eb;
+    padding: 24px 20px; display: flex; flex-direction: column; align-items: center; gap: 16px;
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+  .card-preview {
+    width: 100%; height: 120px; background: #f7f8fa; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; position: relative;
+    overflow: hidden;
+  }
+  .card-title { font-size: 14px; font-weight: 600; color: #1d2129; text-align: center; }
+  .card-desc { font-size: 12px; color: #86909c; text-align: center; line-height: 1.6; }
+  .fb {
+    width: 48px; height: 48px; border-radius: 50%; background: #fff;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08), 0 3px 6px -4px rgba(0,0,0,0.12), 0 9px 28px 8px rgba(0,0,0,0.05);
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid #f0f0f0; cursor: pointer;
+  }
+  .fb-primary { background: #165dff; border-color: #165dff; }
+  .fb-square {
+    border-radius: 8px; height: auto; min-height: 48px;
+    flex-direction: column; padding: 6px 4px; gap: 2px;
+  }
+  .fb-small {
+    width: 40px; height: 40px; border-radius: 50%;
+  }
+  .badge-dot {
+    position: absolute; top: -4px; right: -4px; width: 18px; height: 18px;
+    border-radius: 50%; background: #f53f3f; color: #fff; font-size: 10px;
+    display: flex; align-items: center; justify-content: center; font-weight: 600;
+    border: 2px solid #fff;
+  }
+  .page-mock {
+    width: 80%; height: 80%; background: #fff; border-radius: 4px; border: 1px solid #e5e6eb;
+    position: relative; overflow: hidden;
+  }
+  .page-mock-line {
+    height: 4px; background: #e5e6eb; border-radius: 2px; margin: 6px 8px;
+  }
+  .page-mock-line.short { width: 50%; }
+  .menu-item {
+    padding: 6px 12px; font-size: 11px; color: #4e5969; cursor: pointer;
+    border-bottom: 1px solid #f2f3f5;
+  }
+  .menu-item:hover { background: #f2f3f5; }
+  .menu-item:last-child { border-bottom: none; }
+  .menu-panel {
+    background: #fff; border-radius: 8px; border: 1px solid #e5e6eb;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden;
+    min-width: 80px;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {
+  QuestionCircleOutlined, CustomerServiceOutlined, CommentOutlined,
+  EditOutlined, VerticalAlignTopOutlined, PlusOutlined, CloseOutlined,
+  BellOutlined, FileTextOutlined, BugOutlined, MessageOutlined
+} = icons;
+
+function TypesOverview() {
+  return (
+    <div className="root">
+      <div className="title">1.2 组件类型</div>
+      <div className="desc">悬浮按钮包含 7 种类型，覆盖单一入口、组合展示、菜单收纳等场景</div>
+
+      <div className="grid">
+        {/* 1. Single Default */}
+        <div className="card">
+          <div className="card-preview">
+            <div className="page-mock">
+              <div className="page-mock-line" style={{marginTop: 10}} />
+              <div className="page-mock-line short" />
+              <div className="page-mock-line" />
+              <div className="page-mock-line short" />
+              <div className="page-mock-line" />
+            </div>
+            <div className="fb" style={{ position: 'absolute', bottom: 12, right: 12 }}>
+              <QuestionCircleOutlined style={{ fontSize: 18, color: 'rgba(0,0,0,0.88)' }} />
+            </div>
+          </div>
+          <div className="card-title">单悬浮按钮</div>
+          <div className="card-desc">默认圆形，承载<br/>单一全局操作</div>
+        </div>
+
+        {/* 2. Primary */}
+        <div className="card">
+          <div className="card-preview">
+            <div className="page-mock">
+              <div className="page-mock-line" style={{marginTop: 10}} />
+              <div className="page-mock-line short" />
+              <div className="page-mock-line" />
+              <div className="page-mock-line short" />
+              <div className="page-mock-line" />
+            </div>
+            <div className="fb fb-primary" style={{ position: 'absolute', bottom: 12, right: 12 }}>
+              <CustomerServiceOutlined style={{ fontSize: 18, color: '#fff' }} />
+            </div>
+          </div>
+          <div className="card-title">主色调悬浮按钮</div>
+          <div className="card-desc">品牌色填充，强调<br/>首要全局操作</div>
+        </div>
+
+        {/* 3. Square with text */}
+        <div className="card">
+          <div className="card-preview">
+            <div className="page-mock">
+              <div className="page-mock-line" style={{marginTop: 10}} />
+              <div className="page-mock-line short" />
+              <div className="page-mock-line" />
+              <div className="page-mock-line short" />
+              <div className="page-mock-line" />
+            </div>
+            <div className="fb fb-square" style={{ position: 'absolute', bottom: 12, right: 12 }}>
+              <CommentOutlined style={{ fontSize: 16, color: 'rgba(0,0,0,0.88)' }} />
+              <span style={{ fontSize: 10, color: 'rgba(0,0,0,0.88)', lineHeight: 1 }}>反馈</span>
+            </div>
+          </div>
+          <div className="card-title">方形悬浮按钮</div>
+          <div className="card-desc">方形形态，可携带<br/>精简文字描述</div>
+        </div>
+
+        {/* 4. Group */}
+        <div className="card">
+          <div className="card-preview">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, position: 'absolute', bottom: 12, right: 12 }}>
+              <div className="fb fb-small">
+                <CommentOutlined style={{ fontSize: 14, color: 'rgba(0,0,0,0.88)' }} />
+              </div>
+              <div className="fb fb-small">
+                <QuestionCircleOutlined style={{ fontSize: 14, color: 'rgba(0,0,0,0.88)' }} />
+              </div>
+              <div className="fb fb-small">
+                <CustomerServiceOutlined style={{ fontSize: 14, color: 'rgba(0,0,0,0.88)' }} />
+              </div>
+            </div>
+          </div>
+          <div className="card-title">悬浮按钮组</div>
+          <div className="card-desc">多个平级操作<br/>直接展开展示</div>
+        </div>
+
+        {/* 5. Menu Mode */}
+        <div className="card">
+          <div className="card-preview">
+            <div style={{ position: 'absolute', bottom: 12, right: 12, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
+              <div className="menu-panel">
+                <div className="menu-item">💬 反馈</div>
+                <div className="menu-item">❓ 帮助</div>
+                <div className="menu-item">📞 客服</div>
+              </div>
+              <div className="fb fb-primary" style={{ width: 40, height: 40 }}>
+                <PlusOutlined style={{ fontSize: 16, color: '#fff' }} />
+              </div>
+            </div>
+          </div>
+          <div className="card-title">菜单模式</div>
+          <div className="card-desc">点击展开菜单列表<br/>收纳多个操作</div>
+        </div>
+
+        {/* 6. BackTop */}
+        <div className="card">
+          <div className="card-preview">
+            <div className="page-mock" style={{ height: '90%' }}>
+              <div className="page-mock-line" style={{marginTop: 10}} />
+              <div className="page-mock-line short" />
+              <div className="page-mock-line" />
+              <div className="page-mock-line short" />
+              <div className="page-mock-line" />
+              <div className="page-mock-line" />
+              <div className="page-mock-line short" />
+            </div>
+            <div className="fb" style={{ position: 'absolute', bottom: 12, right: 12, width: 40, height: 40 }}>
+              <VerticalAlignTopOutlined style={{ fontSize: 16, color: 'rgba(0,0,0,0.88)' }} />
+            </div>
+          </div>
+          <div className="card-title">回到顶部</div>
+          <div className="card-desc">长页面滚动后<br/>一键返回顶部</div>
+        </div>
+
+        {/* 7. Badge */}
+        <div className="card">
+          <div className="card-preview">
+            <div className="page-mock">
+              <div className="page-mock-line" style={{marginTop: 10}} />
+              <div className="page-mock-line short" />
+              <div className="page-mock-line" />
+              <div className="page-mock-line short" />
+              <div className="page-mock-line" />
+            </div>
+            <div style={{ position: 'absolute', bottom: 12, right: 12 }}>
+              <div className="fb" style={{ position: 'relative' }}>
+                <BellOutlined style={{ fontSize: 18, color: 'rgba(0,0,0,0.88)' }} />
+                <div className="badge-dot">5</div>
+              </div>
+            </div>
+          </div>
+          <div className="card-title">带徽标悬浮按钮</div>
+          <div className="card-desc">右上角数字徽标<br/>提示待处理数量</div>
+        </div>
+
+        {/* Code reference */}
+        <div className="card" style={{ background: '#f7f8fa', border: '1px dashed #c9cdd4' }}>
+          <div className="card-preview" style={{ background: '#1d2129', borderRadius: 8 }}>
+            <pre style={{ fontSize: 9, color: '#86909c', padding: 8, lineHeight: 1.6, fontFamily: 'Monaco, Consolas, monospace' }}>
+{`<FloatButton
+  type="default|primary"
+  shape="circle|square"
+  icon={<Icon />}
+  content="文字"
+  badge={{ count: 5 }}
+/>`}
+            </pre>
+          </div>
+          <div className="card-title" style={{ color: '#86909c' }}>API 参考</div>
+          <div className="card-desc">type · shape · icon<br/>content · badge</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<TypesOverview />);
+</script>
+</body>
+</html>

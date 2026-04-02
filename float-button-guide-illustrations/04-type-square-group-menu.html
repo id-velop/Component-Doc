@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1.2.3-1.2.5 方形 / 按钮组 / 菜单模式</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5.22.6/dist/reset.min.css">
+<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/antd@5.22.6/dist/antd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ant-design/icons@5/dist/index.umd.min.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f7f8fa; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  .root { width: 960px; margin: 0 auto; padding: 40px; }
+  .section { margin-bottom: 40px; }
+  .title { font-size: 18px; font-weight: 600; color: #1d2129; margin-bottom: 6px; }
+  .desc { font-size: 13px; color: #86909c; margin-bottom: 20px; }
+  .demo-row { display: flex; gap: 20px; }
+  .demo-box {
+    flex: 1; background: #fff; border-radius: 12px; border: 1px solid #e5e6eb; overflow: hidden;
+  }
+  .demo-header {
+    padding: 12px 16px; font-size: 12px; font-weight: 600; border-bottom: 1px solid #f2f3f5;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .demo-content { height: 240px; background: #fafbfc; position: relative; overflow: hidden; }
+  .page-sim {
+    margin: 12px; background: #fff; border-radius: 6px; border: 1px solid #e5e6eb;
+    padding: 12px; height: calc(100% - 24px); overflow: hidden;
+  }
+  .line { height: 6px; background: #e5e6eb; border-radius: 3px; margin-bottom: 8px; }
+  .line.w60 { width: 60%; } .line.w80 { width: 80%; } .line.w40 { width: 40%; }
+  .line.thick { height: 10px; background: #c9cdd4; margin-bottom: 12px; width: 40%; }
+  .fb {
+    width: 48px; height: 48px; border-radius: 50%; background: #fff;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08), 0 3px 6px -4px rgba(0,0,0,0.12), 0 9px 28px 8px rgba(0,0,0,0.05);
+    display: flex; align-items: center; justify-content: center;
+    border: 1px solid #f0f0f0;
+  }
+  .fb-primary { background: #165dff; border-color: #165dff; }
+  .fb-square {
+    border-radius: 8px; height: auto; min-height: 52px;
+    flex-direction: column; padding: 6px 4px; gap: 2px;
+  }
+  .fb-sm { width: 40px; height: 40px; }
+  .menu-panel {
+    background: #fff; border-radius: 8px; border: 1px solid #e5e6eb;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); overflow: hidden; min-width: 100px;
+  }
+  .menu-item {
+    padding: 8px 14px; font-size: 12px; color: #4e5969; display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid #f2f3f5;
+  }
+  .menu-item:last-child { border-bottom: none; }
+  .tooltip {
+    position: absolute; background: rgba(0,0,0,0.75); color: #fff; font-size: 11px;
+    padding: 4px 10px; border-radius: 4px; white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {
+  QuestionCircleOutlined, CustomerServiceOutlined, CommentOutlined,
+  EditOutlined, PlusOutlined, CloseOutlined, FileTextOutlined,
+  BugOutlined, HeartOutlined, ShareAltOutlined
+} = icons;
+
+function SquareGroupMenu() {
+  return (
+    <div className="root">
+      {/* 1.2.3 Square */}
+      <div className="section">
+        <div className="title">1.2.3 方形悬浮按钮（带文字）</div>
+        <div className="desc">方形形态，可携带精简文字描述以增强识别 — shape="square" + content="文字"</div>
+        <div className="demo-row">
+          <div className="demo-box">
+            <div className="demo-header">
+              <span style={{color: '#165dff'}}>●</span> 示例：方形带文字的悬浮按钮
+            </div>
+            <div className="demo-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 32 }}>
+              {['反馈', '客服', '帮助'].map((text, i) => {
+                const icons_ = [
+                  <CommentOutlined style={{ fontSize: 18, color: 'rgba(0,0,0,0.88)' }} />,
+                  <CustomerServiceOutlined style={{ fontSize: 18, color: 'rgba(0,0,0,0.88)' }} />,
+                  <QuestionCircleOutlined style={{ fontSize: 18, color: 'rgba(0,0,0,0.88)' }} />,
+                ];
+                return (
+                  <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+                    <div className="fb fb-square">
+                      {icons_[i]}
+                      <span style={{ fontSize: 11, color: 'rgba(0,0,0,0.88)', lineHeight: 1 }}>{text}</span>
+                    </div>
+                    <span style={{ fontSize: 10, color: '#86909c' }}>content="{text}"</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div className="demo-box">
+            <div className="demo-header">
+              <span style={{color: '#165dff'}}>●</span> 场景：语义需文字辅助说明
+            </div>
+            <div className="demo-content">
+              <div className="page-sim">
+                <div className="line thick" />
+                <div className="line w80" />
+                <div className="line w60" />
+                <div className="line" />
+                <div className="line w80" />
+                <div className="line w40" />
+              </div>
+              <div style={{ position: 'absolute', bottom: 16, right: 16 }}>
+                <div className="fb fb-square">
+                  <CommentOutlined style={{ fontSize: 18, color: 'rgba(0,0,0,0.88)' }} />
+                  <span style={{ fontSize: 11, color: 'rgba(0,0,0,0.88)', lineHeight: 1 }}>反馈</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 1.2.4 Group */}
+      <div className="section">
+        <div className="title">1.2.4 悬浮按钮组</div>
+        <div className="desc">多个同类悬浮按钮组合在一起，自上而下展开，无需二次点击即可看到全部选项</div>
+        <div className="demo-row">
+          <div className="demo-box">
+            <div className="demo-header">
+              <span style={{color: '#00b42a'}}>●</span> 示例：按钮组展开形态
+            </div>
+            <div className="demo-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <span style={{ fontSize: 11, color: '#86909c' }}>反馈</span>
+                  <div className="fb fb-sm">
+                    <CommentOutlined style={{ fontSize: 16, color: 'rgba(0,0,0,0.88)' }} />
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <span style={{ fontSize: 11, color: '#86909c' }}>帮助</span>
+                  <div className="fb fb-sm">
+                    <QuestionCircleOutlined style={{ fontSize: 16, color: 'rgba(0,0,0,0.88)' }} />
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <span style={{ fontSize: 11, color: '#86909c' }}>客服</span>
+                  <div className="fb fb-sm">
+                    <CustomerServiceOutlined style={{ fontSize: 16, color: 'rgba(0,0,0,0.88)' }} />
+                  </div>
+                </div>
+                <div style={{ width: 36, height: 1, background: '#e5e6eb' }} />
+                <div className="fb fb-primary" style={{ width: 48, height: 48 }}>
+                  <PlusOutlined style={{ fontSize: 18, color: '#fff', transform: 'rotate(45deg)' }} />
+                </div>
+                <span style={{ fontSize: 10, color: '#86909c' }}>触发按钮</span>
+              </div>
+            </div>
+          </div>
+          <div className="demo-box">
+            <div className="demo-header">
+              <span style={{color: '#165dff'}}>●</span> 场景：多入口并列展示
+            </div>
+            <div className="demo-content">
+              <div className="page-sim">
+                <div className="line thick" />
+                <div className="line w80" />
+                <div className="line w60" />
+                <div className="line" />
+                <div className="line w80" />
+                <div className="line w40" />
+              </div>
+              <div style={{ position: 'absolute', bottom: 16, right: 16, display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'center' }}>
+                <div className="fb fb-sm">
+                  <CommentOutlined style={{ fontSize: 14, color: 'rgba(0,0,0,0.88)' }} />
+                </div>
+                <div className="fb fb-sm">
+                  <QuestionCircleOutlined style={{ fontSize: 14, color: 'rgba(0,0,0,0.88)' }} />
+                </div>
+                <div className="fb fb-sm">
+                  <CustomerServiceOutlined style={{ fontSize: 14, color: 'rgba(0,0,0,0.88)' }} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 1.2.5 Menu */}
+      <div className="section">
+        <div className="title">1.2.5 菜单模式悬浮按钮</div>
+        <div className="desc">点击或悬停后展开菜单，将多个操作收纳到单一触发入口中 — trigger="click" | "hover"</div>
+        <div className="demo-row">
+          <div className="demo-box">
+            <div className="demo-header">
+              <span style={{color: '#ff7d00'}}>●</span> 示例：菜单展开形态
+            </div>
+            <div className="demo-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8 }}>
+                <div className="menu-panel">
+                  <div className="menu-item"><CommentOutlined style={{fontSize: 13}} /> 提交反馈</div>
+                  <div className="menu-item"><BugOutlined style={{fontSize: 13}} /> 报告 Bug</div>
+                  <div className="menu-item"><QuestionCircleOutlined style={{fontSize: 13}} /> 查看帮助</div>
+                  <div className="menu-item"><CustomerServiceOutlined style={{fontSize: 13}} /> 联系客服</div>
+                  <div className="menu-item"><ShareAltOutlined style={{fontSize: 13}} /> 分享页面</div>
+                </div>
+                <div className="fb fb-primary" style={{ width: 48, height: 48 }}>
+                  <PlusOutlined style={{ fontSize: 18, color: '#fff' }} />
+                </div>
+                <span style={{ fontSize: 10, color: '#86909c' }}>trigger="click"</span>
+              </div>
+            </div>
+          </div>
+          <div className="demo-box">
+            <div className="demo-header">
+              <span style={{color: '#165dff'}}>●</span> 场景：多项操作收纳
+            </div>
+            <div className="demo-content">
+              <div className="page-sim">
+                <div className="line thick" />
+                <div className="line w80" />
+                <div className="line w60" />
+                <div className="line" />
+                <div className="line w80" />
+                <div className="line w40" />
+              </div>
+              <div style={{ position: 'absolute', bottom: 16, right: 16, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
+                <div className="menu-panel" style={{ minWidth: 90 }}>
+                  <div className="menu-item"><CommentOutlined style={{fontSize: 12}} /> 反馈</div>
+                  <div className="menu-item"><QuestionCircleOutlined style={{fontSize: 12}} /> 帮助</div>
+                  <div className="menu-item"><CustomerServiceOutlined style={{fontSize: 12}} /> 客服</div>
+                </div>
+                <div className="fb fb-primary" style={{ width: 40, height: 40 }}>
+                  <PlusOutlined style={{ fontSize: 16, color: '#fff' }} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<SquareGroupMenu />);
+</script>
+</body>
+</html>
