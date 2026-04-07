@@ -8,11 +8,9 @@
 
 单选框由以下基础要素构成，可按需组合使用：
 
-<!-- 附图占位：建议附上一张示例图，展示单选框的三个基础要素（圆点/选中指示器、文本标签、可选容器）的构成关系，标注各要素名称与位置 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=82) -->
 
-```jsx live
+```react
 function App() {
   const { Radio, Typography, Space, Divider } = Infrad;
   const { Text } = Typography;
@@ -67,11 +65,9 @@ function App() {
 
 &emsp;**是什么**：一组圆形单选框水平或垂直排列，通过点击选择唯一选项
 
-<!-- 附图占位：建议附上一张示例图，展示单选框组（圆形指示器 + 文本）的视觉形态，体现默认的单选样式 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=83) -->
 
-```jsx live
+```react
 function App() {
   const { Radio } = Infrad;
   return (
@@ -89,11 +85,11 @@ function App() {
 
 &emsp;**典型场景**：性别选择、支付方式、图表类型切换（折线图/柱状图/饼图）
 
-<!-- 附图占位：建议附上一张场景图，展示表单中性别「男/女」、图表类型「折线图/柱状图/饼图」的单选框组排列 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=84) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Form, Divider } = Infrad;
   return (
@@ -127,11 +123,11 @@ function App() {
 
 &emsp;**是什么**：以按钮形态展示选项，选中项有描边或边框强调，未选中为浅色背景
 
-<!-- 附图占位：建议附上一张示例图，展示按钮样式单选框（outline 风格）的视觉形态，选中与未选中的对比 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=85) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Typography } = Infrad;
   const { Text } = Typography;
@@ -152,11 +148,11 @@ function App() {
 
 &emsp;**典型场景**：视图切换（列表/卡片）、排序方式（最新/最热）、筛选维度（全部/进行中/已完成）
 
-<!-- 附图占位：建议附上一张场景图，展示列表页顶部「全部 | 进行中 | 已完成」的按钮式单选布局 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=86) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Card, Table, Tag } = Infrad;
   const [status, setStatus] = React.useState('all');
@@ -193,11 +189,11 @@ function App() {
 
 &emsp;**是什么**：选中项以实心填充色（如蓝色）强调，未选中为浅色或描边
 
-<!-- 附图占位：建议附上一张示例图，展示实心按钮样式单选（solid）的视觉形态，选中项蓝色实心填充 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=87) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Typography } = Infrad;
   const { Text } = Typography;
@@ -218,11 +214,11 @@ function App() {
 
 &emsp;**典型场景**：主题切换（亮色/暗色）、重要筛选（如优先级高/中/低）
 
-<!-- 附图占位：建议附上一张场景图，展示筛选区「高/中/低」优先级以实心按钮样式单选的布局 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=88) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Card, List, Tag } = Infrad;
   const [priority, setPriority] = React.useState('all');
@@ -260,11 +256,11 @@ function App() {
 
 &emsp;**是什么**：单选框组宽度撑满父容器，每个选项独占一行或占满可用空间
 
-<!-- 附图占位：建议附上一张示例图，展示 Block 单选组合的视觉形态，每个选项横向铺满 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=89) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Flex } = Infrad;
   return (
@@ -286,11 +282,11 @@ function App() {
 
 &emsp;**典型场景**：地区选择（杭州/上海/北京/成都）、收货地址选择、配送方式
 
-<!-- 附图占位：建议附上一张场景图，展示收货地址选择中每个选项为一块可点击区域、撑满宽度的布局 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=90) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Card, Space, Typography } = Infrad;
   const { Text } = Typography;
@@ -323,11 +319,11 @@ function App() {
 
 &emsp;**是什么**：选项垂直堆叠，适用于选项较多或需与「其他」输入框联动
 
-<!-- 附图占位：建议附上一张示例图，展示垂直排列的单选框组，以及「其他」选项旁联动输入框 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=91) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Space, Input } = Infrad;
   const [value, setValue] = React.useState('email');
@@ -352,11 +348,11 @@ function App() {
 
 &emsp;**典型场景**：反馈渠道选择、问题类型选择（带其他说明）
 
-<!-- 附图占位：建议附上一张场景图，展示反馈表单中「选项 A / 选项 B / 其他（请输入）」的垂直单选布局 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=92) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Space, Input, Form, Button, Card } = Infrad;
   const [value, setValue] = React.useState(undefined);
@@ -392,11 +388,11 @@ function App() {
 
 &emsp;**是什么**：单个或整组单选框不可点击，用于权限不足或流程未到该步
 
-<!-- 附图占位：建议附上一张示例图，展示禁用状态的单选框（灰色、不可点击）与正常状态的对比 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=93) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Space, Divider, Typography } = Infrad;
   const { Text } = Typography;
@@ -426,11 +422,11 @@ function App() {
 
 &emsp;**典型场景**：权限受限的表单、已锁定配置的展示、流程中的只读步骤
 
-<!-- 附图占位：建议附上一张场景图，展示部分选项禁用、悬停时提示「无权限」的使用方式 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=94) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Space, Tooltip, Form, Card } = Infrad;
   return (
@@ -462,11 +458,11 @@ function App() {
 
 &emsp;**是什么**：通过 options 配置渲染单选框，而非手写每个 Radio 子节点
 
-<!-- 附图占位：建议附上一张示例图，展示通过 options 配置的单选框组，与手写 Radio 在视觉上一致 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=95) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Space, Typography } = Infrad;
   const { Text } = Typography;
@@ -495,11 +491,11 @@ function App() {
 
 &emsp;**典型场景**：动态选项、多语言选项、与后端配置联动的表单
 
-<!-- 附图占位：建议附上一张场景图，展示通过配置生成的单选框组，选项可动态变化 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=96) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Button, Space, Card, Tag } = Infrad;
   const { PlusOutlined } = Icons;
@@ -538,11 +534,11 @@ function App() {
 
 ### 1.3.1 单选框组与选项数量
 
-<!-- 附图占位：建议附上一张对比图，左侧展示 3–5 个选项的单选框组（符合规范），右侧展示 10 个以上选项平铺造成拥挤（违反规范） -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=97) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Space, Typography, Divider, Alert } = Infrad;
   const { Text } = Typography;
@@ -586,17 +582,17 @@ function App() {
 
 ✅ **推荐：** 选项数量控制在 7 个以内，使用单选框组便于比较选择
 
-<hr>
+---
 
 ❌ **不推荐：** 选项过多时仍使用单选框，造成界面拥挤、选择困难，应改用 Select
 
 ### 1.3.2 按钮样式与语义
 
-<!-- 附图占位：建议附上一张对比图，左侧展示按钮样式用于模式切换、语义清晰（符合规范），右侧展示用按钮样式承载不相关的长列表选项（违反规范） -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=98) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Space, Typography, Divider, Alert } = Infrad;
   const { Text } = Typography;
@@ -639,17 +635,17 @@ function App() {
 
 ✅ **推荐：** 按钮样式用于「切换模式」「筛选维度」等语义相近的少量选项
 
-<hr>
+---
 
 ❌ **不推荐：** 用按钮样式承载大量或语义差异大的选项，导致视觉混乱
 
 ### 1.3.3 Block 与垂直排列
 
-<!-- 附图占位：建议附上一张对比图，左侧展示 Block 或垂直排列时每项可点击区域充足（符合规范），右侧展示选项过密、点击困难（违反规范） -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=99) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Space, Typography, Divider, Alert } = Infrad;
   const { Text } = Typography;
@@ -683,17 +679,17 @@ function App() {
 
 ✅ **推荐：** 选项较多或文案较长时使用 Block 或垂直排列，保证可点击区域与可读性
 
-<hr>
+---
 
 ❌ **不推荐：** 长选项仍横向挤压排列，导致文字截断或点击区域过小
 
 ### 1.3.4 与 Select 的选择
 
-<!-- 附图占位：建议附上一张对比图，左侧展示 5 项以内用 Radio、5 项以上用 Select（符合规范），右侧展示 2 项用 Select 或 15 项用 Radio（违反规范） -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=100) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Select, Space, Typography, Divider, Alert } = Infrad;
   const { Text } = Typography;
@@ -758,7 +754,7 @@ function App() {
 
 ✅ **推荐：** 选项少（5 项以内）且需并排比较时用 Radio；选项多或空间紧张时用 Select
 
-<hr>
+---
 
 ❌ **不推荐：** 仅 2–3 项却用 Select 增加点击步骤；或 10 项以上仍用 Radio 平铺
 
@@ -767,7 +763,6 @@ function App() {
 # 2. 选型指南
 
 ## 2.1 选择流程
-
 
 ```mermaid
 flowchart TD
@@ -782,6 +777,8 @@ flowchart TD
   H -->|否| J[单选框组]
 ```
 
+
+
 ---
 
 # 3. 细致专业部份（交互与排版规则）
@@ -790,15 +787,15 @@ flowchart TD
 
 ## 3.1 选项数量与布局
 
-* **数量上限**：单选框组建议选项不超过 7 个；超出时应考虑 Select、分段控件（Segmented）或分组展示。
-* **水平与垂直**：选项少、文案短时优先水平排列；选项多或文案长时垂直排列更易扫读。
-* **Block 使用**：当每个选项需要较大点击区域或需展示附加信息时，使用 Block 撑满父宽。
+- **数量上限**：单选框组建议选项不超过 7 个；超出时应考虑 Select、分段控件（Segmented）或分组展示。
+- **水平与垂直**：选项少、文案短时优先水平排列；选项多或文案长时垂直排列更易扫读。
+- **Block 使用**：当每个选项需要较大点击区域或需展示附加信息时，使用 Block 撑满父宽。
 
-<!-- 附图占位：建议附上一张场景图，展示水平单选组、垂直单选组、Block 单选组三种布局的适用场景对比 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=101) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Space, Typography, Divider, Flex } = Infrad;
   const { Text } = Typography;
@@ -845,15 +842,15 @@ function App() {
 
 ## 3.2 与表单的配合
 
-* **必填与默认值**：若为必填项，需设置默认值或明确引导用户选择；避免提交时才发现未选。
-* **与其它控件联动**：「其他」选项可联动输入框，需在交互上明确二者关系。
-* **校验反馈**：校验失败时，错误提示应靠近单选框组，不遮挡选项本身。
+- **必填与默认值**：若为必填项，需设置默认值或明确引导用户选择；避免提交时才发现未选。
+- **与其它控件联动**：「其他」选项可联动输入框，需在交互上明确二者关系。
+- **校验反馈**：校验失败时，错误提示应靠近单选框组，不遮挡选项本身。
 
-<!-- 附图占位：建议附上一张场景图，展示必填单选框校验失败时的提示位置与样式 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=102) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Form, Button, Card, Space } = Infrad;
   return (
@@ -879,15 +876,15 @@ function App() {
 
 ## 3.3 按钮样式的视觉层级
 
-* **描边样式**：适用于需弱化视觉权重的切换场景，选中态通过描边或背景区分。
-* **实心样式**：适用于需强调当前选中状态的场景，实色填充应保持与主色一致。
-* **一致性**：同一页面内，同类切换场景应统一使用描边或实心，避免混用。
+- **描边样式**：适用于需弱化视觉权重的切换场景，选中态通过描边或背景区分。
+- **实心样式**：适用于需强调当前选中状态的场景，实色填充应保持与主色一致。
+- **一致性**：同一页面内，同类切换场景应统一使用描边或实心，避免混用。
 
-<!-- 附图占位：建议附上一张对比图，展示描边与实心按钮样式在相同场景下的视觉差异 -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=103) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Space, Typography, Divider } = Infrad;
   const { Text } = Typography;
@@ -919,28 +916,28 @@ function App() {
 
 ## 3.4 顺序与分组
 
-* **顺序**：选项顺序应符合业务逻辑或用户习惯（如按频率、按字母、按流程）。
-* **分组**：若选项可逻辑分组，可用标题或分割线区分，但同一 Radio.Group 内仍保持互斥。
-* **「其他」位置**：若存在「其他」选项，通常置于最后，并联动自定义输入。
+- **顺序**：选项顺序应符合业务逻辑或用户习惯（如按频率、按字母、按流程）。
+- **分组**：若选项可逻辑分组，可用标题或分割线区分，但同一 Radio.Group 内仍保持互斥。
+- **「其他」位置**：若存在「其他」选项，通常置于最后，并联动自定义输入。
 
 ## 3.5 状态与交互反馈
 
-* **默认**：未选中项清晰可点击，选中项明确标识。
-* **悬停**：悬停时应有可点击暗示（如背景或描边变化）。
-* **禁用**：禁用时视觉降级（如灰色），且不可点击；可配合 Tooltip 说明原因。
-* **焦点**：键盘导航时焦点可见，支持方向键在同一组内切换选项。
+- **默认**：未选中项清晰可点击，选中项明确标识。
+- **悬停**：悬停时应有可点击暗示（如背景或描边变化）。
+- **禁用**：禁用时视觉降级（如灰色），且不可点击；可配合 Tooltip 说明原因。
+- **焦点**：键盘导航时焦点可见，支持方向键在同一组内切换选项。
 
 ## 3.6 无障碍与键盘
 
-* **name 属性**：Radio.Group 应设置 name，使浏览器将一组 Radio 识别为同一组，支持方向键在同一组内切换。
-* **标签关联**：每个选项的文本需与对应的 input 正确关联，便于读屏器识别。
-* **焦点顺序**：Tab 进入组后，焦点应先落在当前选中项或第一项，再通过方向键切换。
+- **name 属性**：Radio.Group 应设置 name，使浏览器将一组 Radio 识别为同一组，支持方向键在同一组内切换。
+- **标签关联**：每个选项的文本需与对应的 input 正确关联，便于读屏器识别。
+- **焦点顺序**：Tab 进入组后，焦点应先落在当前选中项或第一项，再通过方向键切换。
 
-<!-- 附图占位：建议附上一张示例图，展示 Radio.Group 的键盘导航流程（Tab 进入、方向键切换、Enter 确认） -->
 
-<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=104) -->
 
-```jsx live
+
+
+```react
 function App() {
   const { Radio, Typography, Space, Tag, Card } = Infrad;
   const { Text } = Typography;
@@ -988,3 +985,4 @@ function App() {
 - 选项较多或文案较长，需要**每项独占一行**以提升可读性。
 - 需要**更大的点击区域**，如移动端或触屏场景。
 - 每个选项需要**展示附加信息**（如说明文字、图标），需要更多空间时。
+

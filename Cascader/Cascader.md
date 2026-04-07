@@ -13,7 +13,7 @@
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=49) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader, Typography, Space } = Infrad;
   const options = [
@@ -62,7 +62,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=50) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader } = Infrad;
   const options = [
@@ -99,7 +99,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=51) -->
 
-```jsx live
+```react
 function App() {
   const { Form, Input, Cascader, Button } = Infrad;
   const options = [
@@ -144,7 +144,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=52) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader } = Infrad;
   const options = [
@@ -184,7 +184,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=53) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader, Space, Button, Typography } = Infrad;
   const options = [
@@ -225,7 +225,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=54) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader, Space, Typography } = Infrad;
   const options = [
@@ -270,7 +270,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=55) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader, Typography, Space } = Infrad;
   const options = [
@@ -317,7 +317,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=56) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader, Typography, Space } = Infrad;
   const [value, setValue] = React.useState(undefined);
@@ -351,7 +351,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=57) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader, Form, Button, Typography } = Infrad;
   const options = [
@@ -393,7 +393,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=58) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader } = Infrad;
   const options = [
@@ -428,7 +428,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=59) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader, Typography, Space } = Infrad;
   const options = [
@@ -467,7 +467,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=60) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader } = Infrad;
   const options = [
@@ -508,7 +508,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=61) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader, Layout, Typography, Card } = Infrad;
   const { Sider, Content } = Layout;
@@ -553,7 +553,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=62) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader, Space, Typography, Divider } = Infrad;
   const options = [
@@ -597,7 +597,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=63) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader, Space, Typography, Divider } = Infrad;
   const options = [
@@ -640,7 +640,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=64) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader, Space, Typography, Divider } = Infrad;
   const options = [
@@ -716,7 +716,7 @@ flowchart TD
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=65) -->
 
-```jsx live
+```react
 function App() {
   const { Space, Input, Cascader, DatePicker, Button, Typography } = Infrad;
   const options = [
@@ -753,7 +753,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=66) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader, Space, Typography } = Infrad;
   const options = [
@@ -797,7 +797,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=67) -->
 
-```jsx live
+```react
 function App() {
   const { Form, Input, Cascader, Button, Space, Card, Layout, Typography, DatePicker } = Infrad;
   const { Sider, Content } = Layout;
@@ -851,7 +851,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=68) -->
 
-```jsx live
+```react
 function App() {
   const { Space, Input, Cascader, Select, DatePicker, Button, Typography } = Infrad;
   const options = [
@@ -899,7 +899,7 @@ function App() {
 
 <!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=70) -->
 
-```jsx live
+```react
 function App() {
   const { Cascader, Flex, Typography } = Infrad;
   const options = [
