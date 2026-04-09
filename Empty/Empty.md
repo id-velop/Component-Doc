@@ -8,7 +8,21 @@
 
 空状态由以下基础要素构成，可按需组合使用：
 
-> <!-- 附图占位：建议附上一张示例图，展示空状态的插图、描述文案、操作按钮的构成关系，标注各要素名称与位置 -->
+<!-- 附图占位：建议附上一张示例图，展示空状态的插图、描述文案、操作按钮的构成关系，标注各要素名称与位置 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=136) -->
+```react
+function App() {
+  const { Empty, Button, Card, Flex, Typography } = Infrad;
+  return (
+    <Card size="small" title="空状态构成示意" style={{ maxWidth: 400 }}>
+      <Flex vertical gap={10}>
+        <Empty image={Empty.PRESENTED_IMAGE_DEFAULT} description="暂无数据" imageStyle={{ height: 72 }} extra={<Button type="primary" size="small">立即创建</Button>} />
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>插图 · 描述文案 · 操作区</Typography.Text>
+      </Flex>
+    </Card>
+  );
+}
+```
 
 &emsp;&emsp;1. **插图** 传达「无数据」或「空」的直观感受，可为默认图、简洁图或自定义图。
 
@@ -28,7 +42,16 @@
 
 &emsp;**典型场景**：列表无数据、搜索结果为空、表格无记录
 
-> <!-- 附图占位：建议附上一张示例图，展示默认空状态的完整形态（插图 + 暂无数据 + 操作按钮） -->
+<!-- 附图占位：建议附上一张示例图，展示默认空状态的完整形态（插图 + 暂无数据 + 操作按钮） -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=137) -->
+```react
+function App() {
+  const { Empty, Button } = Infrad;
+  return (
+    <Empty description="暂无数据" imageStyle={{ height: 100 }} extra={<Button type="primary">新建订单</Button>} style={{ padding: "24px 0" }} />
+  );
+}
+```
 
 &emsp;**替代方案**：若需更轻量或更贴合业务，改用简洁图或自定义空状态
 
@@ -40,7 +63,26 @@
 
 &emsp;**典型场景**：选择器无选项、级联选择为空、穿梭框无数据
 
-> <!-- 附图占位：建议附上一张示例图，展示简洁图与默认图的形态差异，体现轻量化风格 -->
+<!-- 附图占位：建议附上一张示例图，展示简洁图与默认图的形态差异，体现轻量化风格 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=138) -->
+```react
+function App() {
+  const { Empty, Flex, Divider, Typography } = Infrad;
+  return (
+    <Flex gap={16} wrap="wrap" align="flex-start">
+      <Flex vertical gap={6} style={{ width: 200 }}>
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>默认插图</Typography.Text>
+        <Empty image={Empty.PRESENTED_IMAGE_DEFAULT} description="暂无数据" imageStyle={{ height: 72 }} />
+      </Flex>
+      <Divider type="vertical" style={{ height: 140 }} />
+      <Flex vertical gap={6} style={{ width: 200 }}>
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>简洁插图</Typography.Text>
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="无选项" imageStyle={{ height: 48 }} />
+      </Flex>
+    </Flex>
+  );
+}
+```
 
 &emsp;**替代方案**：若为主内容区的空状态，优先使用默认图以保持一致性
 
@@ -52,7 +94,16 @@
 
 &emsp;**典型场景**：首次使用引导、活动页无数据、品牌化产品的空状态
 
-> <!-- 附图占位：建议附上一张示例图，展示自定义插图（如业务吉祥物、场景插画）的空状态形态 -->
+<!-- 附图占位：建议附上一张示例图，展示自定义插图（如业务吉祥物、场景插画）的空状态形态 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=139) -->
+```react
+function App() {
+  const { Empty } = Infrad;
+  return (
+    <Empty image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" description="暂无活动数据" imageStyle={{ height: 90 }} style={{ padding: "16px 0" }} />
+  );
+}
+```
 
 &emsp;**替代方案**：若无需品牌强化，使用默认或简洁图即可
 
@@ -64,7 +115,16 @@
 
 &emsp;**典型场景**：表格内嵌空状态、卡片内小区域、弹窗内紧凑区域
 
-> <!-- 附图占位：建议附上一张示例图，展示仅有插图、无描述文案的极简空状态形态 -->
+<!-- 附图占位：建议附上一张示例图，展示仅有插图、无描述文案的极简空状态形态 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=140) -->
+```react
+function App() {
+  const { Empty } = Infrad;
+  return (
+    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={false} imageStyle={{ height: 40 }} style={{ padding: 8 }} />
+  );
+}
+```
 
 &emsp;**替代方案**：若空间允许，建议添加简短描述以帮助用户理解
 
@@ -76,7 +136,16 @@
 
 &emsp;**典型场景**：列表无数据时引导新建、筛选结果为空时引导调整条件、无收藏时引导去添加
 
-> <!-- 附图占位：建议附上一张示例图，展示空状态下方「立即创建」等操作按钮的布局 -->
+<!-- 附图占位：建议附上一张示例图，展示空状态下方「立即创建」等操作按钮的布局 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=141) -->
+```react
+function App() {
+  const { Empty, Button, Space } = Infrad;
+  return (
+    <Empty description="暂无收藏，去添加心仪商品" imageStyle={{ height: 80 }} extra={<Space><Button type="primary" size="small">去逛逛</Button><Button size="small" type="link">查看帮助</Button></Space>} />
+  );
+}
+```
 
 &emsp;**替代方案**：若用户无法通过操作产生内容（如纯展示型空结果），可不提供操作按钮
 
@@ -86,7 +155,23 @@
 
 ### 1.3.1 主区与内嵌空状态
 
-> <!-- 附图占位：建议附上一张对比图，左侧展示主内容区使用默认空状态 + 操作（符合规范），右侧展示内嵌区域错误使用复杂空状态（不推荐） -->
+<!-- 附图占位：建议附上一张对比图，左侧展示主内容区使用默认空状态 + 操作（符合规范），右侧展示内嵌区域错误使用复杂空状态（不推荐） -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=142) -->
+```react
+function App() {
+  const { Empty, Button, Card, Flex, Typography } = Infrad;
+  return (
+    <Flex gap={16} wrap="wrap">
+      <Card size="small" title="主内容区 · 推荐" style={{ width: 260 }}>
+        <Empty description="暂无列表数据" extra={<Button type="primary" size="small">新建</Button>} imageStyle={{ height: 64 }} />
+      </Card>
+      <Card size="small" title="内嵌区域 · 简洁" style={{ width: 220 }}>
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="无数据" imageStyle={{ height: 36 }} />
+      </Card>
+    </Flex>
+  );
+}
+```
 
 ✅ **推荐：** 主内容区用完整空状态，内嵌小区域用简洁或无描述
 
@@ -96,6 +181,25 @@
 
 ### 1.3.2 描述与操作
 
+<!-- 附图占位：建议附上一张对比图，左侧展示用户可产生内容时提供明确操作（符合规范），右侧展示无法产生内容时仍放置无效操作（不推荐） -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=313) -->
+```react
+function App() {
+  const { Empty, Button, Card, Flex, Typography } = Infrad;
+  return (
+    <Flex gap={16} wrap="wrap" align="flex-start">
+      <Card size="small" title="推荐 · 可操作给明确按钮" style={{ width: 270 }}>
+        <Empty description="暂无订单，创建后即可查看列表" imageStyle={{ height: 56 }} extra={<Button type="primary" size="small">新建订单</Button>} />
+      </Card>
+      <Card size="small" title="不推荐 · 只读场景仍推创建" style={{ width: 270 }}>
+        <Empty description="以下为系统自动汇总数据，无需您创建" imageStyle={{ height: 56 }} extra={<Button type="primary" size="small" disabled>立即创建</Button>} />
+        <Typography.Text type="secondary" style={{ fontSize: 11, display: "block", marginTop: 8 }}>无效操作易误导</Typography.Text>
+      </Card>
+    </Flex>
+  );
+}
+```
+
 ✅ **推荐：** 用户可产生内容时提供明确操作；不可产生时仅说明原因
 
 <hr>
@@ -103,6 +207,28 @@
 ❌ **不推荐：** 在用户无法产生内容的场景中放置「创建」等无效操作
 
 ### 1.3.3 自定义插图
+
+<!-- 附图占位：建议附上一张对比图，左侧展示有品牌或场景需求时使用统一自定义插图（符合规范），右侧展示同页多种插图风格混杂（不推荐） -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=314) -->
+```react
+function App() {
+  const { Empty, Card, Flex, Typography } = Infrad;
+  return (
+    <Flex gap={16} wrap="wrap" align="flex-start">
+      <Card size="small" title="推荐 · 场景化定制" style={{ width: 260 }}>
+        <Empty image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" description="活动专区暂无内容" imageStyle={{ height: 72 }} />
+      </Card>
+      <Card size="small" title="不推荐 · 同页风格混杂" style={{ width: 260 }}>
+        <Flex vertical gap={12}>
+          <Typography.Text type="secondary" style={{ fontSize: 11 }}>区块 A 与区块 B 插图风格不统一</Typography.Text>
+          <Empty image={Empty.PRESENTED_IMAGE_DEFAULT} description="订单列表" imageStyle={{ height: 48 }} />
+          <Empty image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" description="收藏夹" imageStyle={{ height: 64 }} />
+        </Flex>
+      </Card>
+    </Flex>
+  );
+}
+```
 
 ✅ **推荐：** 有品牌或场景需求时使用自定义插图
 

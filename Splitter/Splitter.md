@@ -8,7 +8,33 @@
 
 分隔面板由以下基础要素构成，可按需组合使用：
 
-> <!-- 附图占位：建议附上一张示例图，展示分隔面板的三个基础要素（面板、拖拽条、可折叠图标）的构成关系，标注拖拽条位置与折叠方向 -->
+<!-- 附图占位：建议附上一张示例图，展示分隔面板的三个基础要素（面板、拖拽条、可折叠图标）的构成关系，标注拖拽条位置与折叠方向 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=143) -->
+```react
+function App() {
+  const { Splitter, Typography, Flex } = Infrad;
+  function Desc({ text }) {
+    return (
+      <Flex justify="center" align="center" style={{ height: "100%" }}>
+        <Typography.Text type="secondary" style={{ fontSize: 12 }}>{text}</Typography.Text>
+      </Flex>
+    );
+  }
+  return (
+    <div style={{ maxWidth: 440 }}>
+      <Typography.Text type="secondary" style={{ fontSize: 11, display: "block", marginBottom: 6 }}>面板 · 中间拖拽条 · 可折叠手柄</Typography.Text>
+      <Splitter style={{ height: 200, boxShadow: "0 0 8px rgba(0,0,0,0.08)" }}>
+        <Splitter.Panel defaultSize="45%" min="20%" collapsible>
+          <Desc text="左侧面板" />
+        </Splitter.Panel>
+        <Splitter.Panel>
+          <Desc text="右侧面板" />
+        </Splitter.Panel>
+      </Splitter>
+    </div>
+  );
+}
+```
 
 &emsp;&emsp;1. **面板** 被分隔的内容区域，每个面板可设置初始大小、最小/最大阈值。
 
@@ -28,7 +54,30 @@
 
 &emsp;**典型场景**：文件管理器（树 + 内容）、代码编辑器（代码 + 预览）、后台列表与详情
 
-> <!-- 附图占位：建议附上一张示例图，展示水平左右分栏与中间拖拽条的形态 -->
+<!-- 附图占位：建议附上一张示例图，展示水平左右分栏与中间拖拽条的形态 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=144) -->
+```react
+function App() {
+  const { Splitter, Typography, Flex } = Infrad;
+  function Desc({ text }) {
+    return (
+      <Flex justify="center" align="center" style={{ height: "100%" }}>
+        <Typography.Text type="secondary">{text}</Typography.Text>
+      </Flex>
+    );
+  }
+  return (
+    <Splitter style={{ height: 220, maxWidth: 480, boxShadow: "0 0 8px rgba(0,0,0,0.08)" }}>
+      <Splitter.Panel defaultSize="50%" min="25%">
+        <Desc text="左侧列表" />
+      </Splitter.Panel>
+      <Splitter.Panel>
+        <Desc text="右侧详情" />
+      </Splitter.Panel>
+    </Splitter>
+  );
+}
+```
 
 &emsp;**替代方案**：若需上下分栏，改用垂直分隔
 
@@ -40,7 +89,30 @@
 
 &emsp;**典型场景**：代码编辑器（顶部编辑 + 底部终端）、仪表盘（图表区 + 数据区）
 
-> <!-- 附图占位：建议附上一张示例图，展示垂直上下分栏与中间拖拽条的形态 -->
+<!-- 附图占位：建议附上一张示例图，展示垂直上下分栏与中间拖拽条的形态 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=145) -->
+```react
+function App() {
+  const { Splitter, Typography, Flex } = Infrad;
+  function Desc({ text }) {
+    return (
+      <Flex justify="center" align="center" style={{ height: "100%" }}>
+        <Typography.Text type="secondary">{text}</Typography.Text>
+      </Flex>
+    );
+  }
+  return (
+    <Splitter layout="vertical" style={{ height: 260, maxWidth: 420, boxShadow: "0 0 8px rgba(0,0,0,0.08)" }}>
+      <Splitter.Panel defaultSize="55%" min="30%">
+        <Desc text="上方编辑区" />
+      </Splitter.Panel>
+      <Splitter.Panel>
+        <Desc text="下方终端输出" />
+      </Splitter.Panel>
+    </Splitter>
+  );
+}
+```
 
 &emsp;**替代方案**：若需左右分栏，改用水平分隔
 
@@ -52,7 +124,30 @@
 
 &emsp;**典型场景**：侧边栏可收起、底部面板可收起、临时展开的辅助区
 
-> <!-- 附图占位：建议附上一张示例图，展示可折叠面板的展开与收起态 -->
+<!-- 附图占位：建议附上一张示例图，展示可折叠面板的展开与收起态 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=146) -->
+```react
+function App() {
+  const { Splitter, Typography, Flex } = Infrad;
+  function Desc({ text }) {
+    return (
+      <Flex justify="center" align="center" style={{ height: "100%" }}>
+        <Typography.Text type="secondary">{text}</Typography.Text>
+      </Flex>
+    );
+  }
+  return (
+    <Splitter style={{ height: 200, maxWidth: 440, boxShadow: "0 0 8px rgba(0,0,0,0.08)" }}>
+      <Splitter.Panel defaultSize="35%" min="15%" collapsible>
+        <Desc text="可折叠侧栏" />
+      </Splitter.Panel>
+      <Splitter.Panel>
+        <Desc text="主内容" />
+      </Splitter.Panel>
+    </Splitter>
+  );
+}
+```
 
 &emsp;**替代方案**：若不需要快速折叠，仅拖拽即可满足时，使用基础分隔
 
@@ -64,7 +159,33 @@
 
 &emsp;**典型场景**：三栏布局（树 + 列表 + 详情）、四象限仪表盘、嵌套的左右上下组合
 
-> <!-- 附图占位：建议附上一张示例图，展示三栏或更多面板的多拖拽条形态 -->
+<!-- 附图占位：建议附上一张示例图，展示三栏或更多面板的多拖拽条形态 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=147) -->
+```react
+function App() {
+  const { Splitter, Typography, Flex } = Infrad;
+  function Desc({ text }) {
+    return (
+      <Flex justify="center" align="center" style={{ height: "100%" }}>
+        <Typography.Text type="secondary" style={{ fontSize: 12 }}>{text}</Typography.Text>
+      </Flex>
+    );
+  }
+  return (
+    <Splitter style={{ height: 260, maxWidth: 520, boxShadow: "0 0 8px rgba(0,0,0,0.08)" }}>
+      <Splitter.Panel defaultSize="22%" min="12%" collapsible>
+        <Desc text="树" />
+      </Splitter.Panel>
+      <Splitter.Panel defaultSize="38%" min="18%">
+        <Desc text="列表" />
+      </Splitter.Panel>
+      <Splitter.Panel>
+        <Desc text="详情" />
+      </Splitter.Panel>
+    </Splitter>
+  );
+}
+```
 
 &emsp;**替代方案**：若仅需两栏，使用双面板即可
 
@@ -76,7 +197,30 @@
 
 &emsp;**典型场景**：侧边栏固定宽度、主内容区自适应；或某些面板仅允许折叠、不允许拖拽改变大小
 
-> <!-- 附图占位：建议附上一张示例图，展示一侧固定、仅另一侧可拖拽的形态 -->
+<!-- 附图占位：建议附上一张示例图，展示一侧固定、仅另一侧可拖拽的形态 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=148) -->
+```react
+function App() {
+  const { Splitter, Typography, Flex } = Infrad;
+  function Desc({ text }) {
+    return (
+      <Flex justify="center" align="center" style={{ height: "100%" }}>
+        <Typography.Text type="secondary">{text}</Typography.Text>
+      </Flex>
+    );
+  }
+  return (
+    <Splitter style={{ height: 200, maxWidth: 460, boxShadow: "0 0 8px rgba(0,0,0,0.08)" }}>
+      <Splitter.Panel defaultSize={160} min={120} max={200} resizable={false}>
+        <Desc text="固定宽度侧栏" />
+      </Splitter.Panel>
+      <Splitter.Panel>
+        <Desc text="仅右侧可拖拽调节" />
+      </Splitter.Panel>
+    </Splitter>
+  );
+}
+```
 
 &emsp;**替代方案**：若全部可调，使用默认配置即可
 
@@ -86,7 +230,40 @@
 
 ### 1.3.1 水平分隔
 
-> <!-- 附图占位：建议附上一张对比图，左侧展示左右分栏合理、拖拽条可见易用（符合规范），右侧展示面板过窄导致内容被挤压或拖拽条难以操作（违反规范） -->
+<!-- 附图占位：建议附上一张对比图，左侧展示左右分栏合理、拖拽条可见易用（符合规范），右侧展示面板过窄导致内容被挤压或拖拽条难以操作（违反规范） -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=149) -->
+```react
+function App() {
+  const { Splitter, Typography, Flex } = Infrad;
+  function Desc({ text }) {
+    return (
+      <Flex justify="center" align="center" style={{ height: "100%", padding: 8, textAlign: "center" }}>
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>{text}</Typography.Text>
+      </Flex>
+    );
+  }
+  return (
+    <Flex gap={16} wrap="wrap">
+      <Splitter style={{ height: 200, width: 260, boxShadow: "0 0 8px rgba(0,0,0,0.08)" }}>
+        <Splitter.Panel defaultSize="48%" min="28%">
+          <Desc text="合理 min 宽度" />
+        </Splitter.Panel>
+        <Splitter.Panel>
+          <Desc text="内容可读" />
+        </Splitter.Panel>
+      </Splitter>
+      <Splitter style={{ height: 200, width: 260, boxShadow: "0 0 8px rgba(0,0,0,0.08)" }}>
+        <Splitter.Panel defaultSize="12%" min="8%">
+          <Desc text="过窄难用" />
+        </Splitter.Panel>
+        <Splitter.Panel>
+          <Desc text="拖拽条难点击" />
+        </Splitter.Panel>
+      </Splitter>
+    </Flex>
+  );
+}
+```
 
 ✅ **推荐：** 左右分栏时设置合理的 min/max，保证两侧内容均有可用空间，拖拽条易于识别和操作
 
@@ -96,6 +273,49 @@
 
 ### 1.3.2 可折叠分隔
 
+<!-- 附图占位：建议附上一张对比图，左侧展示折叠柄可见、可一键收起侧栏（符合规范），右侧展示无折叠仅靠细拖拽条、不便快速释放空间（违反规范） -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=354) -->
+```react
+function App() {
+  const { Splitter, Typography, Flex, Tag } = Infrad;
+  function Desc({ text }) {
+    return (
+      <Flex justify="center" align="center" style={{ height: "100%", padding: 8 }}>
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>{text}</Typography.Text>
+      </Flex>
+    );
+  }
+  return (
+    <Flex gap={16} wrap="wrap">
+      <div style={{ border: "1px solid #b7eb8f", borderRadius: 8, padding: 8 }}>
+        <Tag color="success">推荐</Tag>
+        <Typography.Text style={{ fontSize: 11, display: "block", margin: "6px 0" }}>折叠柄可见、可一键收起</Typography.Text>
+        <Splitter style={{ height: 180, width: 248, boxShadow: "0 0 8px rgba(0,0,0,0.08)" }}>
+          <Splitter.Panel defaultSize="40%" min="20%" collapsible>
+            <Desc text="侧栏" />
+          </Splitter.Panel>
+          <Splitter.Panel>
+            <Desc text="主区" />
+          </Splitter.Panel>
+        </Splitter>
+      </div>
+      <div style={{ border: "1px solid #ffccc7", borderRadius: 8, padding: 8 }}>
+        <Tag color="error">不推荐</Tag>
+        <Typography.Text style={{ fontSize: 11, display: "block", margin: "6px 0" }}>无折叠、仅靠细拖拽条</Typography.Text>
+        <Splitter style={{ height: 180, width: 248, boxShadow: "0 0 8px rgba(0,0,0,0.08)" }}>
+          <Splitter.Panel defaultSize="40%" min="12%">
+            <Desc text="侧栏" />
+          </Splitter.Panel>
+          <Splitter.Panel>
+            <Desc text="主区" />
+          </Splitter.Panel>
+        </Splitter>
+      </div>
+    </Flex>
+  );
+}
+```
+
 ✅ **推荐：** 折叠图标易发现，折叠/展开有明确反馈，折叠后主内容区平滑扩展
 
 <hr>
@@ -103,6 +323,56 @@
 ❌ **不推荐：** 折叠图标隐蔽，或折叠后留下难看的空白条
 
 ### 1.3.3 多面板分隔
+
+<!-- 附图占位：建议附上一张对比图，左侧展示三块分区且各面板 min 合理（符合规范），右侧展示四块以上且 min 过小导致单列过窄难读（违反规范） -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=355) -->
+```react
+function App() {
+  const { Splitter, Typography, Flex, Tag } = Infrad;
+  function Desc({ text }) {
+    return (
+      <Flex justify="center" align="center" style={{ height: "100%" }}>
+        <Typography.Text type="secondary" style={{ fontSize: 10 }}>{text}</Typography.Text>
+      </Flex>
+    );
+  }
+  return (
+    <Flex gap={16} wrap="wrap" align="flex-start">
+      <div style={{ border: "1px solid #b7eb8f", borderRadius: 8, padding: 8 }}>
+        <Tag color="success">三块 · 合理 min</Tag>
+        <Splitter style={{ height: 220, width: 308, boxShadow: "0 0 8px rgba(0,0,0,0.08)" }}>
+          <Splitter.Panel defaultSize="25%" min="18%">
+            <Desc text="树" />
+          </Splitter.Panel>
+          <Splitter.Panel defaultSize="35%" min="22%">
+            <Desc text="表" />
+          </Splitter.Panel>
+          <Splitter.Panel min="25%">
+            <Desc text="详情" />
+          </Splitter.Panel>
+        </Splitter>
+      </div>
+      <div style={{ border: "1px solid #ffccc7", borderRadius: 8, padding: 8 }}>
+        <Tag color="error">四块 · 过细</Tag>
+        <Splitter style={{ height: 220, width: 308, boxShadow: "0 0 8px rgba(0,0,0,0.08)" }}>
+          <Splitter.Panel defaultSize="18%" min="8%">
+            <Desc text="A" />
+          </Splitter.Panel>
+          <Splitter.Panel defaultSize="22%" min="8%">
+            <Desc text="B" />
+          </Splitter.Panel>
+          <Splitter.Panel defaultSize="25%" min="8%">
+            <Desc text="C" />
+          </Splitter.Panel>
+          <Splitter.Panel min="8%">
+            <Desc text="D" />
+          </Splitter.Panel>
+        </Splitter>
+      </div>
+    </Flex>
+  );
+}
+```
 
 ✅ **推荐：** 多面板时控制面板数量，每块都有合理 min，拖拽逻辑清晰
 

@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<title>FloatButton 组件文档预览</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+         max-width: 800px; margin: 0 auto; padding: 24px 16px; color: #333; line-height: 1.65; font-size: 14px; }
+  body img { max-width: min(100%, 420px); height: auto; display: block; }
+  h1 { border-bottom: 2px solid #2673dd; padding-bottom: 8px; font-size: 1.5rem; }
+  h2 { color: #2673dd; font-size: 1.2rem; }
+  h3 { color: #444; font-size: 1.05rem; }
+  blockquote { border-left: 4px solid #2673dd; margin: 12px 0; padding: 8px 12px; background: #f6f8fa; }
+  code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-size: 0.85em; }
+  pre code { display: block; padding: 12px; overflow-x: auto; font-size: 12px; }
+  /* 使 antd FloatButton 默认 fixed 相对于本 demo 容器定位，避免多段示例叠在视口同一角 */
+  .demo-mount { margin: 10px 0; padding: 12px 14px; border: 1px solid #e8e8e8; border-radius: 8px; background: #fff; min-height: 48px; max-width: 560px; position: relative; overflow: visible; transform: translate(0); }
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 24px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+  th, td { border: 1px solid #e8e8e8; padding: 8px 12px; text-align: left; }
+  th { background: #f6f8fa; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5/dist/reset.css" />
+<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/antd@5/dist/antd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ant-design/icons@5/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+</head><body><h1 id="1">1. 简洁易读部份</h1>
+<h2 id="10">1.0. 组件描述</h2>
+<p>悬浮按钮用于在页面上提供固定的全局操作入口，无论用户浏览到何处都可以看见并快速触达。</p>
+<h2 id="11">1.1. 组件构成</h2>
+<p>悬浮按钮由以下基础要素构成，可按需组合使用：</p>
+<!-- 附图占位：建议附上一张示例图，展示悬浮按钮的基础要素（容器、图标、可选文字描述）的构成关系，标注各要素名称与位置 -->
+<div id="demo-1" class="demo-mount"></div>
+
+<p>&emsp;&emsp;1. <strong>容器</strong> 定义按钮的点击区域与整体形态，固定悬浮于视口某一位置，用于承载图标与可选文字。</p>
+<p>&emsp;&emsp;2. <strong>图标</strong> 表达操作语义，为悬浮按钮的核心要素，必须清晰可识别。</p>
+<p>&emsp;&emsp;3. <strong>文字描述（可选）</strong> 用于补充说明操作含义，仅在方形按钮中支持，需精简。</p>
+<hr />
+<h2 id="12">1.2. 组件包含哪些不同类型</h2>
+<h3 id="121">1.2.1 单悬浮按钮（默认）</h3>
+<p>&emsp;<strong>是什么</strong>：单个悬浮于页面上方的圆形按钮，承载单一全局操作</p>
+<!-- 附图占位：建议附上一张示例图，展示单悬浮按钮（圆形、右下角固定）的视觉形态，体现其作为全局入口的悬浮特性 -->
+<div id="demo-2" class="demo-mount"></div>
+
+<p>&emsp;<strong>简单用法</strong>：必须用于网站上的全局功能；无论用户滚动到何处都需可见；同一视口内同一区域不宜出现多个独立悬浮按钮</p>
+<p>&emsp;<strong>典型场景</strong>：反馈入口、在线客服、快捷帮助、提交建议</p>
+<p>&emsp;<strong>替代方案</strong>：若需收纳多个操作，改用悬浮按钮组或菜单模式</p>
+<h3 id="122">1.2.2 主色调悬浮按钮</h3>
+<p>&emsp;<strong>是什么</strong>：采用主色填充的悬浮按钮，用于强调当前页面的首要全局操作</p>
+<!-- 附图占位：建议附上一张示例图，展示主色调悬浮按钮（实心填充、品牌色）与默认悬浮按钮的视觉对比，体现层级差异 -->
+<div id="demo-3" class="demo-mount"></div>
+
+<p>&emsp;<strong>简单用法</strong>：必须用于页面唯一的、最重要的全局入口；不可与多个同等强调的悬浮按钮并存；视觉上需明显区别于默认类型</p>
+<p>&emsp;<strong>典型场景</strong>：主 CTA（如「立即咨询」）、核心业务入口、付费转化按钮</p>
+<p>&emsp;<strong>替代方案</strong>：若操作非首要目标，改用默认悬浮按钮</p>
+<h3 id="123">1.2.3 方形悬浮按钮（带文字）</h3>
+<p>&emsp;<strong>是什么</strong>：采用方形形态的悬浮按钮，可携带精简文字描述以增强识别</p>
+<!-- 附图占位：建议附上一张示例图，展示方形悬浮按钮（含图标与双字描述如「反馈」）的视觉形态，体现方形+文字的紧凑组合 -->
+<div id="demo-4" class="demo-mount"></div>
+
+<p>&emsp;<strong>简单用法</strong>：必须用于需要文字辅助说明语义的场景；文字必须精简，推荐双字；仅方形支持文字内容</p>
+<p>&emsp;<strong>典型场景</strong>：反馈、客服、帮助、回到顶部</p>
+<p>&emsp;<strong>替代方案</strong>：若语义通过图标已可识别，改用圆形悬浮按钮</p>
+<h3 id="124">1.2.4 悬浮按钮组</h3>
+<p>&emsp;<strong>是什么</strong>：将多个同类悬浮按钮组合在一起，自上而下或自侧展开，无需二次点击即可看到全部选项</p>
+<!-- 附图占位：建议附上一张示例图，展示悬浮按钮组展开后的形态（触发按钮 + 多个子按钮垂直排列），体现一次性展示多个操作的布局 -->
+<div id="demo-5" class="demo-mount"></div>
+
+<p>&emsp;<strong>简单用法</strong>：必须用于多个同等重要或平级的全局操作；子按钮数量不宜超过 5 个；展开方向需与页面留白匹配</p>
+<p>&emsp;<strong>典型场景</strong>：反馈 + 帮助 + 客服、多种快捷入口并列</p>
+<p>&emsp;<strong>替代方案</strong>：若子项过多或需收纳，改用菜单模式悬浮按钮</p>
+<h3 id="125">1.2.5 菜单模式悬浮按钮</h3>
+<p>&emsp;<strong>是什么</strong>：点击或悬停后展开菜单，将多个操作收纳到单一触发入口中</p>
+<!-- 附图占位：建议附上一张示例图，展示菜单模式悬浮按钮展开后的形态（触发按钮 + 下拉/上拉菜单列表），体现收纳与展开的交互结构 -->
+<div id="demo-6" class="demo-mount"></div>
+
+<p>&emsp;<strong>简单用法</strong>：必须用于操作较多、需收纳以节省空间的场景；支持点击或悬停触发；主触发按钮必须明确表达「更多」或核心动作</p>
+<p>&emsp;<strong>典型场景</strong>：多种反馈入口、多项快捷操作、导出/分享/收藏等动作集合</p>
+<p>&emsp;<strong>替代方案</strong>：若操作数量少且重要性相近，改用悬浮按钮组</p>
+<h3 id="126">1.2.6 回到顶部</h3>
+<p>&emsp;<strong>是什么</strong>：专用于长页面滚动后，一键返回页面顶部的悬浮按钮</p>
+<!-- 附图占位：建议附上一张示例图，展示回到顶部按钮（通常为向上箭头图标）的视觉形态，体现其单一职责 -->
+<div id="demo-7" class="demo-mount"></div>
+
+<p>&emsp;<strong>简单用法</strong>：必须用于长内容页面的滚动场景；需在用户滚动一定高度后才出现；点击后平滑滚动至顶部</p>
+<p>&emsp;<strong>典型场景</strong>：文章页、列表页、详情页、文档页</p>
+<p>&emsp;<strong>替代方案</strong>：若页面内容较短无需滚动，不必使用回到顶部</p>
+<h3 id="127">1.2.7 带徽标悬浮按钮</h3>
+<p>&emsp;<strong>是什么</strong>：在悬浮按钮右上角附带数字徽标，提示待处理数量或新消息</p>
+<!-- 附图占位：建议附上一张示例图，展示带徽标悬浮按钮（右上角红色圆点或数字）的视觉形态，体现数量/状态提示 -->
+<div id="demo-8" class="demo-mount"></div>
+
+<p>&emsp;<strong>简单用法</strong>：必须用于有数量或状态提示需求的入口；徽标数字需与业务含义一致；不可滥用，以免干扰用户</p>
+<p>&emsp;<strong>典型场景</strong>：消息通知、待处理数量、客服未读数</p>
+<p>&emsp;<strong>替代方案</strong>：若无需数量提示，改用普通悬浮按钮</p>
+<hr />
+<h2 id="13">1.3. 各类型典型场景案例</h2>
+<h3 id="131">1.3.1 单悬浮按钮</h3>
+<!-- 附图占位：建议附上一张对比图，左侧展示单一全局操作使用单悬浮按钮（符合规范），右侧展示同一视口内多个独立悬浮按钮并列（违反规范） -->
+<div id="demo-9" class="demo-mount"></div>
+
+<p>✅ <strong>推荐：</strong> 单一全局入口使用单悬浮按钮，保持界面简洁</p>
+<hr>
+
+<p>❌ <strong>不推荐：</strong> 同一视口内出现多个独立悬浮按钮，造成视觉干扰</p>
+<h3 id="132">1.3.2 主色调与默认</h3>
+<!-- 附图占位：建议附上一张对比图，左侧展示首要操作用主色调、次要用默认（符合规范），右侧展示多个主色调悬浮按钮并列（违反规范） -->
+<div id="demo-10" class="demo-mount"></div>
+
+<p>✅ <strong>推荐：</strong> 首要全局操作使用主色调悬浮按钮，次要操作使用默认</p>
+<hr>
+
+<p>❌ <strong>不推荐：</strong> 多个同等强调的主色调悬浮按钮并存</p>
+<h3 id="133">1.3.3 悬浮按钮组与菜单模式</h3>
+<!-- 附图占位：建议附上一张对比图，左侧展示 3–5 个平级操作用悬浮按钮组（符合规范），右侧展示 6 个以上操作平铺或收纳到菜单模式（符合规范） -->
+<div id="demo-11" class="demo-mount"></div>
+
+<p>✅ <strong>推荐：</strong> 操作数量少用悬浮按钮组直接展示，操作多用菜单模式收纳</p>
+<hr>
+
+<p>❌ <strong>不推荐：</strong> 大量操作平铺在悬浮按钮组中，造成选择困难</p>
+<h3 id="134">1.3.4 回到顶部</h3>
+<!-- 附图占位：建议附上一张对比图，左侧展示长页面滚动后出现回到顶部（符合规范），右侧展示短页面也放置回到顶部（违反规范） -->
+<div id="demo-12" class="demo-mount"></div>
+
+<p>✅ <strong>推荐：</strong> 长内容页面、需滚动浏览时使用回到顶部</p>
+<hr>
+
+<p>❌ <strong>不推荐：</strong> 内容不足以产生滚动的页面放置回到顶部</p>
+<hr />
+<h1 id="2">2. 选型指南</h1>
+<h2 id="21">2.1 选择流程</h2>
+<pre><code class="language-mermaid">flowchart TD
+  A[开始：需要全局悬浮操作入口] --&gt; B{是否为回到顶部的单一职责？}
+  B --&gt;|是| C[回到顶部]
+  B --&gt;|否| D{是否为单一全局操作？}
+  D --&gt;|是| E{是否为首要核心入口？}
+  E --&gt;|是| F[主色调悬浮按钮]
+  E --&gt;|否| G{是否需要文字辅助说明？}
+  G --&gt;|是| H[方形悬浮按钮带文字]
+  G --&gt;|否| I[单悬浮按钮]
+  D --&gt;|否| J{是否有数量/状态需提示？}
+  J --&gt;|是| K[带徽标悬浮按钮]
+  J --&gt;|否| L{子操作数量是否较多？}
+  L --&gt;|是| M[菜单模式悬浮按钮]
+  L --&gt;|否| N[悬浮按钮组]
+</code></pre>
+<hr />
+<h1 id="3">3. 细致专业部份（交互与排版规则）</h1>
+<h2 id="31">3.1 多操作的展示与折叠策略</h2>
+<p>当悬浮区域需要承载多个全局操作时，需按以下逻辑决定展示与收纳：</p>
+<ul>
+<li><strong>直接展示</strong>：3–5 个同等重要、使用频率高的操作，使用悬浮按钮组自上而下或自侧展开。</li>
+<li><strong>收纳展示</strong>：超过 5 个操作，或操作重要性差异明显、需要「更多」语义时，使用菜单模式悬浮按钮，通过点击或悬停展开。</li>
+<li><strong>单一优先</strong>：若只有一个核心全局入口，使用单悬浮按钮；避免为凑齐多个而强行增加入口。</li>
+</ul>
+<!-- 附图占位：建议附上一张场景图，展示悬浮按钮组与菜单模式的对比布局，体现多操作的展示与收纳策略 -->
+<div id="demo-13" class="demo-mount"></div>
+
+<h2 id="32">3.2 危险操作（删除/清空/停用）</h2>
+<p>悬浮按钮通常不承载危险操作；若业务强需求在悬浮入口中提供删除、停用等操作：</p>
+<ul>
+<li><strong>收纳</strong>：危险操作必须收纳在菜单模式或悬浮按钮组中，不可作为主触发按钮。</li>
+<li><strong>二次确认</strong>：点击后必须通过弹窗进行二次确认，再执行。</li>
+<li><strong>视觉隔离</strong>：在展开列表中，危险项需通过红色或弱化样式与常规项区分。</li>
+</ul>
+<!-- 附图占位：建议附上一张场景图，展示悬浮按钮菜单中危险操作（如「清空」）收纳在列表末尾、配合二次确认的布局 -->
+<div id="demo-14" class="demo-mount"></div>
+
+<h2 id="33">3.3 摆放位置（按页面场景划分）</h2>
+<p>悬浮按钮的固定位置需与用户视线及操作习惯匹配：</p>
+<ul>
+<li><strong>默认右下角</strong>：适用于多数桌面端页面，符合「从右到左」的视线落点，不遮挡主体内容。</li>
+<li><strong>自定义方向</strong>：若右下角已被占用（如聊天窗口、广告位），可调整至左下、左上或右上；需保证不与核心内容重叠。</li>
+<li><strong>移动端</strong>：需考虑拇指可触达区域，通常仍为右下角或底部居中偏右。</li>
+<li><strong>与内容边距</strong>：悬浮按钮与视口边缘需保持固定间距，避免贴边或遮挡滚动条。</li>
+</ul>
+<!-- 附图占位：建议附上一张场景图，展示桌面端右下角、移动端底部等不同场景下的悬浮按钮摆放位置，体现位置规范 -->
+<div id="demo-15" class="demo-mount"></div>
+
+<h2 id="34">3.4 顺序与对齐逻辑</h2>
+<p>悬浮按钮组或菜单模式中，子项顺序需符合业务优先级与用户预期：</p>
+<ul>
+<li><strong>自上而下</strong>：主操作或高频操作排在顶部；危险操作排在底部。</li>
+<li><strong>逻辑分组</strong>：同类操作（如反馈、帮助、客服）可相邻排列；不同类型间可适当留白或分隔。</li>
+<li><strong>回到顶部</strong>：若与其它悬浮入口并存，回到顶部宜单独放置或放在最底部，避免与主业务入口竞争。</li>
+</ul>
+<!-- 附图占位：建议附上一张场景图，展示悬浮按钮组子项自上而下的排列顺序，体现主操作在上、危险在下的逻辑 -->
+<div id="demo-16" class="demo-mount"></div>
+
+<h2 id="35">3.5 状态与交互反馈</h2>
+<p>悬浮按钮需提供清晰的状态与反馈：</p>
+<ul>
+<li><strong>默认</strong>：可点击性明确，与背景有足够对比。</li>
+<li><strong>悬停</strong>：提供可点击暗示（如轻微放大、阴影或底色变化）。</li>
+<li><strong>按下</strong>：提供明确的按压反馈。</li>
+<li><strong>展开中</strong>：悬浮按钮组或菜单展开时，主按钮应有状态变化（如旋转、高亮），便于用户感知当前展开状态。</li>
+<li><strong>加载中</strong>：若操作触发异步请求，需进入加载状态并锁定，防止重复点击。</li>
+</ul>
+<!-- 附图占位：建议附上一张示例图，展示默认态、加载态与悬浮组展开态下的交互反馈（可点击、防连点、展开可见子项） -->
+<div id="demo-17" class="demo-mount"></div>
+
+<h2 id="36">3.6 视觉规范与形态选择</h2>
+<ul>
+<li><strong>圆形与方形</strong>：圆形为默认形态，适合纯图标；方形适用于需携带文字的场景，文字需精简。</li>
+<li><strong>尺寸</strong>：悬浮按钮需足够大以方便点击，同时不可过大以免遮挡内容；与其它悬浮元素（如聊天气泡）保持协调。</li>
+<li><strong>层级</strong>：在同一视口内，悬浮按钮的层级应高于普通内容，低于模态框、抽屉等全屏覆盖层。</li>
+<li><strong>图标选择</strong>：图标语义必须与操作一致，优先使用行业共识强的图标（如客服、反馈、回到顶部）。</li>
+</ul>
+<!-- 附图占位：建议附上一张示例图，展示圆形与方形悬浮按钮的尺寸与层级关系，体现视觉规范 -->
+<div id="demo-18" class="demo-mount"></div>
+
+<hr />
+<h2 id="40">4.0. 常见问题</h2>
+<h3 id="1_1">1. 悬浮按钮组和菜单模式悬浮按钮有什么区别？</h3>
+<ul>
+<li><strong>悬浮按钮组</strong>：点击主按钮后，子按钮直接展开在旁，所有选项一目了然，适合 3–5 个平级操作。</li>
+<li><strong>菜单模式悬浮按钮</strong>：点击或悬停后展开的是菜单列表，适合更多操作或需要收纳的场景，主按钮通常表达「更多」或核心动作。</li>
+</ul>
+<h3 id="2_1">2. 回到顶部什么时候出现比较合适？</h3>
+<ul>
+<li>建议在用户滚动高度超过一屏（如 400px）后再显示回到顶部按钮，避免短页面也出现该按钮造成干扰。</li>
+</ul>
+<script type="text/babel">
+const Infrad = antd;
+const Icons = icons;
+
+function Demo1() {
+  const { FloatButton, Flex, Typography } = Infrad;
+  const { MessageOutlined } = Icons;
+  return (
+    <Flex align="flex-start" gap={20} wrap="wrap">
+      <div style={{ position: "relative", width: 220, height: 160, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+        <Typography.Text type="secondary" style={{ position: "absolute", top: 8, left: 8, fontSize: 11 }}>① 容器 · 视口内固定悬浮</Typography.Text>
+        <FloatButton icon={<MessageOutlined />} shape="square" description="反馈" style={{ position: "absolute", right: 16, bottom: 16 }} />
+      </div>
+      <Flex vertical gap={8} style={{ maxWidth: 190 }}>
+        <Typography.Text strong style={{ fontSize: 12 }}>② 图标（语义核心）</Typography.Text>
+        <div style={{ position: "relative", width: 48, height: 48 }}>
+          <FloatButton icon={<MessageOutlined />} style={{ position: "absolute", right: 0, bottom: 0 }} />
+        </div>
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>③ 方形可加双字 description</Typography.Text>
+      </Flex>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-1")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo1)));
+
+function Demo2() {
+  const { FloatButton, Typography } = Infrad;
+  const { MessageOutlined } = Icons;
+  return (
+    <div style={{ position: "relative", height: 160, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+      <Typography.Text type="secondary" style={{ position: "absolute", top: 8, left: 8, fontSize: 11 }}>圆形单按钮 · 右下角全局入口</Typography.Text>
+      <FloatButton icon={<MessageOutlined />} tooltip="反馈" style={{ position: "absolute", right: 20, bottom: 20 }} />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-2")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo2)));
+
+function Demo3() {
+  const { FloatButton, Flex, Typography } = Infrad;
+  const { MessageOutlined, AimOutlined } = Icons;
+  return (
+    <Flex gap={24} align="center" wrap="wrap" style={{ minHeight: 120 }}>
+      <div style={{ position: "relative", width: 108, height: 108, border: "1px dashed #d9d9d9", borderRadius: 8 }}>
+        <Typography.Text type="secondary" style={{ position: "absolute", top: 6, left: 6, fontSize: 10 }}>默认弱强调</Typography.Text>
+        <FloatButton icon={<MessageOutlined />} style={{ position: "absolute", right: 12, bottom: 12 }} />
+      </div>
+      <div style={{ position: "relative", width: 108, height: 108, border: "1px dashed #d9d9d9", borderRadius: 8 }}>
+        <Typography.Text type="secondary" style={{ position: "absolute", top: 6, left: 6, fontSize: 10 }}>主色首要入口</Typography.Text>
+        <FloatButton type="primary" icon={<AimOutlined />} style={{ position: "absolute", right: 12, bottom: 12 }} />
+      </div>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-3")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo3)));
+
+function Demo4() {
+  const { FloatButton, Typography } = Infrad;
+  const { MessageOutlined } = Icons;
+  return (
+    <div style={{ position: "relative", height: 128, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+      <Typography.Text type="secondary" style={{ position: "absolute", top: 8, left: 8, fontSize: 11 }}>方形 · 图标 + 双字文案</Typography.Text>
+      <FloatButton icon={<MessageOutlined />} shape="square" description="反馈" style={{ position: "absolute", right: 20, bottom: 20 }} />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-4")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo4)));
+
+function Demo5() {
+  const { FloatButton, Typography } = Infrad;
+  const { MessageOutlined, CustomerServiceOutlined, QuestionCircleOutlined } = Icons;
+  return (
+    <div style={{ position: "relative", height: 220, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+      <Typography.Text type="secondary" style={{ position: "absolute", top: 8, left: 8, fontSize: 11 }}>按钮组展开 · 主钮 + 子钮纵向排列</Typography.Text>
+      <FloatButton.Group shape="circle" open style={{ position: "absolute", right: 20, bottom: 20 }}>
+        <FloatButton icon={<MessageOutlined />} tooltip="反馈" />
+        <FloatButton icon={<CustomerServiceOutlined />} tooltip="客服" />
+        <FloatButton icon={<QuestionCircleOutlined />} tooltip="帮助" />
+      </FloatButton.Group>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-5")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo5)));
+
+function Demo6() {
+  const { FloatButton, Typography } = Infrad;
+  const { EllipsisOutlined, ExportOutlined, ShareAltOutlined, StarOutlined } = Icons;
+  return (
+    <div style={{ position: "relative", height: 240, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+      <Typography.Text type="secondary" style={{ position: "absolute", top: 8, left: 8, fontSize: 11 }}>菜单模式 · 主触发 + 收纳列表</Typography.Text>
+      <FloatButton.Group trigger="click" open icon={<EllipsisOutlined />} type="primary" style={{ position: "absolute", right: 20, bottom: 20 }}>
+        <FloatButton icon={<ExportOutlined />} tooltip="导出" />
+        <FloatButton icon={<ShareAltOutlined />} tooltip="分享" />
+        <FloatButton icon={<StarOutlined />} tooltip="收藏" />
+      </FloatButton.Group>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-6")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo6)));
+
+function Demo7() {
+  const { FloatButton, Typography } = Infrad;
+  const uid = React.useId().replace(/:/g, "");
+  const boxId = "fb-bt-" + uid;
+  return (
+    <div id={boxId} style={{ position: "relative", height: 200, overflow: "auto", border: "1px solid #f0f0f0", borderRadius: 8 }}>
+      <div style={{ height: 480, padding: 12, fontSize: 12, color: "#999" }}>
+        <Typography.Text type="secondary">长内容区内滚动后出现 BackTop（向上箭头）</Typography.Text>
+      </div>
+      <FloatButton.BackTop visibilityHeight={80} target={() => document.getElementById(boxId)} style={{ position: "absolute", right: 16, bottom: 16 }} />
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-7")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo7)));
+
+function Demo8() {
+  const { FloatButton, Badge, Flex, Typography } = Infrad;
+  const { MessageOutlined, BellOutlined, MailOutlined } = Icons;
+  return (
+    <Flex vertical gap={8}>
+      <Typography.Text type="secondary" style={{ fontSize: 11 }}>数字徽标 / 红点 · 提示待处理或新消息</Typography.Text>
+      <Flex gap={24} wrap="wrap" style={{ minHeight: 88 }}>
+        <div style={{ position: "relative", width: 52, height: 52 }}>
+          <Badge count={3}><FloatButton icon={<MessageOutlined />} style={{ position: "absolute", right: 0, bottom: 0 }} /></Badge>
+        </div>
+        <div style={{ position: "relative", width: 52, height: 52 }}>
+          <Badge count={12}><FloatButton type="primary" icon={<BellOutlined />} style={{ position: "absolute", right: 0, bottom: 0 }} /></Badge>
+        </div>
+        <div style={{ position: "relative", width: 52, height: 52 }}>
+          <Badge dot><FloatButton icon={<MailOutlined />} style={{ position: "absolute", right: 0, bottom: 0 }} /></Badge>
+        </div>
+      </Flex>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-8")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo8)));
+
+function Demo9() {
+  const { FloatButton, Flex, Typography, Tag } = Infrad;
+  const { MessageOutlined, QuestionCircleOutlined } = Icons;
+  return (
+    <Flex gap={16} wrap="wrap">
+      <div style={{ position: "relative", flex: "1 1 200px", height: 120, border: "1px solid #b7eb8f", borderRadius: 8 }}>
+        <Tag color="success" style={{ position: "absolute", top: 6, left: 6 }}>推荐</Tag>
+        <Typography.Text type="secondary" style={{ position: "absolute", bottom: 8, left: 8, fontSize: 10 }}>单一全局入口</Typography.Text>
+        <FloatButton icon={<MessageOutlined />} style={{ position: "absolute", right: 12, bottom: 12 }} />
+      </div>
+      <div style={{ position: "relative", flex: "1 1 200px", height: 120, border: "1px solid #ffccc7", borderRadius: 8 }}>
+        <Tag color="error" style={{ position: "absolute", top: 6, left: 6 }}>避免</Tag>
+        <FloatButton icon={<MessageOutlined />} style={{ position: "absolute", right: 12, bottom: 12 }} />
+        <FloatButton icon={<QuestionCircleOutlined />} style={{ position: "absolute", right: 68, bottom: 12 }} />
+      </div>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-9")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo9)));
+
+function Demo10() {
+  const { FloatButton, Flex, Tag, Typography } = Infrad;
+  const { QuestionCircleOutlined, AimOutlined } = Icons;
+  return (
+    <Flex gap={16} wrap="wrap">
+      <div style={{ position: "relative", flex: "1 1 200px", height: 130, border: "1px solid #b7eb8f", borderRadius: 8 }}>
+        <Tag color="success" style={{ position: "absolute", top: 6, left: 6 }}>推荐</Tag>
+        <Typography.Text type="secondary" style={{ position: "absolute", top: 28, left: 6, fontSize: 10 }}>仅一个主色强调</Typography.Text>
+        <FloatButton.Group shape="circle" open style={{ position: "absolute", right: 12, bottom: 12 }}>
+          <FloatButton icon={<QuestionCircleOutlined />} />
+          <FloatButton type="primary" icon={<AimOutlined />} />
+        </FloatButton.Group>
+      </div>
+      <div style={{ position: "relative", flex: "1 1 200px", height: 130, border: "1px solid #ffccc7", borderRadius: 8 }}>
+        <Tag color="error" style={{ position: "absolute", top: 6, left: 6 }}>避免</Tag>
+        <FloatButton.Group shape="circle" open style={{ position: "absolute", right: 12, bottom: 12 }}>
+          <FloatButton type="primary" icon={<QuestionCircleOutlined />} />
+          <FloatButton type="primary" icon={<AimOutlined />} />
+        </FloatButton.Group>
+      </div>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-10")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo10)));
+
+function Demo11() {
+  const { FloatButton, Flex, Typography, Tag } = Infrad;
+  const { MessageOutlined, CustomerServiceOutlined, QuestionCircleOutlined, EllipsisOutlined, FileTextOutlined } = Icons;
+  return (
+    <Flex gap={16} wrap="wrap" align="flex-start">
+      <div style={{ position: "relative", width: 200, height: 200, border: "1px solid #b7eb8f", borderRadius: 8 }}>
+        <Tag color="success" style={{ position: "absolute", top: 6, left: 6 }}>3 项直展</Tag>
+        <FloatButton.Group shape="circle" open style={{ position: "absolute", right: 12, bottom: 12 }}>
+          <FloatButton icon={<MessageOutlined />} />
+          <FloatButton icon={<CustomerServiceOutlined />} />
+          <FloatButton icon={<QuestionCircleOutlined />} />
+        </FloatButton.Group>
+      </div>
+      <div style={{ position: "relative", width: 200, height: 200, border: "1px solid #eee", borderRadius: 8 }}>
+        <Typography.Text type="secondary" style={{ position: "absolute", top: 6, left: 6, fontSize: 11 }}>多项收纳 · 菜单模式</Typography.Text>
+        <FloatButton.Group trigger="click" open icon={<EllipsisOutlined />} type="primary" style={{ position: "absolute", right: 12, bottom: 12 }}>
+          <FloatButton icon={<MessageOutlined />} />
+          <FloatButton icon={<FileTextOutlined />} />
+          <FloatButton icon={<CustomerServiceOutlined />} />
+          <FloatButton icon={<QuestionCircleOutlined />} />
+        </FloatButton.Group>
+      </div>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-11")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo11)));
+
+function Demo12() {
+  const { FloatButton, Flex, Typography, Tag } = Infrad;
+  const { VerticalAlignTopOutlined } = Icons;
+  const uid = React.useId().replace(/:/g, "");
+  const longId = "fb-long-" + uid;
+  return (
+    <Flex gap={16} wrap="wrap">
+      <div id={longId} style={{ position: "relative", flex: "1 1 180px", height: 160, border: "1px solid #b7eb8f", borderRadius: 8, overflow: "auto" }}>
+        <Tag color="success" style={{ position: "absolute", top: 6, left: 6, zIndex: 1 }}>长页</Tag>
+        <div style={{ height: 400 }} />
+        <FloatButton.BackTop visibilityHeight={30} target={() => document.getElementById(longId)} style={{ position: "absolute", right: 12, bottom: 12 }} />
+      </div>
+      <div style={{ position: "relative", flex: "1 1 180px", height: 100, border: "1px solid #ffccc7", borderRadius: 8 }}>
+        <Tag color="error" style={{ position: "absolute", top: 6, left: 6 }}>短页</Tag>
+        <Typography.Text type="secondary" style={{ padding: 32, display: "block", fontSize: 11 }}>内容不足一屏仍放置顶</Typography.Text>
+        <FloatButton icon={<VerticalAlignTopOutlined />} style={{ position: "absolute", right: 12, bottom: 12 }} />
+      </div>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-12")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo12)));
+
+function Demo13() {
+  const { FloatButton, Flex, Typography } = Infrad;
+  const { MessageOutlined, CustomerServiceOutlined, EllipsisOutlined, ExportOutlined } = Icons;
+  return (
+    <Flex gap={24} wrap="wrap" align="flex-start">
+      <div>
+        <Typography.Text type="secondary" style={{ fontSize: 11, display: "block", marginBottom: 8 }}>按钮组 · 平铺展开（少而精）</Typography.Text>
+        <div style={{ position: "relative", height: 180, width: 160, border: "1px dashed #d9d9d9", borderRadius: 8 }}>
+          <FloatButton.Group shape="circle" open style={{ position: "absolute", right: 16, bottom: 16 }}>
+            <FloatButton icon={<MessageOutlined />} />
+            <FloatButton icon={<CustomerServiceOutlined />} />
+          </FloatButton.Group>
+        </div>
+      </div>
+      <div>
+        <Typography.Text type="secondary" style={{ fontSize: 11, display: "block", marginBottom: 8 }}>菜单模式 · 收纳更多操作</Typography.Text>
+        <div style={{ position: "relative", height: 180, width: 160, border: "1px dashed #d9d9d9", borderRadius: 8 }}>
+          <FloatButton.Group trigger="click" open icon={<EllipsisOutlined />} style={{ position: "absolute", right: 16, bottom: 16 }}>
+            <FloatButton icon={<ExportOutlined />} tooltip="导出" />
+            <FloatButton icon={<MessageOutlined />} tooltip="反馈" />
+          </FloatButton.Group>
+        </div>
+      </div>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-13")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo13)));
+
+function Demo14() {
+  const { FloatButton, Modal, Flex, Typography } = Infrad;
+  const { EllipsisOutlined, DeleteOutlined, FileTextOutlined } = Icons;
+  const [open, setOpen] = React.useState(false);
+  return (
+    <Flex vertical gap={8} style={{ maxWidth: 320 }}>
+      <Typography.Text type="secondary" style={{ fontSize: 11 }}>危险项置底 · 点击后弹窗二次确认</Typography.Text>
+      <div style={{ position: "relative", height: 200, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+        <FloatButton.Group trigger="click" open icon={<EllipsisOutlined />} type="primary" style={{ position: "absolute", right: 16, bottom: 16 }}>
+          <FloatButton icon={<FileTextOutlined />} tooltip="草稿" />
+          <FloatButton icon={<DeleteOutlined />} tooltip="清空" type="primary" danger onClick={() => setOpen(true)} />
+        </FloatButton.Group>
+      </div>
+      <Modal open={open} title="确认清空？" onOk={() => setOpen(false)} onCancel={() => setOpen(false)} okText="确认" okButtonProps={{ danger: true }}>
+        <Typography.Text>此操作不可恢复</Typography.Text>
+      </Modal>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-14")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo14)));
+
+function Demo15() {
+  const { FloatButton, Flex, Typography } = Infrad;
+  const { MessageOutlined } = Icons;
+  return (
+    <Flex gap={24} wrap="wrap">
+      <div style={{ position: "relative", width: 200, height: 120, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+        <Typography.Text type="secondary" style={{ position: "absolute", top: 6, left: 6, fontSize: 10 }}>桌面 · 右下默认</Typography.Text>
+        <FloatButton icon={<MessageOutlined />} style={{ position: "absolute", right: 16, bottom: 16 }} />
+      </div>
+      <div style={{ position: "relative", width: 200, height: 120, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+        <Typography.Text type="secondary" style={{ position: "absolute", top: 6, left: 6, fontSize: 10 }}>移动端示意 · 底部偏右</Typography.Text>
+        <FloatButton icon={<MessageOutlined />} style={{ position: "absolute", bottom: 12, left: "calc(50% - 22px)" }} />
+      </div>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-15")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo15)));
+
+function Demo16() {
+  const { FloatButton, Flex, Typography } = Infrad;
+  const { StarOutlined, MessageOutlined, DeleteOutlined } = Icons;
+  return (
+    <Flex vertical gap={8} style={{ maxWidth: 280 }}>
+      <Typography.Text type="secondary" style={{ fontSize: 11 }}>自上而下 · 主操作在上 / 危险在下</Typography.Text>
+      <div style={{ position: "relative", height: 220, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+        <FloatButton.Group shape="circle" open style={{ position: "absolute", right: 16, bottom: 16 }}>
+          <FloatButton icon={<StarOutlined />} tooltip="置顶" />
+          <FloatButton icon={<MessageOutlined />} tooltip="反馈" />
+          <FloatButton icon={<DeleteOutlined />} tooltip="删除" danger />
+        </FloatButton.Group>
+      </div>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-16")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo16)));
+
+function Demo17() {
+  const { FloatButton, Flex, Typography } = Infrad;
+  const { MessageOutlined, CustomerServiceOutlined, CloudUploadOutlined } = Icons;
+  return (
+    <Flex gap={20} wrap="wrap" align="flex-start">
+      <Flex vertical gap={6}>
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>默认 · 对比清晰可点</Typography.Text>
+        <div style={{ position: "relative", width: 48, height: 48 }}>
+          <FloatButton icon={<MessageOutlined />} tooltip="悬停有提示" style={{ position: "absolute", right: 0, bottom: 0 }} />
+        </div>
+      </Flex>
+      <Flex vertical gap={6}>
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>加载中 · 锁定防连点</Typography.Text>
+        <div style={{ position: "relative", width: 48, height: 48 }}>
+          <FloatButton icon={<CloudUploadOutlined />} loading tooltip="提交中" style={{ position: "absolute", right: 0, bottom: 0 }} />
+        </div>
+      </Flex>
+      <Flex vertical gap={6}>
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>展开中 · 子项可见</Typography.Text>
+        <div style={{ position: "relative", width: 140, height: 200, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+          <FloatButton.Group shape="circle" open style={{ position: "absolute", right: 12, bottom: 12 }}>
+            <FloatButton icon={<MessageOutlined />} tooltip="反馈" />
+            <FloatButton icon={<CustomerServiceOutlined />} tooltip="客服" />
+          </FloatButton.Group>
+        </div>
+      </Flex>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-17")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo17)));
+
+function Demo18() {
+  const { FloatButton, Flex, Typography } = Infrad;
+  const { MessageOutlined } = Icons;
+  return (
+    <Flex gap={24} align="flex-end" wrap="wrap">
+      <Flex vertical align="center" gap={6}>
+        <Typography.Text type="secondary" style={{ fontSize: 10 }}>圆形 · 纯图标</Typography.Text>
+        <div style={{ position: "relative", width: 48, height: 48 }}>
+          <FloatButton icon={<MessageOutlined />} style={{ position: "absolute", right: 0, bottom: 0 }} />
+        </div>
+      </Flex>
+      <Flex vertical align="center" gap={6}>
+        <Typography.Text type="secondary" style={{ fontSize: 10 }}>方形 · 双字 description</Typography.Text>
+        <div style={{ position: "relative", width: 72, height: 40 }}>
+          <FloatButton icon={<MessageOutlined />} shape="square" description="帮助" style={{ position: "absolute", right: 0, bottom: 0 }} />
+        </div>
+      </Flex>
+      <Flex vertical gap={4} style={{ maxWidth: 200 }}>
+        <Typography.Text type="secondary" style={{ fontSize: 10 }}>层级</Typography.Text>
+        <Typography.Paragraph type="secondary" style={{ fontSize: 11, margin: 0 }}>热区足够；方形略高以容纳文案；浮层低于 Modal/Drawer</Typography.Paragraph>
+      </Flex>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-18")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo18)));
+
+</script>
+</body></html>

@@ -8,7 +8,23 @@
 
 全局提示由以下基础要素构成，可按需组合使用：
 
-> <!-- 附图占位：建议附上一张示例图，展示 Message 的容器、图标与文本内容的构成关系，标注各要素名称与位置 -->
+<!-- 附图占位：建议附上一张示例图，展示 Message 的容器、图标与文本内容的构成关系，标注各要素名称与位置 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=150) -->
+```react
+function App() {
+  const { Flex, Typography } = Infrad;
+  const { CheckCircleOutlined } = Icons;
+  return (
+    <Flex vertical gap={8} style={{ maxWidth: 380 }}>
+      <Typography.Text type="secondary" style={{ fontSize: 11 }}>容器 · 图标 · 文本（Message 顶部居中浮层示意）</Typography.Text>
+      <Flex align="center" gap={8} style={{ background: "#f6ffed", border: "1px solid #b7eb8f", padding: "8px 12px", borderRadius: 8, justifyContent: "center" }}>
+        <CheckCircleOutlined style={{ color: "#52c41a" }} />
+        <span style={{ fontSize: 14 }}>保存成功</span>
+      </Flex>
+    </Flex>
+  );
+}
+```
 
 &emsp;&emsp;1. **容器** 定义提示框的视觉边界，通常为小卡片形态，承载图标与文本。
 
@@ -24,13 +40,39 @@
 
 &emsp;**是什么**：传达操作已成功完成的正面反馈
 
-> <!-- 附图占位：建议附上一张示例图，展示成功 Message（绿色系、成功图标）的视觉形态，体现正向反馈的语义 -->
+<!-- 附图占位：建议附上一张示例图，展示成功 Message（绿色系、成功图标）的视觉形态，体现正向反馈的语义 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=151) -->
+```react
+function App() {
+  const { App: AntApp, Button } = Infrad;
+  function Demo() {
+    const { message } = AntApp.useApp();
+    return <Button type="primary" size="small" onClick={() => message.success("保存成功")}>触发成功提示</Button>;
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 &emsp;**简单用法**：必须用于已成功完成的操作；文案简洁（如「保存成功」「删除成功」）；默认自动消失
 
 &emsp;**典型场景**：表单提交成功、保存成功、删除成功、复制成功
 
-> <!-- 附图占位：建议附上一张场景图，展示用户点击保存后顶部出现的成功提示，体现轻量反馈的典型用法 -->
+<!-- 附图占位：建议附上一张场景图，展示用户点击保存后顶部出现的成功提示，体现轻量反馈的典型用法 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=152) -->
+```react
+function App() {
+  const { App: AntApp, Button, Card } = Infrad;
+  function Demo() {
+    const { message } = AntApp.useApp();
+    return (
+      <Card size="small" title="订单编辑" style={{ maxWidth: 360 }}>
+        <Button type="primary" onClick={() => message.success("订单已保存")}>保存</Button>
+      </Card>
+    );
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 &emsp;**替代方案**：若需用户持续关注或含操作按钮，改用 Alert 或 Notification
 
@@ -38,13 +80,39 @@
 
 &emsp;**是什么**：传达操作失败或异常的负面反馈
 
-> <!-- 附图占位：建议附上一张示例图，展示错误 Message（红色系、错误图标）的视觉形态，体现失败反馈的语义 -->
+<!-- 附图占位：建议附上一张示例图，展示错误 Message（红色系、错误图标）的视觉形态，体现失败反馈的语义 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=153) -->
+```react
+function App() {
+  const { App: AntApp, Button } = Infrad;
+  function Demo() {
+    const { message } = AntApp.useApp();
+    return <Button danger size="small" onClick={() => message.error("提交失败，请重试")}>触发错误提示</Button>;
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 &emsp;**简单用法**：必须用于已发生的错误；文案应说明失败原因或后续建议；可适当延长显示时间便于阅读
 
 &emsp;**典型场景**：提交失败、网络异常、权限不足
 
-> <!-- 附图占位：建议附上一张场景图，展示提交失败后顶部出现的错误提示，体现失败反馈的典型用法 -->
+<!-- 附图占位：建议附上一张场景图，展示提交失败后顶部出现的错误提示，体现失败反馈的典型用法 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=154) -->
+```react
+function App() {
+  const { App: AntApp, Button, Card } = Infrad;
+  function Demo() {
+    const { message } = AntApp.useApp();
+    return (
+      <Card size="small" title="发布内容" style={{ maxWidth: 360 }}>
+        <Button type="primary" onClick={() => message.error("网络异常，请稍后重试")}>提交</Button>
+      </Card>
+    );
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 &emsp;**替代方案**：若错误复杂需详细说明或含操作入口，改用 Alert 或 Modal
 
@@ -52,13 +120,39 @@
 
 &emsp;**是什么**：传达需用户注意但未造成严重后果的提醒
 
-> <!-- 附图占位：建议附上一张示例图，展示警告 Message（橙色/黄色系、警告图标）的视觉形态，体现需关注的语义 -->
+<!-- 附图占位：建议附上一张示例图，展示警告 Message（橙色/黄色系、警告图标）的视觉形态，体现需关注的语义 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=155) -->
+```react
+function App() {
+  const { App: AntApp, Button } = Infrad;
+  function Demo() {
+    const { message } = AntApp.useApp();
+    return <Button size="small" onClick={() => message.warning("当前账号权限不足")}>触发警告提示</Button>;
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 &emsp;**简单用法**：必须用于潜在风险或需注意的情况；不可用于已发生的错误；文案简洁
 
 &emsp;**典型场景**：操作受限、数据即将过期、配额提醒
 
-> <!-- 附图占位：建议附上一张场景图，展示某操作受限时顶部出现的警告提示，体现警告类反馈的用法 -->
+<!-- 附图占位：建议附上一张场景图，展示某操作受限时顶部出现的警告提示，体现警告类反馈的用法 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=156) -->
+```react
+function App() {
+  const { App: AntApp, Button, Card } = Infrad;
+  function Demo() {
+    const { message } = AntApp.useApp();
+    return (
+      <Card size="small" title="批量导出" style={{ maxWidth: 360 }}>
+        <Button onClick={() => message.warning("今日导出次数已达上限")}>导出</Button>
+      </Card>
+    );
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 &emsp;**替代方案**：若需用户明确确认，改用 Modal
 
@@ -66,13 +160,39 @@
 
 &emsp;**是什么**：传达中性、辅助性的说明或提示
 
-> <!-- 附图占位：建议附上一张示例图，展示信息 Message（蓝色系、信息图标）的视觉形态，体现中性说明的语义 -->
+<!-- 附图占位：建议附上一张示例图，展示信息 Message（蓝色系、信息图标）的视觉形态，体现中性说明的语义 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=157) -->
+```react
+function App() {
+  const { App: AntApp, Button } = Infrad;
+  function Demo() {
+    const { message } = AntApp.useApp();
+    return <Button size="small" onClick={() => message.info("已复制到剪贴板")}>触发信息提示</Button>;
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 &emsp;**简单用法**：必须用于非成功/失败的辅助说明；不可用于错误或严重警告；适合操作说明、状态提示
 
 &emsp;**典型场景**：操作提示、状态说明、简要说明
 
-> <!-- 附图占位：建议附上一张场景图，展示用户执行某操作后顶部出现的信息提示，体现中性反馈的用法 -->
+<!-- 附图占位：建议附上一张场景图，展示用户执行某操作后顶部出现的信息提示，体现中性反馈的用法 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=158) -->
+```react
+function App() {
+  const { App: AntApp, Button, Card } = Infrad;
+  function Demo() {
+    const { message } = AntApp.useApp();
+    return (
+      <Card size="small" title="同步设置" style={{ maxWidth: 360 }}>
+        <Button onClick={() => message.info("将在下次登录时生效")}>应用</Button>
+      </Card>
+    );
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 &emsp;**替代方案**：若信息需持续可见，改用 Alert
 
@@ -80,13 +200,42 @@
 
 &emsp;**是什么**：传达操作正在进行中，需等待完成的反馈
 
-> <!-- 附图占位：建议附上一张示例图，展示加载 Message（加载图标、简洁文案）的视觉形态，体现进行中的语义 -->
+<!-- 附图占位：建议附上一张示例图，展示加载 Message（加载图标、简洁文案）的视觉形态，体现进行中的语义 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=159) -->
+```react
+function App() {
+  const { App: AntApp, Button } = Infrad;
+  function Demo() {
+    const { message } = AntApp.useApp();
+    return <Button size="small" onClick={() => message.loading("正在导出报表…", 0)}>触发加载提示</Button>;
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 &emsp;**简单用法**：必须用于异步操作进行中；通常需手动关闭或操作完成后自动替换为成功/失败提示；不宜长时间悬挂
 
 &emsp;**典型场景**：提交中、导出中、处理中
 
-> <!-- 附图占位：建议附上一张场景图，展示提交过程中顶部显示的加载提示，以及完成后切换为成功提示的流程 -->
+<!-- 附图占位：建议附上一张场景图，展示提交过程中顶部显示的加载提示，以及完成后切换为成功提示的流程 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=160) -->
+```react
+function App() {
+  const { App: AntApp, Button, Space } = Infrad;
+  function Demo() {
+    const { message } = AntApp.useApp();
+    const run = () => {
+      const hide = message.loading("正在提交…", 0);
+      setTimeout(() => {
+        hide();
+        message.success("提交成功");
+      }, 1200);
+    };
+    return <Button type="primary" onClick={run}>提交订单</Button>;
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 &emsp;**替代方案**：若为局部加载，改用 Spin；若为强阻断操作，改用 Modal 的 loading 状态
 
@@ -96,7 +245,35 @@
 
 ### 1.3.1 成功与错误反馈
 
-> <!-- 附图占位：建议附上一张对比图，左侧展示操作成功后使用 success、失败后使用 error（符合规范），右侧展示类型与结果不符（违反规范） -->
+<!-- 附图占位：建议附上一张对比图，左侧展示操作成功后使用 success、失败后使用 error（符合规范），右侧展示类型与结果不符（违反规范） -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=353) -->
+```react
+function App() {
+  const { App: AntApp, Button, Flex, Typography, Space } = Infrad;
+  function Demo() {
+    const { message } = AntApp.useApp();
+    return (
+      <Flex gap={24} wrap="wrap">
+        <Flex vertical gap={6}>
+          <Typography.Text type="secondary" style={{ fontSize: 11 }}>符合规范</Typography.Text>
+          <Space>
+            <Button size="small" type="primary" onClick={() => message.success("删除成功")}>成功结果</Button>
+            <Button size="small" danger onClick={() => message.error("删除失败")}>失败结果</Button>
+          </Space>
+        </Flex>
+        <Flex vertical gap={6}>
+          <Typography.Text type="secondary" style={{ fontSize: 11 }}>类型与结果不符</Typography.Text>
+          <Space>
+            <Button size="small" onClick={() => message.success("删除失败")}>失败却用 success</Button>
+            <Button size="small" onClick={() => message.error("删除成功")}>成功却用 error</Button>
+          </Space>
+        </Flex>
+      </Flex>
+    );
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 ✅ **推荐：** 按实际操作结果选择 success 或 error，文案与结果一致
 
@@ -106,7 +283,29 @@
 
 ### 1.3.2 简短与自动消失
 
-> <!-- 附图占位：建议附上一张对比图，左侧展示简短文案、合理时长的 Message（符合规范），右侧展示长文案或过长停留（违反规范） -->
+<!-- 附图占位：建议附上一张对比图，左侧展示简短文案、合理时长的 Message（符合规范），右侧展示长文案或过长停留（违反规范） -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=162) -->
+```react
+function App() {
+  const { App: AntApp, Button, Flex, Typography } = Infrad;
+  function Demo() {
+    const { message } = AntApp.useApp();
+    return (
+      <Flex gap={24} wrap="wrap">
+        <Flex vertical gap={6}>
+          <Typography.Text type="secondary" style={{ fontSize: 11 }}>简短</Typography.Text>
+          <Button size="small" onClick={() => message.success("已保存", 2)}>保存成功</Button>
+        </Flex>
+        <Flex vertical gap={6}>
+          <Typography.Text type="secondary" style={{ fontSize: 11 }}>冗长停留</Typography.Text>
+          <Button size="small" onClick={() => message.info("这是一段非常长的说明文字，包含多个从句与冗余信息，影响快速阅读", 8)}>长文案</Button>
+        </Flex>
+      </Flex>
+    );
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 ✅ **推荐：** 文案控制在简短一句，默认自动消失，时长适中（如 3 秒）
 
@@ -116,7 +315,24 @@
 
 ### 1.3.3 与 Alert、Notification 区分
 
-> <!-- 附图占位：建议附上一张对比图，展示 Message 适合轻量短时反馈、Alert 适合持久展示、Notification 适合系统级推送的差异 -->
+<!-- 附图占位：建议附上一张对比图，展示 Message 适合轻量短时反馈、Alert 适合持久展示、Notification 适合系统级推送的差异 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=163) -->
+```react
+function App() {
+  const { App: AntApp, Button, Space, Alert, Card, Flex, Typography } = Infrad;
+  function Demo() {
+    const { message, notification } = AntApp.useApp();
+    return (
+      <Flex vertical gap={12} style={{ maxWidth: 440 }}>
+        <Button size="small" type="primary" onClick={() => message.success("已保存")}>Message 短时反馈</Button>
+        <Alert message="Alert 持久展示" type="info" showIcon />
+        <Button size="small" onClick={() => notification.open({ message: "系统通知", description: "新版本已发布" })}>Notification 系统推送</Button>
+      </Flex>
+    );
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 ✅ **推荐：** 操作结果短时反馈用 Message；需持续可见用 Alert；系统级或带操作用 Notification
 
@@ -157,7 +373,29 @@ flowchart TD
 * **堆叠数量**：同一时刻可见的 Message 不宜过多，超出时可限制最大数量，优先关闭最早的一条。
 * **顺序**：新提示在上方或按时间顺序排列，避免相互遮挡。
 
-> <!-- 附图占位：建议附上一张场景图，展示多条 Message 的堆叠与数量限制效果 -->
+<!-- 附图占位：建议附上一张场景图，展示多条 Message 的堆叠与数量限制效果 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=164) -->
+```react
+function App() {
+  const { App: AntApp, Button } = Infrad;
+  function Demo() {
+    const { message } = AntApp.useApp();
+    return (
+      <Button
+        size="small"
+        onClick={() => {
+          message.success("第一条");
+          message.success("第二条");
+          message.success("第三条");
+        }}
+      >
+        连续触发多条
+      </Button>
+    );
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 ## 3.2 时长与关闭
 
@@ -165,7 +403,21 @@ flowchart TD
 * **不自动关闭**：可配置为 0 秒，需用户手动关闭，慎用于常规反馈。
 * **悬停暂停**：悬停时暂停计时，移开后继续，便于用户阅读。
 
-> <!-- 附图占位：建议附上一张示意图，展示不同时长与悬停暂停的交互逻辑 -->
+<!-- 附图占位：建议附上一张示意图，展示不同时长与悬停暂停的交互逻辑 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=165) -->
+```react
+function App() {
+  const { Flex, Typography, Card } = Infrad;
+  return (
+    <Card size="small" style={{ maxWidth: 400 }}>
+      <Typography.Paragraph style={{ marginBottom: 8, fontSize: 12 }}>
+        默认时长约 3s；错误/警告可略长。悬停提示时暂停计时（ant-design Message 默认行为）。
+      </Typography.Paragraph>
+      <Typography.Text type="secondary" style={{ fontSize: 11 }}>可配置 duration；duration 为 0 时常驻需手动关闭</Typography.Text>
+    </Card>
+  );
+}
+```
 
 ## 3.3 文案规范
 
@@ -173,14 +425,50 @@ flowchart TD
 * **动词导向**：优先使用「保存成功」「删除成功」等动宾结构。
 * **错误说明**：失败时尽量说明原因或建议（如「网络异常，请稍后重试」）。
 
-> <!-- 附图占位：建议附上一张对比图，展示简洁动宾文案与冗长模糊文案的差异 -->
+<!-- 附图占位：建议附上一张对比图，展示简洁动宾文案与冗长模糊文案的差异 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=166) -->
+```react
+function App() {
+  const { Flex, Typography } = Infrad;
+  return (
+    <Flex vertical gap={10} style={{ maxWidth: 420 }}>
+      <Flex vertical gap={4}>
+        <Typography.Text strong style={{ fontSize: 12 }}>推荐</Typography.Text>
+        <Typography.Text type="success" style={{ fontSize: 12 }}>保存成功 · 删除成功</Typography.Text>
+      </Flex>
+      <Flex vertical gap={4}>
+        <Typography.Text strong style={{ fontSize: 12 }}>不推荐</Typography.Text>
+        <Typography.Text type="secondary" style={{ fontSize: 12 }}>那个关于保存的事情我们已经尝试去做了但是好像没有成功</Typography.Text>
+      </Flex>
+    </Flex>
+  );
+}
+```
 
 ## 3.4 类型与语义
 
 * **类型一致**：图标与颜色必须与反馈类型一致（成功绿、错误红、警告橙、信息蓝）。
 * **不滥用**：不宜用 Message 承载重要、需用户决策的信息；此类场景用 Modal 或 Alert。
 
-> <!-- 附图占位：建议附上一张示意图，展示四种类型的视觉区分与语义对应 -->
+<!-- 附图占位：建议附上一张示意图，展示四种类型的视觉区分与语义对应 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=167) -->
+```react
+function App() {
+  const { App: AntApp, Button, Space } = Infrad;
+  function Demo() {
+    const { message } = AntApp.useApp();
+    return (
+      <Space wrap>
+        <Button size="small" type="primary" onClick={() => message.success("成功")}>success</Button>
+        <Button size="small" danger onClick={() => message.error("错误")}>error</Button>
+        <Button size="small" onClick={() => message.warning("警告")}>warning</Button>
+        <Button size="small" onClick={() => message.info("说明")}>info</Button>
+      </Space>
+    );
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 ## 3.5 加载状态
 
@@ -188,14 +476,53 @@ flowchart TD
 * **关闭方式**：操作完成后需显式关闭或替换为成功/失败提示，避免长期悬挂。
 * **与 Spin 区分**：局部加载用 Spin；全局、阻断性加载可考虑 Modal loading。
 
-> <!-- 附图占位：建议附上一张流程图，展示 loading → success/error 的完整反馈流程 -->
+<!-- 附图占位：建议附上一张流程图，展示 loading → success/error 的完整反馈流程 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=168) -->
+```react
+function App() {
+  const { App: AntApp, Button, Space } = Infrad;
+  function Demo() {
+    const { message } = AntApp.useApp();
+    const run = () => {
+      const hide = message.loading("处理中…", 0);
+      setTimeout(() => {
+        hide();
+        message.success("处理完成");
+      }, 1000);
+    };
+    return (
+      <Space>
+        <Button size="small" onClick={run}>开始</Button>
+        <Button size="small" danger onClick={() => { const h = message.loading("处理中…", 0); setTimeout(() => { h(); message.error("处理失败"); }, 900); }}>失败分支</Button>
+      </Space>
+    );
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 ## 3.6 可访问性与上下文
 
 * **可访问性**：提示内容需对屏幕阅读器友好；自动消失时需注意无障碍体验。
 * **上下文**：静态方法可能无法获取 ConfigProvider、主题等上下文；需上下文时优先使用 hooks 方式。
 
-> <!-- 附图占位：建议附上一张说明图，展示在需要主题或国际化时的推荐使用方式 -->
+<!-- 附图占位：建议附上一张说明图，展示在需要主题或国际化时的推荐使用方式 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=169) -->
+```react
+function App() {
+  const { App: AntApp, Typography, Card } = Infrad;
+  function Demo() {
+    return (
+      <Card size="small" style={{ maxWidth: 420 }}>
+        <Typography.Paragraph style={{ marginBottom: 0, fontSize: 12 }}>
+          需要主题、国际化或注入上下文时，使用 <Typography.Text code>App.useApp()</Typography.Text> 获取 message，并包裹在 <Typography.Text code>{"<App>"}</Typography.Text> 内，以便继承 ConfigProvider。
+        </Typography.Paragraph>
+      </Card>
+    );
+  }
+  return <AntApp><Demo /></AntApp>;
+}
+```
 
 ---
 

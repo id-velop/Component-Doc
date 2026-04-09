@@ -8,7 +8,26 @@
 
 水印由以下基础要素构成，可按需组合使用：
 
-> <!-- 附图占位：建议附上一张示例图，展示水印的平铺区域、单块水印（文字或图片）、旋转角度、间距等构成关系，标注各要素名称与位置 -->
+<!-- 附图占位：建议附上一张示例图，展示水印的平铺区域、单块水印（文字或图片）、旋转角度、间距等构成关系，标注各要素名称与位置 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=131) -->
+```react
+function App() {
+  const { Watermark, Card, Flex, Typography } = Infrad;
+  return (
+    <Flex gap={20} wrap="wrap" align="flex-start">
+      <Card size="small" title="平铺区域与单块水印" style={{ width: 300 }}>
+        <Watermark content="机密文档" rotate={-22} gap={[88, 88]} font={{ color: "rgba(0,0,0,0.15)", fontSize: 13 }} style={{ height: 150 }}>
+          <div style={{ height: 130, background: "#fff", border: "1px solid #f0f0f0", borderRadius: 6 }} />
+        </Watermark>
+      </Card>
+      <Flex vertical gap={6} style={{ maxWidth: 200 }}>
+        <Typography.Text strong style={{ fontSize: 12 }}>旋转 · 间距 · 透明度</Typography.Text>
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>内容可为文字或图片，整块重复平铺。</Typography.Text>
+      </Flex>
+    </Flex>
+  );
+}
+```
 
 &emsp;&emsp;1. **水印内容** 单块水印的载体，可为文字或图片，承载版权、用户标识、公司名称等信息。
 
@@ -32,7 +51,18 @@
 
 &emsp;**典型场景**：文档预览、报表导出、内部系统页面、合同预览
 
-> <!-- 附图占位：建议附上一张示例图，展示单行文字水印平铺的形态 -->
+<!-- 附图占位：建议附上一张示例图，展示单行文字水印平铺的形态 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=132) -->
+```react
+function App() {
+  const { Watermark } = Infrad;
+  return (
+    <Watermark content="Shopee Internal Only" rotate={-22} gap={[110, 96]} font={{ color: "rgba(0,0,0,0.14)", fontSize: 14 }} style={{ height: 200 }}>
+      <div style={{ height: 200, background: "#fafafa", borderRadius: 8, border: "1px solid #eee" }} />
+    </Watermark>
+  );
+}
+```
 
 &emsp;**替代方案**：若需多行信息，改用多行文字水印
 
@@ -44,7 +74,18 @@
 
 &emsp;**典型场景**：敏感报表、审计文档、多维度溯源信息
 
-> <!-- 附图占位：建议附上一张示例图，展示多行文字水印平铺的形态 -->
+<!-- 附图占位：建议附上一张示例图，展示多行文字水印平铺的形态 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=133) -->
+```react
+function App() {
+  const { Watermark } = Infrad;
+  return (
+    <Watermark content={["Shopee Logistics", "zhangsan@shopee.com", "2026-04-09"]} rotate={-22} gap={[96, 88]} font={{ color: "rgba(0,0,0,0.14)", fontSize: 12 }} style={{ height: 200 }}>
+      <div style={{ height: 200, background: "#fafafa", borderRadius: 8, border: "1px solid #eee" }} />
+    </Watermark>
+  );
+}
+```
 
 &emsp;**替代方案**：若仅需单一信息，使用单行文字水印即可
 
@@ -56,7 +97,18 @@
 
 &emsp;**典型场景**：设计稿预览、品牌文档、对外展示页
 
-> <!-- 附图占位：建议附上一张示例图，展示图片水印平铺的形态 -->
+<!-- 附图占位：建议附上一张示例图，展示图片水印平铺的形态 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=134) -->
+```react
+function App() {
+  const { Watermark } = Infrad;
+  return (
+    <Watermark image="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" height={26} width={80} rotate={-22} gap={[96, 88]} style={{ height: 200 }}>
+      <div style={{ height: 200, background: "#fff", borderRadius: 8, border: "1px solid #eee" }} />
+    </Watermark>
+  );
+}
+```
 
 &emsp;**替代方案**：若图片加载异常，可同时配置文字水印作为兜底
 
@@ -66,7 +118,30 @@
 
 ### 1.3.1 文字与图片水印的选择
 
-> <!-- 附图占位：建议附上一张对比图，左侧展示版权/用户信息用文字水印（符合规范），右侧展示品牌标识用图片水印（符合规范） -->
+<!-- 附图占位：建议附上一张对比图，左侧展示版权/用户信息用文字水印（符合规范），右侧展示品牌标识用图片水印（符合规范） -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=135) -->
+```react
+function App() {
+  const { Watermark, Flex, Divider, Typography } = Infrad;
+  return (
+    <Flex gap={12} wrap="wrap" align="flex-start">
+      <div style={{ flex: "1 1 200px" }}>
+        <Typography.Text type="secondary" style={{ fontSize: 11, display: "block", marginBottom: 6 }}>版权 / 用户 · 文字水印</Typography.Text>
+        <Watermark content="zhangsan@shopee.com" rotate={-22} gap={[72, 72]} font={{ color: "rgba(0,0,0,0.13)", fontSize: 12 }} style={{ height: 150 }}>
+          <div style={{ height: 150, background: "#f7f7f7", borderRadius: 6 }} />
+        </Watermark>
+      </div>
+      <Divider type="vertical" style={{ height: 170 }} />
+      <div style={{ flex: "1 1 200px" }}>
+        <Typography.Text type="secondary" style={{ fontSize: 11, display: "block", marginBottom: 6 }}>品牌 · 图片水印</Typography.Text>
+        <Watermark image="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" height={22} width={72} rotate={-22} gap={[64, 64]} style={{ height: 150 }}>
+          <div style={{ height: 150, background: "#f7f7f7", borderRadius: 6 }} />
+        </Watermark>
+      </div>
+    </Flex>
+  );
+}
+```
 
 ✅ **推荐：** 版权、用户名、时间等用文字水印；品牌 Logo 等用图片水印
 

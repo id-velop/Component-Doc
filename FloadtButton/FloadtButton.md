@@ -8,8 +8,29 @@
 
 悬浮按钮由以下基础要素构成，可按需组合使用：
 
-> <img src="https://editor.shopee.io/uss/50059334/docs/image_1773989484.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张示例图，展示悬浮按钮的基础要素（容器、图标、可选文字描述）的构成关系，标注各要素名称与位置 -->
+<!-- 附图占位：建议附上一张示例图，展示悬浮按钮的基础要素（容器、图标、可选文字描述）的构成关系，标注各要素名称与位置 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=335) -->
+```react
+function App() {
+  const { FloatButton, Flex, Typography } = Infrad;
+  const { MessageOutlined } = Icons;
+  return (
+    <Flex align="flex-start" gap={20} wrap="wrap">
+      <div style={{ position: "relative", width: 220, height: 160, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+        <Typography.Text type="secondary" style={{ position: "absolute", top: 8, left: 8, fontSize: 11 }}>① 容器 · 视口内固定悬浮</Typography.Text>
+        <FloatButton icon={<MessageOutlined />} shape="square" description="反馈" style={{ position: "absolute", right: 16, bottom: 16 }} />
+      </div>
+      <Flex vertical gap={8} style={{ maxWidth: 190 }}>
+        <Typography.Text strong style={{ fontSize: 12 }}>② 图标（语义核心）</Typography.Text>
+        <div style={{ position: "relative", width: 48, height: 48 }}>
+          <FloatButton icon={<MessageOutlined />} style={{ position: "absolute", right: 0, bottom: 0 }} />
+        </div>
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>③ 方形可加双字 description</Typography.Text>
+      </Flex>
+    </Flex>
+  );
+}
+```
 
 &emsp;&emsp;1. **容器** 定义按钮的点击区域与整体形态，固定悬浮于视口某一位置，用于承载图标与可选文字。
 
@@ -25,8 +46,20 @@
 
 &emsp;**是什么**：单个悬浮于页面上方的圆形按钮，承载单一全局操作
 
-> <img src="https://editor.shopee.io/uss/50059334/docs/image_1773989497.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张示例图，展示单悬浮按钮（圆形、右下角固定）的视觉形态，体现其作为全局入口的悬浮特性 -->
+<!-- 附图占位：建议附上一张示例图，展示单悬浮按钮（圆形、右下角固定）的视觉形态，体现其作为全局入口的悬浮特性 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=336) -->
+```react
+function App() {
+  const { FloatButton, Typography } = Infrad;
+  const { MessageOutlined } = Icons;
+  return (
+    <div style={{ position: "relative", height: 160, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+      <Typography.Text type="secondary" style={{ position: "absolute", top: 8, left: 8, fontSize: 11 }}>圆形单按钮 · 右下角全局入口</Typography.Text>
+      <FloatButton icon={<MessageOutlined />} tooltip="反馈" style={{ position: "absolute", right: 20, bottom: 20 }} />
+    </div>
+  );
+}
+```
 
 &emsp;**简单用法**：必须用于网站上的全局功能；无论用户滚动到何处都需可见；同一视口内同一区域不宜出现多个独立悬浮按钮
 
@@ -38,8 +71,26 @@
 
 &emsp;**是什么**：采用主色填充的悬浮按钮，用于强调当前页面的首要全局操作
 
-> <img src="https://editor.shopee.io/uss/50059334/docs/image_1773989512.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张示例图，展示主色调悬浮按钮（实心填充、品牌色）与默认悬浮按钮的视觉对比，体现层级差异 -->
+<!-- 附图占位：建议附上一张示例图，展示主色调悬浮按钮（实心填充、品牌色）与默认悬浮按钮的视觉对比，体现层级差异 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=337) -->
+```react
+function App() {
+  const { FloatButton, Flex, Typography } = Infrad;
+  const { MessageOutlined, AimOutlined } = Icons;
+  return (
+    <Flex gap={24} align="center" wrap="wrap" style={{ minHeight: 120 }}>
+      <div style={{ position: "relative", width: 108, height: 108, border: "1px dashed #d9d9d9", borderRadius: 8 }}>
+        <Typography.Text type="secondary" style={{ position: "absolute", top: 6, left: 6, fontSize: 10 }}>默认弱强调</Typography.Text>
+        <FloatButton icon={<MessageOutlined />} style={{ position: "absolute", right: 12, bottom: 12 }} />
+      </div>
+      <div style={{ position: "relative", width: 108, height: 108, border: "1px dashed #d9d9d9", borderRadius: 8 }}>
+        <Typography.Text type="secondary" style={{ position: "absolute", top: 6, left: 6, fontSize: 10 }}>主色首要入口</Typography.Text>
+        <FloatButton type="primary" icon={<AimOutlined />} style={{ position: "absolute", right: 12, bottom: 12 }} />
+      </div>
+    </Flex>
+  );
+}
+```
 
 &emsp;**简单用法**：必须用于页面唯一的、最重要的全局入口；不可与多个同等强调的悬浮按钮并存；视觉上需明显区别于默认类型
 
@@ -51,8 +102,20 @@
 
 &emsp;**是什么**：采用方形形态的悬浮按钮，可携带精简文字描述以增强识别
 
-><img src="https://editor.shopee.io/uss/50059334/docs/image_1773989526.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张示例图，展示方形悬浮按钮（含图标与双字描述如「反馈」）的视觉形态，体现方形+文字的紧凑组合 -->
+<!-- 附图占位：建议附上一张示例图，展示方形悬浮按钮（含图标与双字描述如「反馈」）的视觉形态，体现方形+文字的紧凑组合 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=338) -->
+```react
+function App() {
+  const { FloatButton, Typography } = Infrad;
+  const { MessageOutlined } = Icons;
+  return (
+    <div style={{ position: "relative", height: 128, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+      <Typography.Text type="secondary" style={{ position: "absolute", top: 8, left: 8, fontSize: 11 }}>方形 · 图标 + 双字文案</Typography.Text>
+      <FloatButton icon={<MessageOutlined />} shape="square" description="反馈" style={{ position: "absolute", right: 20, bottom: 20 }} />
+    </div>
+  );
+}
+```
 
 &emsp;**简单用法**：必须用于需要文字辅助说明语义的场景；文字必须精简，推荐双字；仅方形支持文字内容
 
@@ -64,8 +127,24 @@
 
 &emsp;**是什么**：将多个同类悬浮按钮组合在一起，自上而下或自侧展开，无需二次点击即可看到全部选项
 
-> <img src="https://editor.shopee.io/uss/50059334/docs/image_1773989542.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张示例图，展示悬浮按钮组展开后的形态（触发按钮 + 多个子按钮垂直排列），体现一次性展示多个操作的布局 -->
+<!-- 附图占位：建议附上一张示例图，展示悬浮按钮组展开后的形态（触发按钮 + 多个子按钮垂直排列），体现一次性展示多个操作的布局 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=339) -->
+```react
+function App() {
+  const { FloatButton, Typography } = Infrad;
+  const { MessageOutlined, CustomerServiceOutlined, QuestionCircleOutlined } = Icons;
+  return (
+    <div style={{ position: "relative", height: 220, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+      <Typography.Text type="secondary" style={{ position: "absolute", top: 8, left: 8, fontSize: 11 }}>按钮组展开 · 主钮 + 子钮纵向排列</Typography.Text>
+      <FloatButton.Group shape="circle" open style={{ position: "absolute", right: 20, bottom: 20 }}>
+        <FloatButton icon={<MessageOutlined />} tooltip="反馈" />
+        <FloatButton icon={<CustomerServiceOutlined />} tooltip="客服" />
+        <FloatButton icon={<QuestionCircleOutlined />} tooltip="帮助" />
+      </FloatButton.Group>
+    </div>
+  );
+}
+```
 
 &emsp;**简单用法**：必须用于多个同等重要或平级的全局操作；子按钮数量不宜超过 5 个；展开方向需与页面留白匹配
 
@@ -77,8 +156,24 @@
 
 &emsp;**是什么**：点击或悬停后展开菜单，将多个操作收纳到单一触发入口中
 
-> <img src="https://editor.shopee.io/uss/50059334/docs/image_1773989560.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张示例图，展示菜单模式悬浮按钮展开后的形态（触发按钮 + 下拉/上拉菜单列表），体现收纳与展开的交互结构 -->
+<!-- 附图占位：建议附上一张示例图，展示菜单模式悬浮按钮展开后的形态（触发按钮 + 下拉/上拉菜单列表），体现收纳与展开的交互结构 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=340) -->
+```react
+function App() {
+  const { FloatButton, Typography } = Infrad;
+  const { EllipsisOutlined, ExportOutlined, ShareAltOutlined, StarOutlined } = Icons;
+  return (
+    <div style={{ position: "relative", height: 240, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+      <Typography.Text type="secondary" style={{ position: "absolute", top: 8, left: 8, fontSize: 11 }}>菜单模式 · 主触发 + 收纳列表</Typography.Text>
+      <FloatButton.Group trigger="click" open icon={<EllipsisOutlined />} type="primary" style={{ position: "absolute", right: 20, bottom: 20 }}>
+        <FloatButton icon={<ExportOutlined />} tooltip="导出" />
+        <FloatButton icon={<ShareAltOutlined />} tooltip="分享" />
+        <FloatButton icon={<StarOutlined />} tooltip="收藏" />
+      </FloatButton.Group>
+    </div>
+  );
+}
+```
 
 &emsp;**简单用法**：必须用于操作较多、需收纳以节省空间的场景；支持点击或悬停触发；主触发按钮必须明确表达「更多」或核心动作
 
@@ -90,8 +185,23 @@
 
 &emsp;**是什么**：专用于长页面滚动后，一键返回页面顶部的悬浮按钮
 
-> <img src="https://editor.shopee.io/uss/50059334/docs/image_1773989570.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张示例图，展示回到顶部按钮（通常为向上箭头图标）的视觉形态，体现其单一职责 -->
+<!-- 附图占位：建议附上一张示例图，展示回到顶部按钮（通常为向上箭头图标）的视觉形态，体现其单一职责 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=341) -->
+```react
+function App() {
+  const { FloatButton, Typography } = Infrad;
+  const uid = React.useId().replace(/:/g, "");
+  const boxId = "fb-bt-" + uid;
+  return (
+    <div id={boxId} style={{ position: "relative", height: 200, overflow: "auto", border: "1px solid #f0f0f0", borderRadius: 8 }}>
+      <div style={{ height: 480, padding: 12, fontSize: 12, color: "#999" }}>
+        <Typography.Text type="secondary">长内容区内滚动后出现 BackTop（向上箭头）</Typography.Text>
+      </div>
+      <FloatButton.BackTop visibilityHeight={80} target={() => document.getElementById(boxId)} style={{ position: "absolute", right: 16, bottom: 16 }} />
+    </div>
+  );
+}
+```
 
 &emsp;**简单用法**：必须用于长内容页面的滚动场景；需在用户滚动一定高度后才出现；点击后平滑滚动至顶部
 
@@ -103,8 +213,30 @@
 
 &emsp;**是什么**：在悬浮按钮右上角附带数字徽标，提示待处理数量或新消息
 
-><img src="https://editor.shopee.io/uss/50059334/docs/image_1773989583.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张示例图，展示带徽标悬浮按钮（右上角红色圆点或数字）的视觉形态，体现数量/状态提示 -->
+<!-- 附图占位：建议附上一张示例图，展示带徽标悬浮按钮（右上角红色圆点或数字）的视觉形态，体现数量/状态提示 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=342) -->
+```react
+function App() {
+  const { FloatButton, Badge, Flex, Typography } = Infrad;
+  const { MessageOutlined, BellOutlined, MailOutlined } = Icons;
+  return (
+    <Flex vertical gap={8}>
+      <Typography.Text type="secondary" style={{ fontSize: 11 }}>数字徽标 / 红点 · 提示待处理或新消息</Typography.Text>
+      <Flex gap={24} wrap="wrap" style={{ minHeight: 88 }}>
+        <div style={{ position: "relative", width: 52, height: 52 }}>
+          <Badge count={3}><FloatButton icon={<MessageOutlined />} style={{ position: "absolute", right: 0, bottom: 0 }} /></Badge>
+        </div>
+        <div style={{ position: "relative", width: 52, height: 52 }}>
+          <Badge count={12}><FloatButton type="primary" icon={<BellOutlined />} style={{ position: "absolute", right: 0, bottom: 0 }} /></Badge>
+        </div>
+        <div style={{ position: "relative", width: 52, height: 52 }}>
+          <Badge dot><FloatButton icon={<MailOutlined />} style={{ position: "absolute", right: 0, bottom: 0 }} /></Badge>
+        </div>
+      </Flex>
+    </Flex>
+  );
+}
+```
 
 &emsp;**简单用法**：必须用于有数量或状态提示需求的入口；徽标数字需与业务含义一致；不可滥用，以免干扰用户
 
@@ -118,8 +250,28 @@
 
 ### 1.3.1 单悬浮按钮
 
-> <img src="https://editor.shopee.io/uss/50059334/docs/image_1773989598.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张对比图，左侧展示单一全局操作使用单悬浮按钮（符合规范），右侧展示同一视口内多个独立悬浮按钮并列（违反规范） -->
+<!-- 附图占位：建议附上一张对比图，左侧展示单一全局操作使用单悬浮按钮（符合规范），右侧展示同一视口内多个独立悬浮按钮并列（违反规范） -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=343) -->
+```react
+function App() {
+  const { FloatButton, Flex, Typography, Tag } = Infrad;
+  const { MessageOutlined, QuestionCircleOutlined } = Icons;
+  return (
+    <Flex gap={16} wrap="wrap">
+      <div style={{ position: "relative", flex: "1 1 200px", height: 120, border: "1px solid #b7eb8f", borderRadius: 8 }}>
+        <Tag color="success" style={{ position: "absolute", top: 6, left: 6 }}>推荐</Tag>
+        <Typography.Text type="secondary" style={{ position: "absolute", bottom: 8, left: 8, fontSize: 10 }}>单一全局入口</Typography.Text>
+        <FloatButton icon={<MessageOutlined />} style={{ position: "absolute", right: 12, bottom: 12 }} />
+      </div>
+      <div style={{ position: "relative", flex: "1 1 200px", height: 120, border: "1px solid #ffccc7", borderRadius: 8 }}>
+        <Tag color="error" style={{ position: "absolute", top: 6, left: 6 }}>避免</Tag>
+        <FloatButton icon={<MessageOutlined />} style={{ position: "absolute", right: 12, bottom: 12 }} />
+        <FloatButton icon={<QuestionCircleOutlined />} style={{ position: "absolute", right: 68, bottom: 12 }} />
+      </div>
+    </Flex>
+  );
+}
+```
 
 ✅ **推荐：** 单一全局入口使用单悬浮按钮，保持界面简洁
 
@@ -129,8 +281,33 @@
 
 ### 1.3.2 主色调与默认
 
-> <img src="https://editor.shopee.io/uss/50059334/docs/image_1773989659.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张对比图，左侧展示首要操作用主色调、次要用默认（符合规范），右侧展示多个主色调悬浮按钮并列（违反规范） -->
+<!-- 附图占位：建议附上一张对比图，左侧展示首要操作用主色调、次要用默认（符合规范），右侧展示多个主色调悬浮按钮并列（违反规范） -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=344) -->
+```react
+function App() {
+  const { FloatButton, Flex, Tag, Typography } = Infrad;
+  const { QuestionCircleOutlined, AimOutlined } = Icons;
+  return (
+    <Flex gap={16} wrap="wrap">
+      <div style={{ position: "relative", flex: "1 1 200px", height: 130, border: "1px solid #b7eb8f", borderRadius: 8 }}>
+        <Tag color="success" style={{ position: "absolute", top: 6, left: 6 }}>推荐</Tag>
+        <Typography.Text type="secondary" style={{ position: "absolute", top: 28, left: 6, fontSize: 10 }}>仅一个主色强调</Typography.Text>
+        <FloatButton.Group shape="circle" open style={{ position: "absolute", right: 12, bottom: 12 }}>
+          <FloatButton icon={<QuestionCircleOutlined />} />
+          <FloatButton type="primary" icon={<AimOutlined />} />
+        </FloatButton.Group>
+      </div>
+      <div style={{ position: "relative", flex: "1 1 200px", height: 130, border: "1px solid #ffccc7", borderRadius: 8 }}>
+        <Tag color="error" style={{ position: "absolute", top: 6, left: 6 }}>避免</Tag>
+        <FloatButton.Group shape="circle" open style={{ position: "absolute", right: 12, bottom: 12 }}>
+          <FloatButton type="primary" icon={<QuestionCircleOutlined />} />
+          <FloatButton type="primary" icon={<AimOutlined />} />
+        </FloatButton.Group>
+      </div>
+    </Flex>
+  );
+}
+```
 
 ✅ **推荐：** 首要全局操作使用主色调悬浮按钮，次要操作使用默认
 
@@ -140,8 +317,35 @@
 
 ### 1.3.3 悬浮按钮组与菜单模式
 
-> <img src="https://editor.shopee.io/uss/50059334/docs/image_1773989668.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张对比图，左侧展示 3–5 个平级操作用悬浮按钮组（符合规范），右侧展示 6 个以上操作平铺或收纳到菜单模式（符合规范） -->
+<!-- 附图占位：建议附上一张对比图，左侧展示 3–5 个平级操作用悬浮按钮组（符合规范），右侧展示 6 个以上操作平铺或收纳到菜单模式（符合规范） -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=345) -->
+```react
+function App() {
+  const { FloatButton, Flex, Typography, Tag } = Infrad;
+  const { MessageOutlined, CustomerServiceOutlined, QuestionCircleOutlined, EllipsisOutlined, FileTextOutlined } = Icons;
+  return (
+    <Flex gap={16} wrap="wrap" align="flex-start">
+      <div style={{ position: "relative", width: 200, height: 200, border: "1px solid #b7eb8f", borderRadius: 8 }}>
+        <Tag color="success" style={{ position: "absolute", top: 6, left: 6 }}>3 项直展</Tag>
+        <FloatButton.Group shape="circle" open style={{ position: "absolute", right: 12, bottom: 12 }}>
+          <FloatButton icon={<MessageOutlined />} />
+          <FloatButton icon={<CustomerServiceOutlined />} />
+          <FloatButton icon={<QuestionCircleOutlined />} />
+        </FloatButton.Group>
+      </div>
+      <div style={{ position: "relative", width: 200, height: 200, border: "1px solid #eee", borderRadius: 8 }}>
+        <Typography.Text type="secondary" style={{ position: "absolute", top: 6, left: 6, fontSize: 11 }}>多项收纳 · 菜单模式</Typography.Text>
+        <FloatButton.Group trigger="click" open icon={<EllipsisOutlined />} type="primary" style={{ position: "absolute", right: 12, bottom: 12 }}>
+          <FloatButton icon={<MessageOutlined />} />
+          <FloatButton icon={<FileTextOutlined />} />
+          <FloatButton icon={<CustomerServiceOutlined />} />
+          <FloatButton icon={<QuestionCircleOutlined />} />
+        </FloatButton.Group>
+      </div>
+    </Flex>
+  );
+}
+```
 
 ✅ **推荐：** 操作数量少用悬浮按钮组直接展示，操作多用菜单模式收纳
 
@@ -151,8 +355,30 @@
 
 ### 1.3.4 回到顶部
 
-> <img src="https://editor.shopee.io/uss/50059334/docs/image_1773989681.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张对比图，左侧展示长页面滚动后出现回到顶部（符合规范），右侧展示短页面也放置回到顶部（违反规范） -->
+<!-- 附图占位：建议附上一张对比图，左侧展示长页面滚动后出现回到顶部（符合规范），右侧展示短页面也放置回到顶部（违反规范） -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=346) -->
+```react
+function App() {
+  const { FloatButton, Flex, Typography, Tag } = Infrad;
+  const { VerticalAlignTopOutlined } = Icons;
+  const uid = React.useId().replace(/:/g, "");
+  const longId = "fb-long-" + uid;
+  return (
+    <Flex gap={16} wrap="wrap">
+      <div id={longId} style={{ position: "relative", flex: "1 1 180px", height: 160, border: "1px solid #b7eb8f", borderRadius: 8, overflow: "auto" }}>
+        <Tag color="success" style={{ position: "absolute", top: 6, left: 6, zIndex: 1 }}>长页</Tag>
+        <div style={{ height: 400 }} />
+        <FloatButton.BackTop visibilityHeight={30} target={() => document.getElementById(longId)} style={{ position: "absolute", right: 12, bottom: 12 }} />
+      </div>
+      <div style={{ position: "relative", flex: "1 1 180px", height: 100, border: "1px solid #ffccc7", borderRadius: 8 }}>
+        <Tag color="error" style={{ position: "absolute", top: 6, left: 6 }}>短页</Tag>
+        <Typography.Text type="secondary" style={{ padding: 32, display: "block", fontSize: 11 }}>内容不足一屏仍放置顶</Typography.Text>
+        <FloatButton icon={<VerticalAlignTopOutlined />} style={{ position: "absolute", right: 12, bottom: 12 }} />
+      </div>
+    </Flex>
+  );
+}
+```
 
 ✅ **推荐：** 长内容页面、需滚动浏览时使用回到顶部
 
@@ -196,8 +422,36 @@ flowchart TD
 * **收纳展示**：超过 5 个操作，或操作重要性差异明显、需要「更多」语义时，使用菜单模式悬浮按钮，通过点击或悬停展开。
 * **单一优先**：若只有一个核心全局入口，使用单悬浮按钮；避免为凑齐多个而强行增加入口。
 
-> <img src="https://editor.shopee.io/uss/50059334/docs/image_1773989700.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张场景图，展示悬浮按钮组与菜单模式的对比布局，体现多操作的展示与收纳策略 -->
+<!-- 附图占位：建议附上一张场景图，展示悬浮按钮组与菜单模式的对比布局，体现多操作的展示与收纳策略 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=347) -->
+```react
+function App() {
+  const { FloatButton, Flex, Typography } = Infrad;
+  const { MessageOutlined, CustomerServiceOutlined, EllipsisOutlined, ExportOutlined } = Icons;
+  return (
+    <Flex gap={24} wrap="wrap" align="flex-start">
+      <div>
+        <Typography.Text type="secondary" style={{ fontSize: 11, display: "block", marginBottom: 8 }}>按钮组 · 平铺展开（少而精）</Typography.Text>
+        <div style={{ position: "relative", height: 180, width: 160, border: "1px dashed #d9d9d9", borderRadius: 8 }}>
+          <FloatButton.Group shape="circle" open style={{ position: "absolute", right: 16, bottom: 16 }}>
+            <FloatButton icon={<MessageOutlined />} />
+            <FloatButton icon={<CustomerServiceOutlined />} />
+          </FloatButton.Group>
+        </div>
+      </div>
+      <div>
+        <Typography.Text type="secondary" style={{ fontSize: 11, display: "block", marginBottom: 8 }}>菜单模式 · 收纳更多操作</Typography.Text>
+        <div style={{ position: "relative", height: 180, width: 160, border: "1px dashed #d9d9d9", borderRadius: 8 }}>
+          <FloatButton.Group trigger="click" open icon={<EllipsisOutlined />} style={{ position: "absolute", right: 16, bottom: 16 }}>
+            <FloatButton icon={<ExportOutlined />} tooltip="导出" />
+            <FloatButton icon={<MessageOutlined />} tooltip="反馈" />
+          </FloatButton.Group>
+        </div>
+      </div>
+    </Flex>
+  );
+}
+```
 
 ## 3.2 危险操作（删除/清空/停用）
 
@@ -207,8 +461,29 @@ flowchart TD
 * **二次确认**：点击后必须通过弹窗进行二次确认，再执行。
 * **视觉隔离**：在展开列表中，危险项需通过红色或弱化样式与常规项区分。
 
-> <img src="https://editor.shopee.io/uss/50059334/docs/image_1773989709.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张场景图，展示悬浮按钮菜单中危险操作（如「清空」）收纳在列表末尾、配合二次确认的布局 -->
+<!-- 附图占位：建议附上一张场景图，展示悬浮按钮菜单中危险操作（如「清空」）收纳在列表末尾、配合二次确认的布局 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=348) -->
+```react
+function App() {
+  const { FloatButton, Modal, Flex, Typography } = Infrad;
+  const { EllipsisOutlined, DeleteOutlined, FileTextOutlined } = Icons;
+  const [open, setOpen] = React.useState(false);
+  return (
+    <Flex vertical gap={8} style={{ maxWidth: 320 }}>
+      <Typography.Text type="secondary" style={{ fontSize: 11 }}>危险项置底 · 点击后弹窗二次确认</Typography.Text>
+      <div style={{ position: "relative", height: 200, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+        <FloatButton.Group trigger="click" open icon={<EllipsisOutlined />} type="primary" style={{ position: "absolute", right: 16, bottom: 16 }}>
+          <FloatButton icon={<FileTextOutlined />} tooltip="草稿" />
+          <FloatButton icon={<DeleteOutlined />} tooltip="清空" type="primary" danger onClick={() => setOpen(true)} />
+        </FloatButton.Group>
+      </div>
+      <Modal open={open} title="确认清空？" onOk={() => setOpen(false)} onCancel={() => setOpen(false)} okText="确认" okButtonProps={{ danger: true }}>
+        <Typography.Text>此操作不可恢复</Typography.Text>
+      </Modal>
+    </Flex>
+  );
+}
+```
 
 ## 3.3 摆放位置（按页面场景划分）
 
@@ -219,8 +494,26 @@ flowchart TD
 * **移动端**：需考虑拇指可触达区域，通常仍为右下角或底部居中偏右。
 * **与内容边距**：悬浮按钮与视口边缘需保持固定间距，避免贴边或遮挡滚动条。
 
-> <img src="https://editor.shopee.io/uss/50059334/docs/image_1773989717.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张场景图，展示桌面端右下角、移动端底部等不同场景下的悬浮按钮摆放位置，体现位置规范 -->
+<!-- 附图占位：建议附上一张场景图，展示桌面端右下角、移动端底部等不同场景下的悬浮按钮摆放位置，体现位置规范 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=349) -->
+```react
+function App() {
+  const { FloatButton, Flex, Typography } = Infrad;
+  const { MessageOutlined } = Icons;
+  return (
+    <Flex gap={24} wrap="wrap">
+      <div style={{ position: "relative", width: 200, height: 120, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+        <Typography.Text type="secondary" style={{ position: "absolute", top: 6, left: 6, fontSize: 10 }}>桌面 · 右下默认</Typography.Text>
+        <FloatButton icon={<MessageOutlined />} style={{ position: "absolute", right: 16, bottom: 16 }} />
+      </div>
+      <div style={{ position: "relative", width: 200, height: 120, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+        <Typography.Text type="secondary" style={{ position: "absolute", top: 6, left: 6, fontSize: 10 }}>移动端示意 · 底部偏右</Typography.Text>
+        <FloatButton icon={<MessageOutlined />} style={{ position: "absolute", bottom: 12, left: "calc(50% - 22px)" }} />
+      </div>
+    </Flex>
+  );
+}
+```
 
 ## 3.4 顺序与对齐逻辑
 
@@ -230,8 +523,26 @@ flowchart TD
 * **逻辑分组**：同类操作（如反馈、帮助、客服）可相邻排列；不同类型间可适当留白或分隔。
 * **回到顶部**：若与其它悬浮入口并存，回到顶部宜单独放置或放在最底部，避免与主业务入口竞争。
 
-> <img src="https://editor.shopee.io/uss/50059334/docs/image_1773989725.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张场景图，展示悬浮按钮组子项自上而下的排列顺序，体现主操作在上、危险在下的逻辑 -->
+<!-- 附图占位：建议附上一张场景图，展示悬浮按钮组子项自上而下的排列顺序，体现主操作在上、危险在下的逻辑 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=350) -->
+```react
+function App() {
+  const { FloatButton, Flex, Typography } = Infrad;
+  const { StarOutlined, MessageOutlined, DeleteOutlined } = Icons;
+  return (
+    <Flex vertical gap={8} style={{ maxWidth: 280 }}>
+      <Typography.Text type="secondary" style={{ fontSize: 11 }}>自上而下 · 主操作在上 / 危险在下</Typography.Text>
+      <div style={{ position: "relative", height: 220, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+        <FloatButton.Group shape="circle" open style={{ position: "absolute", right: 16, bottom: 16 }}>
+          <FloatButton icon={<StarOutlined />} tooltip="置顶" />
+          <FloatButton icon={<MessageOutlined />} tooltip="反馈" />
+          <FloatButton icon={<DeleteOutlined />} tooltip="删除" danger />
+        </FloatButton.Group>
+      </div>
+    </Flex>
+  );
+}
+```
 
 ## 3.5 状态与交互反馈
 
@@ -242,7 +553,39 @@ flowchart TD
 * **按下**：提供明确的按压反馈。
 * **展开中**：悬浮按钮组或菜单展开时，主按钮应有状态变化（如旋转、高亮），便于用户感知当前展开状态。
 * **加载中**：若操作触发异步请求，需进入加载状态并锁定，防止重复点击。
-> <img src="https://editor.shopee.io/uss/50059334/docs/image_1773989763.png" alt="image.png" width="auto" /><!-- 附图占位：建议附上一张示例图，展示圆形与方形悬浮按钮的尺寸与层级关系，体现视觉规范 -->
+<!-- 附图占位：建议附上一张示例图，展示默认态、加载态与悬浮组展开态下的交互反馈（可点击、防连点、展开可见子项） -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=351) -->
+```react
+function App() {
+  const { FloatButton, Flex, Typography } = Infrad;
+  const { MessageOutlined, CustomerServiceOutlined, CloudUploadOutlined } = Icons;
+  return (
+    <Flex gap={20} wrap="wrap" align="flex-start">
+      <Flex vertical gap={6}>
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>默认 · 对比清晰可点</Typography.Text>
+        <div style={{ position: "relative", width: 48, height: 48 }}>
+          <FloatButton icon={<MessageOutlined />} tooltip="悬停有提示" style={{ position: "absolute", right: 0, bottom: 0 }} />
+        </div>
+      </Flex>
+      <Flex vertical gap={6}>
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>加载中 · 锁定防连点</Typography.Text>
+        <div style={{ position: "relative", width: 48, height: 48 }}>
+          <FloatButton icon={<CloudUploadOutlined />} loading tooltip="提交中" style={{ position: "absolute", right: 0, bottom: 0 }} />
+        </div>
+      </Flex>
+      <Flex vertical gap={6}>
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>展开中 · 子项可见</Typography.Text>
+        <div style={{ position: "relative", width: 140, height: 200, border: "1px solid #f0f0f0", borderRadius: 8 }}>
+          <FloatButton.Group shape="circle" open style={{ position: "absolute", right: 12, bottom: 12 }}>
+            <FloatButton icon={<MessageOutlined />} tooltip="反馈" />
+            <FloatButton icon={<CustomerServiceOutlined />} tooltip="客服" />
+          </FloatButton.Group>
+        </div>
+      </Flex>
+    </Flex>
+  );
+}
+```
 
 ## 3.6 视觉规范与形态选择
 
@@ -251,8 +594,34 @@ flowchart TD
 * **层级**：在同一视口内，悬浮按钮的层级应高于普通内容，低于模态框、抽屉等全屏覆盖层。
 * **图标选择**：图标语义必须与操作一致，优先使用行业共识强的图标（如客服、反馈、回到顶部）。
 
-> <img src="https://editor.shopee.io/uss/50059334/docs/image_1773989746.png" alt="image.png" width="auto" />
-> <!-- 附图占位：建议附上一张示例图，展示圆形与方形悬浮按钮的尺寸与层级关系，体现视觉规范 -->
+<!-- 附图占位：建议附上一张示例图，展示圆形与方形悬浮按钮的尺寸与层级关系，体现视觉规范 -->
+<!-- [▶ 在线演示](https://infrad.shopee.io/playground/?agent_code_id=352) -->
+```react
+function App() {
+  const { FloatButton, Flex, Typography } = Infrad;
+  const { MessageOutlined } = Icons;
+  return (
+    <Flex gap={24} align="flex-end" wrap="wrap">
+      <Flex vertical align="center" gap={6}>
+        <Typography.Text type="secondary" style={{ fontSize: 10 }}>圆形 · 纯图标</Typography.Text>
+        <div style={{ position: "relative", width: 48, height: 48 }}>
+          <FloatButton icon={<MessageOutlined />} style={{ position: "absolute", right: 0, bottom: 0 }} />
+        </div>
+      </Flex>
+      <Flex vertical align="center" gap={6}>
+        <Typography.Text type="secondary" style={{ fontSize: 10 }}>方形 · 双字 description</Typography.Text>
+        <div style={{ position: "relative", width: 72, height: 40 }}>
+          <FloatButton icon={<MessageOutlined />} shape="square" description="帮助" style={{ position: "absolute", right: 0, bottom: 0 }} />
+        </div>
+      </Flex>
+      <Flex vertical gap={4} style={{ maxWidth: 200 }}>
+        <Typography.Text type="secondary" style={{ fontSize: 10 }}>层级</Typography.Text>
+        <Typography.Paragraph type="secondary" style={{ fontSize: 11, margin: 0 }}>热区足够；方形略高以容纳文案；浮层低于 Modal/Drawer</Typography.Paragraph>
+      </Flex>
+    </Flex>
+  );
+}
+```
 
 ---
 

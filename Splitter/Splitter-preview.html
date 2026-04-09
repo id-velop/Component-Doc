@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Splitter 组件文档预览</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+         max-width: 800px; margin: 0 auto; padding: 24px 16px; color: #333; line-height: 1.65; font-size: 14px; }
+  body img { max-width: min(100%, 420px); height: auto; display: block; }
+  h1 { border-bottom: 2px solid #2673dd; padding-bottom: 8px; font-size: 1.5rem; }
+  h2 { color: #2673dd; font-size: 1.2rem; }
+  h3 { color: #444; font-size: 1.05rem; }
+  blockquote { border-left: 4px solid #2673dd; margin: 12px 0; padding: 8px 12px; background: #f6f8fa; }
+  code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-size: 0.85em; }
+  pre code { display: block; padding: 12px; overflow-x: auto; font-size: 12px; }
+  .demo-mount { margin: 10px 0; padding: 12px 14px; border: 1px solid #e8e8e8; border-radius: 8px; background: #fff; min-height: 48px; max-width: 640px; position: relative; overflow: visible; transform: translate(0); }
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 24px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+  th, td { border: 1px solid #e8e8e8; padding: 8px 12px; text-align: left; }
+  th { background: #f6f8fa; }
+  #doc-error { color: #cf1322; padding: 16px; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5/dist/reset.css" />
+<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/antd@5/dist/antd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ant-design/icons@5/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="doc-root"></div>
+<script>
+(function () {
+  var root = document.getElementById("doc-root");
+  fetch("Splitter.md")
+    .then(function (r) {
+      if (!r.ok) throw new Error("无法加载 Splitter.md。请在 Splitter 目录执行：python3 -m http.server 8766，然后打开 http://localhost:8766/Splitter-preview.html");
+      return r.text();
+    })
+    .then(function (mdContent) {
+      var rePlay = /<!-- \[▶ 在线演示\]\(https:\/\/infrad\.shopee\.io\/playground\/\?agent_code_id=\d+\) -->\n*/g;
+      var blocks = [];
+      var reBlock = /```react\n([\s\S]*?)```/g;
+      var m;
+      while ((m = reBlock.exec(mdContent)) !== null) blocks.push(m[1].trim());
+      var mdForHtml = mdContent.replace(rePlay, "");
+      var n = 0;
+      mdForHtml = mdForHtml.replace(/```react\n[\s\S]*?```/g, function () {
+        n += 1;
+        return '<div id="demo-' + n + '" class="demo-mount"></div>';
+      });
+      root.innerHTML = marked.parse(mdForHtml, { gfm: true });
+      var lines = ["const Infrad = antd;", "const Icons = icons;", ""];
+      for (var i = 0; i < blocks.length; i++) {
+        var code = blocks[i].replace(/^function App\(\)/m, "function Demo" + (i + 1) + "()");
+        lines.push(code);
+        lines.push("");
+        lines.push(
+          'ReactDOM.createRoot(document.getElementById("demo-' +
+            (i + 1) +
+            '")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo' +
+            (i + 1) +
+            ")));"
+        );
+        lines.push("");
+      }
+      var out = Babel.transform(lines.join("\n"), { presets: ["react"] }).code;
+      (0, eval)(out);
+    })
+    .catch(function (e) {
+      root.innerHTML = '<p id="doc-error">' + String(e.message || e) + "</p><p>也可安装 <code>markdown</code> 后运行 <code>python3 render_preview.py</code> 生成 <code>Splitter-preview-baked.html</code>。</p>";
+    });
+})();
+</script>
+</body>
+</html>

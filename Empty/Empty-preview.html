@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<title>Empty 组件文档预览</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+         max-width: 800px; margin: 0 auto; padding: 24px 16px; color: #333; line-height: 1.65; font-size: 14px; }
+  body img { max-width: min(100%, 420px); height: auto; display: block; }
+  h1 { border-bottom: 2px solid #2673dd; padding-bottom: 8px; font-size: 1.5rem; }
+  h2 { color: #2673dd; font-size: 1.2rem; }
+  h3 { color: #444; font-size: 1.05rem; }
+  blockquote { border-left: 4px solid #2673dd; margin: 12px 0; padding: 8px 12px; background: #f6f8fa; }
+  code { background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-size: 0.85em; }
+  pre code { display: block; padding: 12px; overflow-x: auto; font-size: 12px; }
+  .demo-mount { margin: 10px 0; padding: 12px 14px; border: 1px solid #e8e8e8; border-radius: 8px; background: #fff; min-height: 48px; max-width: 560px; position: relative; overflow: visible; }
+  hr { border: none; border-top: 1px solid #e8e8e8; margin: 24px 0; }
+  table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+  th, td { border: 1px solid #e8e8e8; padding: 8px 12px; text-align: left; }
+  th { background: #f6f8fa; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/antd@5/dist/reset.css" />
+<script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/antd@5/dist/antd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ant-design/icons@5/dist/index.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+</head><body><h1 id="1">1. 简洁易读部份</h1>
+<h2 id="10">1.0. 组件描述</h2>
+<p>空状态组件用于在暂无数据或尚未产生内容时，向用户显式提示当前状态，并可引导用户执行创建、刷新等操作，避免空白区域造成困惑。</p>
+<h2 id="11">1.1. 组件构成</h2>
+<p>空状态由以下基础要素构成，可按需组合使用：</p>
+<!-- 附图占位：建议附上一张示例图，展示空状态的插图、描述文案、操作按钮的构成关系，标注各要素名称与位置 -->
+<div id="demo-1" class="demo-mount"></div>
+
+<p>&emsp;&emsp;1. <strong>插图</strong> 传达「无数据」或「空」的直观感受，可为默认图、简洁图或自定义图。</p>
+<p>&emsp;&emsp;2. <strong>描述文案</strong> 说明当前状态的原因或建议，引导用户理解并采取行动。</p>
+<p>&emsp;&emsp;3. <strong>操作区</strong> 提供创建、刷新、筛选等入口，将用户引导至有内容的状态。</p>
+<hr />
+<h2 id="12">1.2. 组件包含哪些不同类型</h2>
+<h3 id="121">1.2.1 默认空状态</h3>
+<p>&emsp;<strong>是什么</strong>：使用标准插图与「暂无数据」等默认文案，适用于通用的无数据场景</p>
+<p>&emsp;<strong>简单用法</strong>：适用于大多数「无数据」的通用场景；若业务有明确引导诉求，可叠加操作按钮</p>
+<p>&emsp;<strong>典型场景</strong>：列表无数据、搜索结果为空、表格无记录</p>
+<!-- 附图占位：建议附上一张示例图，展示默认空状态的完整形态（插图 + 暂无数据 + 操作按钮） -->
+<div id="demo-2" class="demo-mount"></div>
+
+<p>&emsp;<strong>替代方案</strong>：若需更轻量或更贴合业务，改用简洁图或自定义空状态</p>
+<h3 id="122">1.2.2 简洁图空状态</h3>
+<p>&emsp;<strong>是什么</strong>：使用更简洁、线条更少的插图，视觉更轻量</p>
+<p>&emsp;<strong>简单用法</strong>：适用于空间有限或作为次要空状态（如选择器、下拉列表内）的场景</p>
+<p>&emsp;<strong>典型场景</strong>：选择器无选项、级联选择为空、穿梭框无数据</p>
+<!-- 附图占位：建议附上一张示例图，展示简洁图与默认图的形态差异，体现轻量化风格 -->
+<div id="demo-3" class="demo-mount"></div>
+
+<p>&emsp;<strong>替代方案</strong>：若为主内容区的空状态，优先使用默认图以保持一致性</p>
+<h3 id="123">1.2.3 自定义插图</h3>
+<p>&emsp;<strong>是什么</strong>：使用业务定制的插图或图片，强化品牌或场景代入感</p>
+<p>&emsp;<strong>简单用法</strong>：适用于有明确品牌或业务氛围要求的场景；插图需与「空」的语义一致，避免误导</p>
+<p>&emsp;<strong>典型场景</strong>：首次使用引导、活动页无数据、品牌化产品的空状态</p>
+<!-- 附图占位：建议附上一张示例图，展示自定义插图（如业务吉祥物、场景插画）的空状态形态 -->
+<div id="demo-4" class="demo-mount"></div>
+
+<p>&emsp;<strong>替代方案</strong>：若无需品牌强化，使用默认或简洁图即可</p>
+<h3 id="124">1.2.4 无描述空状态</h3>
+<p>&emsp;<strong>是什么</strong>：仅展示插图，不展示描述文案，适用于空间极小或语义极简的场景</p>
+<p>&emsp;<strong>简单用法</strong>：必须用于空间紧张、或上下文已能说明「空」含义的场景；不宜在主内容区单独使用</p>
+<p>&emsp;<strong>典型场景</strong>：表格内嵌空状态、卡片内小区域、弹窗内紧凑区域</p>
+<!-- 附图占位：建议附上一张示例图，展示仅有插图、无描述文案的极简空状态形态 -->
+<div id="demo-5" class="demo-mount"></div>
+
+<p>&emsp;<strong>替代方案</strong>：若空间允许，建议添加简短描述以帮助用户理解</p>
+<h3 id="125">1.2.5 带操作引导的空状态</h3>
+<p>&emsp;<strong>是什么</strong>：在描述之外，明确提供「创建」「刷新」「去筛选」等操作按钮，引导用户产生内容</p>
+<p>&emsp;<strong>简单用法</strong>：适用于用户可通过操作从「空」变为「有数据」的场景；按钮文案需具体、可执行</p>
+<p>&emsp;<strong>典型场景</strong>：列表无数据时引导新建、筛选结果为空时引导调整条件、无收藏时引导去添加</p>
+<!-- 附图占位：建议附上一张示例图，展示空状态下方「立即创建」等操作按钮的布局 -->
+<div id="demo-6" class="demo-mount"></div>
+
+<p>&emsp;<strong>替代方案</strong>：若用户无法通过操作产生内容（如纯展示型空结果），可不提供操作按钮</p>
+<hr />
+<h2 id="13">1.3. 各类型典型场景案例</h2>
+<h3 id="131">1.3.1 主区与内嵌空状态</h3>
+<!-- 附图占位：建议附上一张对比图，左侧展示主内容区使用默认空状态 + 操作（符合规范），右侧展示内嵌区域错误使用复杂空状态（不推荐） -->
+<div id="demo-7" class="demo-mount"></div>
+
+<p>✅ <strong>推荐：</strong> 主内容区用完整空状态，内嵌小区域用简洁或无描述</p>
+<hr>
+
+<p>❌ <strong>不推荐：</strong> 在内嵌小区域使用过于复杂的空状态占用过多空间</p>
+<h3 id="132">1.3.2 描述与操作</h3>
+<!-- 附图占位：建议附上一张对比图，左侧展示用户可产生内容时提供明确操作（符合规范），右侧展示无法产生内容时仍放置无效操作（不推荐） -->
+<div id="demo-8" class="demo-mount"></div>
+
+<p>✅ <strong>推荐：</strong> 用户可产生内容时提供明确操作；不可产生时仅说明原因</p>
+<hr>
+
+<p>❌ <strong>不推荐：</strong> 在用户无法产生内容的场景中放置「创建」等无效操作</p>
+<h3 id="133">1.3.3 自定义插图</h3>
+<!-- 附图占位：建议附上一张对比图，左侧展示有品牌或场景需求时使用统一自定义插图（符合规范），右侧展示同页多种插图风格混杂（不推荐） -->
+<div id="demo-9" class="demo-mount"></div>
+
+<p>✅ <strong>推荐：</strong> 有品牌或场景需求时使用自定义插图</p>
+<hr>
+
+<p>❌ <strong>不推荐：</strong> 在通用场景中过度定制，导致产品内空状态风格混乱</p>
+<hr />
+<h1 id="2">2. 选型指南</h1>
+<h2 id="21">2.1 选择流程</h2>
+<pre><code class="language-mermaid">flowchart TD
+  A[开始：当前无数据需占位展示] --&gt; B{是否为主内容区的空状态？}
+  B --&gt;|是| C[默认空状态]
+  B --&gt;|否| D{空间是否紧张？}
+  D --&gt;|是| E[简洁图或无描述]
+  D --&gt;|否| F[默认空状态]
+  C --&gt; G{用户是否可通过操作产生内容？}
+  G --&gt;|是| H[带操作引导]
+  G --&gt;|否| I[仅描述说明]
+  F --&gt; J{是否有品牌/场景定制需求？}
+  J --&gt;|是| K[自定义插图]
+  J --&gt;|否| L[默认或简洁图]
+</code></pre>
+<hr />
+<h1 id="3">3. 细致专业部份（交互与排版规则）</h1>
+<h2 id="31">3.1 插图与视觉权重</h2>
+<ul>
+<li><strong>插图大小</strong>：主内容区空状态插图应足够醒目，但不喧宾夺主；内嵌区域可缩小。</li>
+<li><strong>风格统一</strong>：同一产品内，默认、简洁、自定义等类型应保持风格一致；插图色系与页面协调。</li>
+<li><strong>语义一致</strong>：插图需传达「空」「暂无」等含义，避免使用容易误解的图案。</li>
+</ul>
+<h2 id="32">3.2 描述文案</h2>
+<ul>
+<li><strong>简洁明确</strong>：描述应简短说明「为什么是空的」或「可以怎么做」，避免冗长或模糊。</li>
+<li><strong>场景化</strong>：可根据具体场景定制文案，如「暂无搜索结果」与「暂无订单」的差异。</li>
+<li><strong>语气</strong>：建议使用中性、友善的语气，避免让用户产生被责备的感觉。</li>
+</ul>
+<h2 id="33">3.3 操作按钮</h2>
+<ul>
+<li><strong>主操作优先</strong>：若有多个可能操作，将「创建」「去添加」等主操作放在最显眼位置。</li>
+<li><strong>按钮数量</strong>：操作不宜过多，建议 1～2 个；过多会分散注意力。</li>
+<li><strong>禁用与权限</strong>：当用户无权限执行操作时，不应展示该操作按钮，或展示为禁用态并说明原因。</li>
+</ul>
+<h2 id="34">3.4 与其他组件的配合</h2>
+<ul>
+<li><strong>表格/列表</strong>：当表格或列表无数据时，空状态通常居中展示在内容区域；表头或筛选栏可保留。</li>
+<li><strong>选择器</strong>：Select、TreeSelect、Cascader 等无选项时，可在下拉内展示简洁空状态。</li>
+<li><strong>全局配置</strong>：可通过全局配置统一空状态的插图与描述，保证产品内一致性。</li>
+</ul>
+<h2 id="35">3.5 加载与空状态的切换</h2>
+<ul>
+<li><strong>加载优先</strong>：数据加载中应展示加载态（如 Spin），而非空状态；加载完成且无数据时才展示空状态。</li>
+<li><strong>筛选场景</strong>：筛选后无结果与初始无数据可略有区分，描述可说明「未找到匹配结果，可尝试调整筛选条件」。</li>
+</ul>
+<h2 id="36">3.6 首次使用与初始化引导</h2>
+<ul>
+<li><strong>首次使用</strong>：当用户首次进入且无历史数据时，空状态可承担引导角色，文案与操作可更强调「开始创建」。</li>
+<li><strong>初始化</strong>：某些功能需用户完成初始化（如配置数据源），空状态可作为入口引导用户完成配置。</li>
+</ul>
+<hr />
+<h2 id="40">4.0. 常见问题</h2>
+<h3 id="1_1">1. 空状态和加载状态的区别是什么</h3>
+<ul>
+<li><strong>加载状态</strong>：数据正在获取中，应展示 Spin、骨架屏等，表示「即将有内容」。</li>
+<li><strong>空状态</strong>：加载完成但确实无数据，应展示空状态占位，表示「当前为空，可引导操作」。</li>
+</ul>
+<h3 id="2_1">2. 何时使用简洁图与默认图</h3>
+<ul>
+<li><strong>默认图</strong>：主内容区、空间充足、需要清晰传达「无数据」时使用。</li>
+<li><strong>简洁图</strong>：内嵌区域、空间紧张、或作为次要提示时使用。</li>
+</ul>
+<h3 id="3_1">3. 空状态是否需要操作按钮</h3>
+<ul>
+<li><strong>需要</strong>：用户可以通过「新建」「去添加」「调整筛选」等操作产生内容时，应提供操作按钮。</li>
+<li><strong>不需要</strong>：纯展示型无数据（如某类数据本身就不存在）时，仅需描述说明即可。</li>
+</ul>
+<script type="text/babel">
+const Infrad = antd;
+const Icons = icons;
+
+function Demo1() {
+  const { Empty, Button, Card, Flex, Typography } = Infrad;
+  return (
+    <Card size="small" title="空状态构成示意" style={{ maxWidth: 400 }}>
+      <Flex vertical gap={10}>
+        <Empty image={Empty.PRESENTED_IMAGE_DEFAULT} description="暂无数据" imageStyle={{ height: 72 }} extra={<Button type="primary" size="small">立即创建</Button>} />
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>插图 · 描述文案 · 操作区</Typography.Text>
+      </Flex>
+    </Card>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-1")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo1)));
+
+function Demo2() {
+  const { Empty, Button } = Infrad;
+  return (
+    <Empty description="暂无数据" imageStyle={{ height: 100 }} extra={<Button type="primary">新建订单</Button>} style={{ padding: "24px 0" }} />
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-2")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo2)));
+
+function Demo3() {
+  const { Empty, Flex, Divider, Typography } = Infrad;
+  return (
+    <Flex gap={16} wrap="wrap" align="flex-start">
+      <Flex vertical gap={6} style={{ width: 200 }}>
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>默认插图</Typography.Text>
+        <Empty image={Empty.PRESENTED_IMAGE_DEFAULT} description="暂无数据" imageStyle={{ height: 72 }} />
+      </Flex>
+      <Divider type="vertical" style={{ height: 140 }} />
+      <Flex vertical gap={6} style={{ width: 200 }}>
+        <Typography.Text type="secondary" style={{ fontSize: 11 }}>简洁插图</Typography.Text>
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="无选项" imageStyle={{ height: 48 }} />
+      </Flex>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-3")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo3)));
+
+function Demo4() {
+  const { Empty } = Infrad;
+  return (
+    <Empty image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" description="暂无活动数据" imageStyle={{ height: 90 }} style={{ padding: "16px 0" }} />
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-4")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo4)));
+
+function Demo5() {
+  const { Empty } = Infrad;
+  return (
+    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={false} imageStyle={{ height: 40 }} style={{ padding: 8 }} />
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-5")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo5)));
+
+function Demo6() {
+  const { Empty, Button, Space } = Infrad;
+  return (
+    <Empty description="暂无收藏，去添加心仪商品" imageStyle={{ height: 80 }} extra={<Space><Button type="primary" size="small">去逛逛</Button><Button size="small" type="link">查看帮助</Button></Space>} />
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-6")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo6)));
+
+function Demo7() {
+  const { Empty, Button, Card, Flex, Typography } = Infrad;
+  return (
+    <Flex gap={16} wrap="wrap">
+      <Card size="small" title="主内容区 · 推荐" style={{ width: 260 }}>
+        <Empty description="暂无列表数据" extra={<Button type="primary" size="small">新建</Button>} imageStyle={{ height: 64 }} />
+      </Card>
+      <Card size="small" title="内嵌区域 · 简洁" style={{ width: 220 }}>
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="无数据" imageStyle={{ height: 36 }} />
+      </Card>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-7")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo7)));
+
+function Demo8() {
+  const { Empty, Button, Card, Flex, Typography } = Infrad;
+  return (
+    <Flex gap={16} wrap="wrap" align="flex-start">
+      <Card size="small" title="推荐 · 可操作给明确按钮" style={{ width: 270 }}>
+        <Empty description="暂无订单，创建后即可查看列表" imageStyle={{ height: 56 }} extra={<Button type="primary" size="small">新建订单</Button>} />
+      </Card>
+      <Card size="small" title="不推荐 · 只读场景仍推创建" style={{ width: 270 }}>
+        <Empty description="以下为系统自动汇总数据，无需您创建" imageStyle={{ height: 56 }} extra={<Button type="primary" size="small" disabled>立即创建</Button>} />
+        <Typography.Text type="secondary" style={{ fontSize: 11, display: "block", marginTop: 8 }}>无效操作易误导</Typography.Text>
+      </Card>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-8")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo8)));
+
+function Demo9() {
+  const { Empty, Card, Flex, Typography } = Infrad;
+  return (
+    <Flex gap={16} wrap="wrap" align="flex-start">
+      <Card size="small" title="推荐 · 场景化定制" style={{ width: 260 }}>
+        <Empty image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" description="活动专区暂无内容" imageStyle={{ height: 72 }} />
+      </Card>
+      <Card size="small" title="不推荐 · 同页风格混杂" style={{ width: 260 }}>
+        <Flex vertical gap={12}>
+          <Typography.Text type="secondary" style={{ fontSize: 11 }}>区块 A 与区块 B 插图风格不统一</Typography.Text>
+          <Empty image={Empty.PRESENTED_IMAGE_DEFAULT} description="订单列表" imageStyle={{ height: 48 }} />
+          <Empty image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg" description="收藏夹" imageStyle={{ height: 64 }} />
+        </Flex>
+      </Card>
+    </Flex>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("demo-9")).render(React.createElement(antd.ConfigProvider, { theme: { token: { colorPrimary: "#2673dd" } } }, React.createElement(Demo9)));
+
+</script>
+</body></html>
